@@ -12,6 +12,9 @@ export const S = {
   phase: "intro",            // intro · play · result · paused · over
   level: 1, lives: CONFIG.lives, slots: CONFIG.lives, streak: 0, cuts: [], score: null,
   shape: null, cfg: null, rot: 0, rotSpd: 0, maxR: 1,
+  tf: null,                  // proyección del último fotograma
+  seed: 0, startedAt: 0,     // con qué semilla y cuándo empezó la partida
+  trace: [],                 // los cortes de la partida, para el servidor
   t0: 0, last: 0, aim: null, res: null, world: null, pause: null,
   timer: 0, runTimer: 0, limit: 0, lastShape: null, mode: "free",
   board: "daily",            // clasificación que se está mirando

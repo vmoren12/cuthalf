@@ -20,7 +20,7 @@ const ASSETS = [
   "manifest.webmanifest",
   "css/base.css", "css/game.css", "css/screens.css",
   "src/main.js", "src/config.js", "src/i18n.js", "src/rng.js", "src/util.js", "src/scoring.js",
-  "src/geometry.js", "src/shapes.js", "src/storage.js", "src/scores.js",
+  "src/geometry.js", "src/replay.js", "src/shapes.js", "src/storage.js", "src/scores.js",
   "src/state.js", "src/game.js", "src/render.js", "src/share.js",
   "src/input.js", "src/menu.js", "src/pwa.js",
   "icons/icon-192-any.png", "icons/icon-512-any.png", "icons/icon-512-maskable.png"

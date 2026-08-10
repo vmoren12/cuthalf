@@ -12,6 +12,7 @@ import { clamp, dayKey, dayTimer, hashStr } from "./util.js";
 import { drawBest, drawTable } from "./scores.js";
 import { evaluate, normalize, partsCentroid } from "./geometry.js";
 import { cmp, freeBoard } from "./scoring.js";
+import { toShapeSpace, trim } from "./replay.js";
 import { toast } from "./share.js";
 
 export function newLevel(){
@@ -99,12 +100,24 @@ export function doCut(a, b){
   const N = { x: -dy/len, y: dx/len };
   const r = evaluate(S.world, a, N);
   const ok = r.err < CONFIG.tolerance;
-  S.res = Object.assign(r, { P:a, N, ok, t0: performance.now() });
+  const now = performance.now();
+  S.res = Object.assign(r, { P:a, N, ok, t0: now });
   S.phase = "result";
   S.cuts.push(100 - r.err);
   UI.num(r.err, ok);
 
   const tut = S.mode === "tutor";
+
+  /* el corte, apuntado como lo verá el servidor: en coordenadas de la
+     figura, que es lo único que puede volver a medir por su cuenta  */
+  if (!tut && S.tf){
+    const m = toShapeSpace(S.tf, a, N);
+    S.trace.push({
+      P : { x: trim(m.P.x), y: trim(m.P.y) },
+      N : { x: trim(m.N.x), y: trim(m.N.y) },
+      ms: Math.round(now - S.t0)
+    });
+  }
 
   if (ok){
     S.streak++;
@@ -115,23 +128,29 @@ export function doCut(a, b){
       UI.hype(T("praise")[Math.min(S.step, T("praise").length - 1)], 1);
       if (navigator.vibrate) navigator.vibrate(10);
     }
-    /* el récord se bate en el momento de subir por encima de él */
-    else if (!S.recordShown && S.refBest > 0 && S.level + 1 > S.refBest){
-      S.recordShown = true;
-      UI.hype(T("newRecord"), .8);
-      if (navigator.vibrate) navigator.vibrate([10,40,10,40,20]);
-      if (S.streak + 1 >= CONFIG.streak){ S.streak = 0; if (S.lives < CONFIG.maxLives){ S.lives++; UI.lives(); } }
-      return;
-    }
-    else if (S.streak >= CONFIG.streak){
-      S.streak = 0;
-      const room = S.lives < CONFIG.maxLives;
-      if (room){ S.lives++; UI.lives(); }
-      UI.hype(T(room ? "bonus" : "full"), .58);
-      if (navigator.vibrate) navigator.vibrate(room ? [12,50,12,50,12] : 10);
-    } else {
-      UI.hype(T("praise")[S.streak - 1], 1 + (S.streak - 1) * .05);
-      if (navigator.vibrate) navigator.vibrate(10);
+    /* El récord se bate al subir por encima de él, y manda sobre el
+       aviso de racha: no caben dos rótulos a la vez. Pero sólo manda
+       en lo que se dice, nunca en lo que pasa — las vidas y la racha
+       siguen la misma regla para todos. Batir un récord es cosa de tu
+       aparato, y el servidor, que no sabe de tus marcas, tiene que
+       poder repetir la partida y llegar al mismo sitio.             */
+    else {
+      const record = !S.recordShown && S.refBest > 0 && S.level + 1 > S.refBest;
+      if (record) S.recordShown = true;
+
+      if (S.streak >= CONFIG.streak){
+        S.streak = 0;
+        const room = S.lives < CONFIG.maxLives;
+        if (room){ S.lives++; UI.lives(); }
+        UI.hype(record ? T("newRecord") : T(room ? "bonus" : "full"), record ? .8 : .58);
+        if (navigator.vibrate) navigator.vibrate(record ? [10,40,10,40,20] : (room ? [12,50,12,50,12] : 10));
+      } else if (record){
+        UI.hype(T("newRecord"), .8);
+        if (navigator.vibrate) navigator.vibrate([10,40,10,40,20]);
+      } else {
+        UI.hype(T("praise")[S.streak - 1], 1 + (S.streak - 1) * .05);
+        if (navigator.vibrate) navigator.vibrate(10);
+      }
     }
   } else {
     S.streak = 0;
@@ -166,6 +185,7 @@ export function doCut(a, b){
 
 export function timeUp(){
   S.aim = null;
+  if (S.mode !== "tutor") S.trace.push({ timeout: true, ms: Math.round(S.limit * 1000) });
   S.res = { ok:false, timeout:true, parts:S.world, t0: performance.now() };
   S.phase = "result";
   S.streak = 0; S.lives--;
@@ -258,7 +278,11 @@ export function goHome(){
   if (pendingReload) applyUpdate();
 }
 
-export function start(mode){
+/* `seed` sólo llega en el juego libre y sólo cuando la reparte el
+   servidor, que es lo que impide sortear semillas hasta dar con una
+   cómoda. Sin conexión se sortea aquí y la partida no sube a la
+   clasificación mundial, pero se juega igual.                      */
+export function start(mode, seed){
   const want = mode === "daily" ? "daily" : "free";
   /* la primera vez se enseña antes de jugar, y al terminar (o al
      saltar) se entra en la partida que se había pedido             */
@@ -266,18 +290,20 @@ export function start(mode){
   S.mode = want;
   if (S.mode === "daily"){
     const key = dayKey();
-    setRNG(mulberry32(hashStr(key)));   // misma secuencia para todos
+    seed = hashStr(key);                // misma secuencia para todos
     S.runTimer = dayTimer(key);
     DAILY.open();
     S.refBest = DAILY.today().lv;
   } else {
-    setRNG(Math.random);
+    seed = (seed >>> 0) || (Math.random() * 2**32) >>> 0;
     S.runTimer = S.timer;
     S.refBest = (DB.list(freeBoard(S.runTimer))[0] || {}).lv || 0;
   }
+  setRNG(mulberry32(seed));
   S.recordShown = false;
   S.level = 1; S.lives = CONFIG.lives; S.slots = CONFIG.lives; S.streak = 0;
   S.cuts = []; S.score = null; S.pause = null; S.lastShape = null;
+  S.trace = []; S.seed = seed; S.startedAt = Date.now();
   $("lives").innerHTML = "";
   $("name").value = "";
   $("scr-intro").hidden = true; $("scr-over").hidden = true;

@@ -43,6 +43,7 @@ const { setRNG, mulberry32 }            = await import("../src/rng.js");
 const { applyLang, openScores, paintScores } = await import("../src/menu.js");
 const { shareText }                     = await import("../src/share.js");
 const { paint }                         = await import("../src/render.js");
+const { replay, toShapeSpace }          = await import("../src/replay.js");
 await import("../src/main.js");          // arranque, igual que en la página
 
 const log = [];
@@ -106,6 +107,53 @@ step("reto diario: corte y cierre", () => {
   gameOver();
   if (!DAILY.today().tries) throw new Error("el intento de hoy no se ha contado");
   goHome();
+});
+
+/* ── repetición: lo que hará el servidor ───────────────────────── */
+step("un corte mide igual en la pantalla que en la figura", () => {
+  S.timer = 0; start("free"); frame();
+  const P = { x: 100, y: 210 }, N = { x: 0.6, y: 0.8 };
+  const enPantalla = evaluate(S.world, P, N).err;
+  const m = toShapeSpace(S.tf, P, N);
+  const enLaFigura = evaluate(S.shape, m.P, m.N).err;
+  if (Math.abs(enPantalla - enLaFigura) > 0.01)
+    throw new Error(enPantalla.toFixed(4) + " frente a " + enLaFigura.toFixed(4));
+});
+
+step("el servidor repite la partida y le sale lo mismo", () => {
+  S.timer = 0;
+  start("free", 20260811);                       // semilla fija, como la dará el servidor
+  const semilla = S.seed;
+  /* seis cortes por sitios distintos: unos entrarán y otros no, que es
+     justo lo que interesa — así se recorren aciertos, fallos y vidas */
+  for (const [dx, dy] of [[0,150],[150,0],[60,140],[0,150],[130,60],[0,150]]){
+    if (S.phase === "over") break;
+    frame();
+    cut(dx, dy);
+    frame();                                      // el resultado en pantalla
+    paint(S.res.t0 + 5000);                       // y su final, que pasa de nivel
+  }
+  const nivelJugado = S.level, cortesJugados = S.cuts.slice();
+
+  const r = replay(semilla, S.trace);
+  if (!r.ok) throw new Error("el servidor rechaza la partida: " + r.reason);
+  if (r.level !== nivelJugado)
+    throw new Error("nivel " + nivelJugado + " jugado, " + r.level + " repetido");
+  if (r.cuts !== cortesJugados.length)
+    throw new Error("cortes: " + cortesJugados.length + " jugados, " + r.cuts + " repetidos");
+  const avJugado = +(cortesJugados.reduce((a,b)=>a+b,0) / (cortesJugados.length||1)).toFixed(1);
+  if (Math.abs(r.av - avJugado) > 0.15)
+    throw new Error("precisión " + avJugado + " frente a " + r.av);
+  if (!S.trace.length) throw new Error("no se ha apuntado ningún corte");
+  goHome();
+});
+
+step("una partida inventada no cuela", () => {
+  /* cortes al azar, de los que no parten nada por la mitad */
+  const basura = Array.from({length: 12}, () => ({ P:{x:.9,y:.9}, N:{x:1,y:0}, ms: 300 }));
+  const r = replay(20260811, basura);
+  if (r.level > 3) throw new Error("acepta un nivel " + r.level + " con cortes de mentira");
+  if (!r.over) throw new Error("debería quedarse sin vidas");
 });
 
 /* ── clasificaciones ───────────────────────────────────────────── */

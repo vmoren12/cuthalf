@@ -114,6 +114,10 @@ export function paint(now){
       x: cx + (v.x*c - v.y*s)*sc,
       y: cy + (v.x*s + v.y*c)*sc
     })));
+    /* la proyección de este fotograma, para poder deshacerla: un corte
+       hecho en la pantalla se guarda en coordenadas de la figura, que
+       es lo único que el servidor puede volver a comprobar           */
+    S.tf = { cx, cy, sc, c, s };
 
     if (S.limit){
       const left = S.limit - el;
