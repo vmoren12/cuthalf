@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>arrancando</title>
+<meta name="theme-color" content="#DFE1DA">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/game.css">
+<link rel="stylesheet" href="../css/screens.css">
+<script>
+  /* cualquier fallo — de carga o de ejecución — acaba en el título */
+  const fail = m => { document.title = "ERROR :: " + m; };
+  addEventListener("error", e => {
+    fail(e.message ? e.message + " @ " + (e.filename || "?") + ":" + (e.lineno || "?")
+                   : "no carga " + (e.target && (e.target.src || e.target.href)));
+  }, true);
+  addEventListener("unhandledrejection", e => fail("promesa: " + e.reason));
+</script>
+</head>
+<body>
+<script type="module">
+/* Prueba de humo del juego entero.
+
+   El cuerpo de la página sale del index.html de verdad, no de una
+   copia: así esta prueba no puede quedarse desfasada cuando cambie
+   la interfaz. Los módulos se cargan después, ya con el DOM puesto
+   (los <script> que entran por innerHTML no se ejecutan solos).
+
+   Se ejecuta sin ratón ni dedos: llama al juego por dentro, corta
+   figuras a mano y comprueba lo que queda guardado. El resultado va
+   al título de la página, que es lo que lee el navegador sin cara.  */
+
+const html = await (await fetch("../index.html")).text();
+document.body.innerHTML = html.split("<body>")[1].split("</body>")[0];
+
+const { S, $ }                          = await import("../src/state.js");
+const { start, doCut, gameOver, saveMark, goHome } = await import("../src/game.js");
+const { DB, DAILY, qualifies }          = await import("../src/storage.js");
+const { points, freeBoard }             = await import("../src/scoring.js");
+const { normalize, evaluate }           = await import("../src/geometry.js");
+const { SHAPES }                        = await import("../src/shapes.js");
+const { setRNG, mulberry32 }            = await import("../src/rng.js");
+const { applyLang, openScores, paintScores } = await import("../src/menu.js");
+const { shareText }                     = await import("../src/share.js");
+const { paint }                         = await import("../src/render.js");
+await import("../src/main.js");          // arranque, igual que en la página
+
+const log = [];
+const step = (name, fn) => {
+  try { fn(); log.push("ok " + name); }
+  catch(e){ log.push("FALLO " + name + ": " + e.message); }
+  if (!document.title.startsWith("ERROR")) document.title = log.join(" | ");
+};
+/* el corte se mide contra la figura ya proyectada en el lienzo, y de
+   eso se encarga el bucle de dibujo: aquí se le pide un fotograma  */
+const frame = () => paint(performance.now());
+const cut = (dx, dy) => {
+  const r = $("stage").getBoundingClientRect();
+  doCut({ x: r.width/2 - dx, y: r.height/2 - dy }, { x: r.width/2 + dx, y: r.height/2 + dy });
+};
+
+/* ── geometría ─────────────────────────────────────────────────── */
+step("un diámetro reparte al 50%", () => {
+  const r = evaluate(normalize(SHAPES.circle()), { x:0, y:0 }, { x:0, y:1 });
+  if (Math.abs(r.err) > 0.5) throw new Error("da " + r.err + "% de error");
+});
+step("misma semilla, misma figura", () => {
+  setRNG(mulberry32(1234)); const a = JSON.stringify(normalize(SHAPES.blob()));
+  setRNG(mulberry32(1234)); const b = JSON.stringify(normalize(SHAPES.blob()));
+  if (a !== b) throw new Error("la semilla no reproduce la figura");
+});
+
+/* ── partida ───────────────────────────────────────────────────── */
+step("saltar la práctica", () => { DB.set("tutorDone", true); });
+step("juego libre: empieza", () => {
+  S.timer = 3;                                  // con reloj de 3 s
+  start("free");
+  if (S.phase !== "play") throw new Error("no arranca, fase " + S.phase);
+  if (S.runTimer !== 3) throw new Error("no coge el reloj elegido");
+});
+frame();
+step("juego libre: cortar", () => {
+  cut(0, 140);
+  if (!S.res || !(S.res.err >= 0)) throw new Error("el corte no se ha medido");
+});
+step("juego libre: la marca guarda su reloj", () => {
+  S.cuts = [98.2, 97.1];
+  gameOver();
+  if (S.score.tl !== 3) throw new Error("la marca no recuerda el reloj");
+  if (!shareText()) throw new Error("el texto para compartir sale vacío");
+  $("name").value = "PRUEBA";
+  saveMark();
+  if (DB.list("free-3")[0].n !== "PRUEBA") throw new Error("no ha entrado en la tabla de 3 s");
+  if (DB.list("free-0").some(r => r.n === "PRUEBA")) throw new Error("se ha colado en la tabla de ∞");
+  goHome();
+});
+step("reto diario: empieza", () => {
+  start("daily");
+  if (S.mode !== "daily") throw new Error("no entra en el reto");
+});
+frame();
+step("reto diario: corte y cierre", () => {
+  cut(0, 140);
+  if (!S.res) throw new Error("el corte no se ha medido");
+  S.cuts = [95];
+  gameOver();
+  if (!DAILY.today().tries) throw new Error("el intento de hoy no se ha contado");
+  goHome();
+});
+
+/* ── clasificaciones ───────────────────────────────────────────── */
+step("cada reloj, su tabla", () => {
+  DB.add({ n:"LENTO",  lv: 9, av: 91, tl: 0, ts: 1 });
+  DB.add({ n:"RAPIDO", lv: 4, av: 88, tl: 3, ts: 2 });
+  if (DB.list("free-0").some(r => r.tl === 3)) throw new Error("las tablas se mezclan");
+  if (!qualifies(2, 50, 3)) throw new Error("la tabla de 3 s rechaza una marca que le cabe");
+  if (freeBoard(10) !== "free-10") throw new Error("mal nombre de tabla");
+});
+step("puntos y temporada", () => {
+  if (points(12, 97.4) !== 12974) throw new Error("la fórmula no cuadra: " + points(12, 97.4));
+  const s = DAILY.season();
+  if (s.pts !== s.days.reduce((a, d) => a + points(d.lv, d.av), 0)) throw new Error("el acumulado no suma");
+  if (!s.played) throw new Error("el día jugado no consta en la temporada");
+});
+step("pantalla de clasificaciones", () => {
+  openScores();
+  if ($("seg-board").children.length !== 5) throw new Error("faltan pestañas: " + $("seg-board").children.length);
+  if ($("season-box").hidden) throw new Error("el reto diario no muestra la temporada");
+  if (!$("tbl-all").children.length) throw new Error("la tabla del reto sale vacía");
+  S.board = "free-3"; paintScores();
+  if (!$("season-box").hidden) throw new Error("el juego libre no debería mostrar la temporada");
+  if ($("tbl-all").textContent.includes("LENTO")) throw new Error("la tabla de 3 s enseña marcas de ∞");
+  S.board = "daily"; paintScores();
+});
+step("cambio de idioma", () => {
+  applyLang("en");
+  if ($("go").textContent !== "Play") throw new Error("no traduce: " + $("go").textContent);
+  applyLang("es");
+});
+
+if (!document.title.startsWith("ERROR")) document.title = log.join(" | ");
+</script>
+</body>
+</html>

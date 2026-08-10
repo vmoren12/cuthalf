@@ -1,0 +1,21 @@
+# dependencias
+node_modules/
+
+# secretos · nunca en el repositorio
+.env
+.env.*
+!.env.example
+
+# Supabase · trabajo local de la herramienta
+supabase/.temp/
+supabase/.branches/
+
+# ajustes personales del editor
+.claude/
+.vscode/
+.idea/
+
+# sistema
+Thumbs.db
+Desktop.ini
+.DS_Store

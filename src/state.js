@@ -1,0 +1,102 @@
+/* Estado e interfaz · el estado de la partida, el lienzo y los
+   pequeños refrescos de pantalla. */
+
+import { CONFIG, TUTOR } from "./config.js";
+import { T } from "./i18n.js";
+
+export const $ = id => document.getElementById(id);
+export const cv = $("cv"), ctx = cv.getContext("2d"), stage = $("stage");
+export let W = 0, H = 0;
+
+export const S = {
+  phase: "intro",            // intro · play · result · paused · over
+  level: 1, lives: CONFIG.lives, slots: CONFIG.lives, streak: 0, cuts: [], score: null,
+  shape: null, cfg: null, rot: 0, rotSpd: 0, maxR: 1,
+  t0: 0, last: 0, aim: null, res: null, world: null, pause: null,
+  timer: 0, runTimer: 0, limit: 0, lastShape: null, mode: "free",
+  board: "daily",            // clasificación que se está mirando
+  step: 0, tutorGuide: false, tutorHelp: false, tutorPending: null,
+  refBest: 0, recordShown: false,
+  capDesc: { k:"swipe" }, numErr: null, numOk: false
+};
+
+export const COL = { ink:"#0F1211", signal:"#2438F5" };
+export function refreshColors(){
+  const cs = getComputedStyle(document.body);
+  COL.ink    = cs.getPropertyValue("--ink").trim();
+  COL.signal = cs.getPropertyValue("--signal").trim();
+}
+export const ink = () => COL.ink, signal = () => COL.signal;
+
+export const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+/* negativo total durante 80 ms: el golpe, sin añadir un solo elemento */
+export function flash(){
+  if (reduceMotion) return;
+  const r = document.documentElement;
+  r.classList.add("flash"); refreshColors();
+  setTimeout(() => {
+    r.classList.add("snap"); r.classList.remove("flash"); refreshColors();
+    requestAnimationFrame(() => requestAnimationFrame(() => r.classList.remove("snap")));
+  }, 80);
+}
+
+export const UI = {
+  level(){
+    if (S.mode === "tutor"){
+      $("lvl-label").textContent = T("practice");
+      $("lvl").textContent = (S.step + 1) + "/" + TUTOR.length;
+      return;
+    }
+    $("lvl").textContent = String(S.level).padStart(2,"0");
+    $("lvl-label").textContent = T(S.mode === "daily" ? "daily" : "level");
+  },
+  tip(text){
+    const el = $("tip");
+    el.textContent = text || "";
+    el.hidden = !text;
+    if (!text) return;
+    el.classList.remove("on"); void el.offsetWidth; el.classList.add("on");
+  },
+  /* las ranuras crecen si se gana una vida y nunca se rehacen desde
+     cero: así las transiciones de apagado y encendido se ven         */
+  lives(){
+    const box = $("lives");
+    S.slots = Math.max(CONFIG.lives, S.lives, S.slots);
+    while (box.children.length < S.slots){
+      const t = document.createElement("i");
+      t.className = "new"; box.appendChild(t);
+      requestAnimationFrame(() => requestAnimationFrame(() => t.classList.remove("new")));
+    }
+    while (box.children.length > S.slots) box.lastChild.remove();
+    [...box.children].forEach((el, i) => el.classList.toggle("off", i >= S.lives));
+  },
+  cap(desc){
+    S.capDesc = desc;
+    const el = $("cap");
+    el.textContent = T(desc.k);
+    el.classList.toggle("hit", !!desc.hit);
+  },
+  /* el elogio crece un punto por cada eslabón de la racha */
+  hype(text, k, miss){
+    const el = $("hype");
+    el.textContent = text;
+    el.style.setProperty("--k", k);
+    el.classList.toggle("miss", !!miss);
+    el.classList.remove("on"); void el.offsetWidth; el.classList.add("on");
+  },
+  num(err, ok){
+    const n = $("num");
+    S.numErr = err; S.numOk = ok;
+    if (err === null){ n.className = "num"; return; }
+    n.innerHTML = err.toFixed(1) + "<small>" + T("err") + "</small>";
+    n.className = "num on " + (ok ? "valid" : "void");
+    $("live").textContent = T("read")(err.toFixed(1)) + " · " + T(ok ? "cutOk" : "cutFail");
+  }
+};
+export function resize(){
+  const r = stage.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2);
+  W = r.width; H = r.height;
+  cv.width = W*d; cv.height = H*d;
+  ctx.setTransform(d,0,0,d,0,0);
+}
+new ResizeObserver(resize).observe(stage);

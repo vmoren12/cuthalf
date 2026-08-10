@@ -1,0 +1,120 @@
+/* CUTHALF · pantallas
+   Portada, fin de partida, marcas, entrada de nombre y aviso. */
+
+/* ── pantallas ───────────────────────────────────────────────── */
+.screen{
+  position:fixed;inset:0;background:var(--ground);z-index:5;
+  display:flex;flex-direction:column;justify-content:center;gap:22px;
+  padding:max(22px,env(safe-area-inset-top)) 26px max(26px,env(safe-area-inset-bottom));
+  overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;
+}
+.screen[hidden]{display:none}
+/* la ayuda ocupa en la portada el mismo hueco que «Cerrar» en las
+   demás pantallas: esquina superior derecha, sobre el margen. Fuera
+   del flujo, para no abrir un hueco en la pila ni pelearse con el
+   logotipo, que en un móvil ocupa todo el ancho.                   */
+#go-tutor{position:absolute;top:max(22px,env(safe-area-inset-top));right:26px}
+/* logotipo dibujado: la barra de la H y el brazo del 7 están
+   centrados en y=51, justo donde pasa la línea de corte          */
+.mark{position:relative;display:block;line-height:0;align-self:flex-start;width:min(86vw,460px)}
+.mark svg{display:block;width:100%;height:auto}
+.mark::after{content:"";position:absolute;top:51%;left:-40vw;right:-40vw;height:2px;
+  background:var(--signal);transform:translateY(-50%)}
+.mark--sm{width:150px}
+.mark--sm::after{display:none}
+.headline{
+  font-family:var(--sans);font-weight:600;
+  font-size:clamp(52px,17vw,96px);line-height:.82;letter-spacing:-.05em;
+  position:relative;align-self:flex-start;
+}
+.headline::after{content:"";position:absolute;top:47%;left:-40vw;right:-40vw;height:1px;background:var(--signal)}
+.lede{font-size:13px;line-height:1.65;max-width:30ch;opacity:.72}
+.row--left{justify-content:flex-start;gap:22px;flex-wrap:wrap}
+.btn{
+  font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink);background:none;border:1px solid var(--ink);
+  padding:16px 22px;cursor:pointer;align-self:stretch;line-height:1.4;
+  transition:background .18s,color .18s;
+}
+.btn:active{background:var(--ink);color:var(--ground)}
+.btn[hidden]{display:none}
+.row{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.stats{display:flex;flex-direction:column}
+.stat{display:flex;justify-content:space-between;align-items:baseline;gap:16px;border-top:1px solid var(--hair);padding:12px 0}
+.lbl{font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.55}
+.val{font-family:var(--sans);font-weight:500;font-size:26px;letter-spacing:-.02em;text-align:right;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* la mejor marca lleva nombre: más discreta que las cifras sueltas */
+#best-val{font-size:18px}
+
+/* ── tabla de marcas ─────────────────────────────────────────── */
+.tbl{list-style:none;display:flex;flex-direction:column}
+.tbl li{display:grid;grid-template-columns:22px minmax(0,1fr) auto auto;gap:14px;align-items:baseline;
+  border-top:1px solid var(--hair);padding:10px 0;font-size:12px}
+.tbl li.me{color:var(--signal)}
+.tbl .r{opacity:.4}
+.tbl .n{font-weight:500;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tbl .l{font-family:var(--sans);font-weight:500;font-size:17px;letter-spacing:-.01em}
+.tbl .a{opacity:.55;font-size:11px;min-width:52px;text-align:right}
+.empty{font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.4;border-top:1px solid var(--hair);padding-top:12px}
+
+/* ── entrada de nombre ───────────────────────────────────────── */
+.entry{display:flex;align-items:flex-end;gap:16px;border-top:1px solid var(--hair);padding-top:14px}
+.tag{
+  font-family:var(--sans);font-weight:500;font-size:20px;letter-spacing:-.01em;
+  flex:1;min-width:0;background:none;border:0;border-bottom:1px solid var(--ink);
+  color:var(--ink);padding:0 0 6px;
+}
+.tag::placeholder{font-family:var(--mono);font-size:12px;letter-spacing:.16em;
+  text-transform:uppercase;opacity:.32}
+.note{font-size:11px;letter-spacing:.1em;line-height:1.6;opacity:.5;text-transform:uppercase}
+/* conmutador de tema: disco partido por su diámetro, como el juego.
+   Al cambiar gira 180º y los dos colores intercambian su sitio.   */
+.tt{
+  width:26px;height:26px;flex:none;padding:0;cursor:pointer;
+  border:1px solid var(--ink);border-radius:50%;background:none;
+  position:relative;overflow:hidden;
+  transition:transform .45s cubic-bezier(.2,.8,.2,1),border-color .35s;
+}
+.tt::before{content:"";position:absolute;left:0;right:0;bottom:0;height:50%;background:var(--ink)}
+.tt::after{content:"";position:absolute;left:-1px;right:-1px;top:50%;height:1px;
+  background:var(--signal);transform:translateY(-.5px)}
+[data-theme="dark"] .tt{transform:rotate(180deg)}
+.tt:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+
+/* selector de tiempo */
+.seg{display:flex;border:1px solid var(--hair)}
+.seg button{font:inherit;font-size:11px;letter-spacing:.1em;min-width:40px;padding:8px 0;
+  background:none;border:0;border-left:1px solid var(--hair);color:var(--ink);opacity:.45;cursor:pointer;
+  transition:background .18s,color .18s,opacity .18s}
+.seg button:first-child{border-left:0}
+/* el selector de clasificación ocupa el ancho: son cinco tablas y
+   ninguna es más importante que las otras */
+.seg--full{width:100%}
+.seg--full button{flex:1;min-width:0}
+.seg button.on{background:var(--ink);color:var(--ground);opacity:1}
+#scr-ask{z-index:7;justify-content:center}
+#scr-scores{z-index:8;justify-content:flex-start;gap:18px}
+.toast{
+  position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));z-index:9;
+  transform:translate(-50%,14px);opacity:0;pointer-events:none;
+  background:var(--ink);color:var(--ground);padding:12px 20px;max-width:86vw;
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;text-align:center;
+  transition:opacity .24s,transform .24s cubic-bezier(.2,.8,.2,1);
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.statlink{width:100%;font:inherit;color:inherit;background:none;border:0;
+  border-top:1px solid var(--hair);cursor:pointer;text-align:left}
+.statlink .u{border-bottom:1px solid var(--ink);padding-bottom:2px}
+.btn--ghost{border-color:var(--hair)}
+.btn--solid{background:var(--ink);color:var(--ground)}
+.btn--sm{font-size:11px;letter-spacing:.18em;padding:13px 20px}
+.btn--solid:active{background:none;color:var(--ink)}
+.free{display:flex;flex-direction:column;gap:12px}
+/* separador con rótulo: la línea se abre a los lados del texto */
+.sep{display:flex;align-items:center;gap:14px;margin-top:4px;
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.55}
+.sep::before,.sep::after{content:"";flex:1;height:1px;background:var(--hair)}
+.record{font-family:var(--sans);font-weight:600;letter-spacing:-.02em;color:var(--signal);
+  font-size:clamp(26px,8vw,40px);line-height:1;animation:capIn .45s cubic-bezier(.2,.8,.2,1)}
+.daily{display:flex;flex-direction:column;gap:11px}

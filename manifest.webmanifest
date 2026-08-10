@@ -1,0 +1,35 @@
+{
+  "name": "CUTHALF",
+  "short_name": "CUTHALF",
+  "description": "Corta cada figura en dos mitades iguales. Error admitido: 7%.",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0F1211",
+  "theme_color": "#0F1211",
+  "categories": [
+    "games",
+    "puzzle"
+  ],
+  "icons": [
+    {
+      "src": "icons/icon-192-any.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512-any.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "start_url": "./",
+  "scope": "./"
+}

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<title>CUTHALF</title>
+<meta name="description" content="Parte cada figura en dos mitades iguales. Error máximo: 7%.">
+<meta name="theme-color" content="#DFE1DA">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CUTHALF">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192-any.png">
+<link rel="icon" href="icons/icon-192-any.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/game.css">
+<link rel="stylesheet" href="css/screens.css">
+</head>
+<body>
+
+<main id="app">
+  <header class="hud">
+    <span><span id="lvl-label" data-t="level">Nivel</span> <b id="lvl">01</b></span>
+    <button class="lnk" id="close-run" data-t="close">Cerrar</button>
+    <button class="lnk" id="tutor-skip" data-t="skip" hidden>Saltar</button>
+  </header>
+
+  <div class="stage" id="stage"><canvas id="cv"></canvas><span class="lives" id="lives" data-ta="livesLeft"></span><p class="tip" id="tip" hidden></p><div class="hype" id="hype" aria-hidden="true"></div></div>
+
+  <footer class="readout">
+    <div class="num" id="num" aria-hidden="true">0.0<small>%</small></div>
+    <div class="cap" id="cap">Desliza para cortar</div>
+    <p class="sr" id="live" aria-live="polite"></p>
+  </footer>
+</main>
+
+<!-- ── inicio ──────────────────────────────────────────────────── -->
+<section class="screen" id="scr-intro">
+  <button class="lnk" id="go-tutor" data-t="howTo">Cómo se juega</button>
+  <h1 class="mark"><svg viewBox="0 0 462 100" role="img" aria-label="CUTHALF"><path fill="currentColor" d="M0 0H56V14H0Z M0 86H56V100H0Z M0 0H15V100H0Z M66 0H81V100H66Z M113 0H128V100H113Z M66 86H128V100H66Z M138 0H196V14H138Z M159.5 0H174.5V100H159.5Z M206 0H221V100H206Z M253 0H268V100H253Z M221 44H253V58H221Z M304 0H318L293 100H278Z M304 0H318L344 100H329Z M293 66H330V80H293Z M354 0H369V100H354Z M354 86H406V100H354Z M400 0H460L455.8 14H400Z M400 44H446.8L442.6 58H400Z M446 0H460L430 100H416Z"/></svg></h1>
+  <p class="lede" data-t="lede">Parte cada figura en dos mitades iguales. El error no puede pasar del 7%.</p>
+  <div class="daily">
+    <button class="btn btn--solid" id="go-daily" data-t="daily">Reto de hoy</button>
+  </div>
+
+  <div class="free">
+    <p class="sep"><span data-t="freePlay">Juego libre</span></p>
+    <div class="row"><span class="lbl" data-t="timeLimit">Tiempo por figura</span><span class="seg" id="seg-intro"></span></div>
+    <button class="btn btn--sm" id="go" data-t="play">Jugar</button>
+  </div>
+  <button class="stat statlink" id="open-scores"><span class="lbl u" data-t="scores">Mejores marcas</span><b class="val" id="best-val">—</b></button>
+  <div class="row row--left">
+    <button class="lnk" id="install-intro" data-t="install" hidden>Instalar</button>
+    <span class="seg" id="lang-intro"></span>
+    <button class="tt" id="theme-intro"></button>
+  </div>
+  <p class="note" id="install-hint" hidden></p>
+</section>
+
+<!-- ── fin de partida ──────────────────────────────────────────── -->
+<section class="screen" id="scr-over" hidden>
+  <h1 class="headline" id="over-mark">FIN</h1>
+  <div class="stats">
+    <div class="stat"><span class="lbl" data-t="reached">Nivel alcanzado</span><b class="val" id="s-lvl">01</b></div>
+    <div class="stat"><span class="lbl" data-t="avg">Precisión media</span><b class="val" id="s-avg">—</b></div>
+    <div class="stat"><span class="lbl" data-t="bestCut">Mejor corte</span><b class="val" id="s-best">—</b></div>
+  </div>
+
+  <p class="record" id="rec-badge" data-t="newRecord" hidden>¡Nuevo récord!</p>
+
+  <div class="stats" id="daily-over" hidden>
+    <div class="stat"><span class="lbl" data-t="attempt">Intento de hoy</span><b class="val" id="d-try">—</b></div>
+    <div class="stat"><span class="lbl" data-t="bestToday">Tu mejor de hoy</span><b class="val" id="d-best">—</b></div>
+    <div class="stat"><span class="lbl" data-t="streak">Racha</span><b class="val" id="d-streak">—</b></div>
+  </div>
+
+  <div class="entry" id="entry" hidden>
+    <input class="tag" id="name" maxlength="14" data-tp="yourName" data-ta="yourName" autocomplete="off" spellcheck="false">
+    <button class="lnk" id="save" data-t="save">Guardar</button>
+  </div>
+  <p class="note" id="entry-note" hidden></p>
+
+  <ol class="tbl" id="tbl-over"></ol>
+  <button class="btn" id="again" data-t="again">Volver a empezar</button>
+  <button class="btn btn--ghost" id="share" data-t="share">Compartir</button>
+  <div class="row row--left"><button class="lnk" id="home" data-t="home">Volver al inicio</button></div>
+</section>
+
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<section class="screen" id="scr-scores" hidden>
+  <div class="row">
+    <span class="mark mark--sm"><svg viewBox="0 0 462 100" role="img" aria-label="CUTHALF"><path fill="currentColor" d="M0 0H56V14H0Z M0 86H56V100H0Z M0 0H15V100H0Z M66 0H81V100H66Z M113 0H128V100H113Z M66 86H128V100H66Z M138 0H196V14H138Z M159.5 0H174.5V100H159.5Z M206 0H221V100H206Z M253 0H268V100H253Z M221 44H253V58H221Z M304 0H318L293 100H278Z M304 0H318L344 100H329Z M293 66H330V80H293Z M354 0H369V100H354Z M354 86H406V100H354Z M400 0H460L455.8 14H400Z M400 44H446.8L442.6 58H400Z M446 0H460L430 100H416Z"/></svg></span>
+    <button class="lnk" id="scores-close" data-t="close">Cerrar</button>
+  </div>
+  <p class="lbl" data-t="boards">Clasificaciones</p>
+  <span class="seg seg--full" id="seg-board"></span>
+  <div class="stats" id="season-box" hidden>
+    <div class="stat"><span class="lbl" data-t="seasonPts">Puntos de la temporada</span><b class="val" id="sea-pts">—</b></div>
+    <div class="stat"><span class="lbl" data-t="playedDays">Días jugados</span><b class="val" id="sea-days">—</b></div>
+    <div class="stat"><span class="lbl" data-t="streak">Racha</span><b class="val" id="sea-streak">—</b></div>
+  </div>
+  <ol class="tbl" id="tbl-all"></ol>
+</section>
+
+<section class="screen" id="scr-ask" hidden>
+  <p class="lede" id="ask-q"></p>
+  <button class="btn" id="ask-yes"></button>
+  <div class="row row--left"><button class="lnk" id="ask-no"></button></div>
+</section>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

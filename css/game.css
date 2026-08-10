@@ -1,0 +1,71 @@
+/* CUTHALF · partida
+   Telemetría superior, escenario y lectura inferior. */
+
+/* ── telemetría superior ─────────────────────────────────────── */
+.hud{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  padding-bottom:12px;border-bottom:1px solid var(--hair);
+}
+.hud b{font-weight:500}
+.lives{display:flex;gap:6px;align-items:center}
+.lives i{display:block;position:relative;width:3px;height:14px}
+.lives i::before{content:"";position:absolute;inset:0;background:var(--ink);
+  transition:opacity .32s,transform .32s cubic-bezier(.2,.8,.2,1);transform-origin:center}
+.lives i.off::before{opacity:.16;transform:scaleY(.4)}
+.lives i.new::before{opacity:0;transform:scaleY(0)}
+/* ── escenario ───────────────────────────────────────────────── */
+.stage{position:relative}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* vidas: dentro del escenario, arriba a la izquierda, enfrentadas
+   a la cuenta atrás que se dibuja en el lienzo arriba a la derecha */
+.stage .lives{position:absolute;left:12px;top:19px;z-index:2}
+/* consejo del tutorial: banda superior del escenario, fuera del paso
+   de la figura, que ocupa la franja central                        */
+.tip{
+  position:absolute;left:0;right:0;top:0;margin:0 auto;max-width:34ch;
+  padding:6px 16px 0;text-align:center;pointer-events:none;
+  font-size:12px;line-height:1.55;opacity:.75;
+}
+.tip.on{animation:capIn .38s cubic-bezier(.2,.8,.2,1)}
+/* elogio: aparece en el centro del escenario y se va solo */
+.hype{
+  position:absolute;left:0;right:0;top:50%;padding:0 22px;text-align:center;
+  font-family:var(--sans);font-weight:600;line-height:1.02;letter-spacing:-.03em;
+  font-size:calc(clamp(30px,10vw,52px) * var(--k,1));
+  color:var(--signal);opacity:0;pointer-events:none;
+  transform:translateY(-50%);
+}
+.hype.on{animation:hype .8s cubic-bezier(.2,.8,.2,1) .1s both}
+/* el fallo también habla, y sin azul: el azul sólo marca el acierto.
+   Pero la balanza se vence por el centro, justo bajo este texto, y se
+   dibuja en tinta plana: cualquier color fijo se perdería encima. El
+   negativo se calcula contra lo que haya detrás — blanco literal, no
+   una variable: con «difference» es lo que garantiza la inversión en
+   los dos temas y también sobre la figura.                          */
+.hype.miss{color:#fff;mix-blend-mode:difference}
+@keyframes hype{
+  0%{opacity:0;transform:translateY(-50%) scale(.94)}
+  20%{opacity:1;transform:translateY(-50%) scale(1)}
+  68%{opacity:1;transform:translateY(-50%) scale(1)}
+  100%{opacity:0;transform:translateY(-50%) scale(1.03)}
+}
+
+/* ── lectura inferior ────────────────────────────────────────── */
+.readout{min-height:118px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px}
+.num{
+  font-family:var(--sans);font-weight:600;
+  font-size:clamp(50px,17vw,86px);line-height:.86;letter-spacing:-.045em;
+  opacity:0;transform:translateY(6px);transition:opacity .18s ease,transform .18s ease;
+  position:relative;align-self:flex-start;
+}
+.num.on{opacity:1;transform:none}
+.num small{font-size:.34em;font-weight:400;letter-spacing:0;vertical-align:.9em;margin-left:.1em;opacity:.5}
+.num::after{content:"";position:absolute;left:-4px;right:-4px;top:52%;height:1px;background:var(--ink);
+  transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.num.void::after{transform:scaleX(1)}
+.num.valid{color:var(--signal)}
+.cap{font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.55;
+  border-top:1px solid var(--hair);padding-top:11px;transition:color .2s}
+.cap.hit{color:var(--signal);opacity:1;animation:capIn .38s cubic-bezier(.2,.8,.2,1)}
+@keyframes capIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}

@@ -1,0 +1,6 @@
+# En el repositorio, siempre saltos de línea de Unix; en Windows
+# cada cual trabaja como quiera.
+* text=auto eol=lf
+
+# binarios
+*.png binary
