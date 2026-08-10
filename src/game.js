@@ -13,6 +13,9 @@ import { drawBest, drawTable } from "./scores.js";
 import { evaluate, normalize, partsCentroid } from "./geometry.js";
 import { cmp, freeBoard } from "./scoring.js";
 import { toShapeSpace, trim } from "./replay.js";
+import { runStart } from "./net.js";
+import { ME } from "./player.js";
+import { ENVIO, enviarPartida, limpiarEnvio, repintarEnvio } from "./submit.js";
 import { toast } from "./share.js";
 
 export function newLevel(){
@@ -239,37 +242,61 @@ export function paintOver(){
   $("again").textContent = T(S.mode === "daily" ? "retry" : "again");
   $("rec-badge").hidden = !S.score.record;
 
+  /* El nombre se pide una sola vez en la vida del aparato. Mientras
+     no lo haya, no se sube nada: primero hay que saber quién eres. */
+  const primeraVez = !ME.tieneNombre();
+  $("entry").hidden = !primeraVez;
+  if (primeraVez){
+    $("entry-note").hidden = false;
+    $("entry-note").textContent = T("askName");
+  }
+
   if (S.mode === "daily"){
     const d = S.score.daily, st = DAILY.streak();
     $("daily-over").hidden = false;
-    $("entry").hidden = true; $("entry-note").hidden = true; $("tbl-over").hidden = true;
+    $("tbl-over").hidden = true;
     $("d-try").textContent    = "#" + d.tries;
     $("d-best").textContent   = "N." + String(d.lv).padStart(2,"0") + " · " + d.av.toFixed(1) + "%";
     $("d-streak").textContent = st.n + " " + T("days");
-    return;
-  }
-  $("daily-over").hidden = true; $("tbl-over").hidden = false;
+  } else {
+    $("daily-over").hidden = true; $("tbl-over").hidden = false;
 
-  const q = !S.score.saved && qualifies(S.score.lv, S.score.av, S.score.tl);
-  $("entry").hidden = !q;
-  $("entry-note").hidden = q;
-  if (q) $("name").value = $("name").value || DB.name();
-  else if (S.score.saved) $("entry-note").textContent = DB.persistent ? T("saved") : T("savedSession");
-  else $("entry-note").textContent = T("noTable");
-  drawTable($("tbl-over"), S.score.saved ? 6 : 5, S.score.ts || null, S.score.tl);
+    /* con el nombre ya sabido, la marca entra sola en su tabla */
+    if (!primeraVez && !S.score.saved && qualifies(S.score.lv, S.score.av, S.score.tl)) guardarMarca();
+    if (!primeraVez){
+      const dentro = S.score.saved;
+      $("entry-note").hidden = ENVIO.estado !== "" || dentro;
+      if (!dentro && ENVIO.estado === "") $("entry-note").textContent = T("noTable");
+    }
+    drawTable($("tbl-over"), S.score.saved ? 6 : 5, S.score.ts || null, S.score.tl);
+  }
+
+  if (!primeraVez) enviarPartida();
+  repintarEnvio();
 }
 
-export function saveMark(){
+/* la marca en la tabla de este aparato */
+function guardarMarca(){
   if (!S.score || S.score.saved) return;   // una marca por partida
-  const raw = $("name").value.replace(/\s+/g," ").trim().slice(0, CONFIG.nameMax);
-  const n = raw || "—";
   const ts = Date.now();
-  DB.add({ n, lv: S.score.lv, av: S.score.av, tl: S.score.tl, ts });
+  DB.add({ n: DB.name() || "—", lv: S.score.lv, av: S.score.av, tl: S.score.tl, ts });
   S.score.saved = true; S.score.ts = ts;
-  paintOver(); drawBest();
+  drawBest();
+}
+
+/* El botón de la entrada de nombre. Sólo aparece la primera vez:
+   guarda el nombre para siempre, mete la marca en su tabla y sube la
+   partida. A partir de aquí, todo eso pasa solo.                    */
+export function saveMark(){
+  if (!S.score) return;
+  const raw = $("name").value.replace(/\s+/g," ").trim().slice(0, CONFIG.nameMax);
+  DB.set("name", raw || "—");
+  if (S.mode !== "daily" && !S.score.saved && qualifies(S.score.lv, S.score.av, S.score.tl)) guardarMarca();
+  paintOver();
 }
 
 export function goHome(){
+  limpiarEnvio();
   $("scr-over").hidden = true; $("scr-intro").hidden = false;
   S.phase = "intro"; S.score = null; S.pause = null;
   disarmBack();                       // en la portada, atrás vuelve a salir
@@ -282,7 +309,7 @@ export function goHome(){
    servidor, que es lo que impide sortear semillas hasta dar con una
    cómoda. Sin conexión se sortea aquí y la partida no sube a la
    clasificación mundial, pero se juega igual.                      */
-export function start(mode, seed){
+export async function start(mode, seed){
   const want = mode === "daily" ? "daily" : "free";
   /* la primera vez se enseña antes de jugar, y al terminar (o al
      saltar) se entra en la partida que se había pedido             */
@@ -298,6 +325,18 @@ export function start(mode, seed){
     seed = (seed >>> 0) || (Math.random() * 2**32) >>> 0;
     S.runTimer = S.timer;
     S.refBest = (DB.list(freeBoard(S.runTimer))[0] || {}).lv || 0;
+  }
+
+  /* El vale de la partida. Si el servidor contesta, la semilla es la
+     suya y al terminar se podrá comprobar lo que se ha jugado. Si no
+     contesta —o no hay red— se juega igual con la semilla de casa,
+     sin subir a la clasificación: nadie se queda sin jugar por eso. */
+  S.ticket = null; S.enviada = false;
+  const vale = await runStart(S.mode === "daily" ? "daily" : freeBoard(S.runTimer), dayKey());
+  if (vale && !vale.error && typeof vale.seed === "number"){
+    seed = vale.seed;
+    S.ticket = vale.ticket;
+    S.runTimer = vale.tl;
   }
   setRNG(mulberry32(seed));
   S.recordShown = false;

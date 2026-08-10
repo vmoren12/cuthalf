@@ -14,10 +14,12 @@ export const S = {
   shape: null, cfg: null, rot: 0, rotSpd: 0, maxR: 1,
   tf: null,                  // proyección del último fotograma
   seed: 0, startedAt: 0,     // con qué semilla y cuándo empezó la partida
+  ticket: null, enviada: false,  // el vale del servidor y si ya se subió
   trace: [],                 // los cortes de la partida, para el servidor
   t0: 0, last: 0, aim: null, res: null, world: null, pause: null,
   timer: 0, runTimer: 0, limit: 0, lastShape: null, mode: "free",
   board: "daily",            // clasificación que se está mirando
+  scope: "world",            // el mundo o sólo este aparato
   step: 0, tutorGuide: false, tutorHelp: false, tutorPending: null,
   refBest: 0, recordShown: false,
   capDesc: { k:"swipe" }, numErr: null, numOk: false

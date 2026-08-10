@@ -7,15 +7,22 @@
 
 import { $ } from "./state.js";
 import { DAILY, DB } from "./storage.js";
-import { freeBoard } from "./scoring.js";
+import { freeBoard, seasonOf } from "./scoring.js";
 import { T } from "./i18n.js";
+import { NET, meFree, meSeason, worldFree, worldSeason } from "./net.js";
+import { ME } from "./player.js";
+import { dayKey } from "./util.js";
 
 const cell = (c, txt) => { const s = document.createElement("span"); s.className = c; s.textContent = txt; return s; };
 
 /* rows: [{ r, n, l, a, me }] · r puesto · n nombre · l nivel · a precisión */
 export function drawRows(el, rows, note){
   el.innerHTML = "";
-  if (!rows.length){ el.innerHTML = '<li class="empty">' + T("empty") + '</li>'; return; }
+  if (!rows.length){
+    const li = document.createElement("li");
+    li.className = "empty"; li.textContent = note || T("empty");
+    el.appendChild(li); return;
+  }
   for (const row of rows){
     const li = document.createElement("li");
     if (row.me) li.className = "me";
@@ -51,6 +58,41 @@ export function localSeason(){
     l: levelText(d.lv),
     a: d.av.toFixed(1) + "%"
   }));
+}
+
+/* ── el mundo ─────────────────────────────────────────────────────
+   En el reto diario la tabla mundial es la de la temporada: los
+   puntos acumulados del mes, que es lo que se compite. El día suelto
+   se ve al terminar de jugarlo.
+
+   Si tu marca queda fuera de los cien primeros, se añade tu fila al
+   final: una clasificación en la que no te encuentras no dice nada. */
+export async function worldRows(board){
+  const yo = ME.id();
+  const mes = seasonOf(dayKey());
+
+  const [lista, mio] = board === "daily"
+    ? await Promise.all([worldSeason(mes), meSeason(yo, mes)])
+    : await Promise.all([worldFree(board), meFree(yo, board)]);
+
+  if (!Array.isArray(lista)) return { rows: [], nota: NET.vivo ? T("notSent") : T("noNet") };
+
+  const fila = r => board === "daily"
+    ? { r: String(r.pos), n: r.name, l: Number(r.points).toLocaleString(), a: r.days + " " + T("days"), me: r.player_id === yo }
+    : { r: String(r.pos), n: r.name, l: levelText(r.level), a: Number(r.accuracy).toFixed(1) + "%", me: r.player_id === yo };
+
+  const rows = lista.map(fila);
+  if (!rows.length) return { rows: [], nota: T("worldEmpty") };
+
+  /* ¿estás en la lista? Si no, tu puesto va al final */
+  const yoDentro = rows.some(r => r.me);
+  const m = Array.isArray(mio) ? mio[0] : null;
+  if (!yoDentro && m){
+    rows.push(board === "daily"
+      ? { r: String(m.pos), n: DB.name() || "—", l: Number(m.points).toLocaleString(), a: m.days + " " + T("days"), me: true }
+      : { r: String(m.pos), n: DB.name() || "—", l: levelText(m.level), a: Number(m.accuracy).toFixed(1) + "%", me: true });
+  }
+  return { rows, nota: m ? T("rankOf")(m.pos, m.total) : "" };
 }
 
 /* la tabla que se pinta al terminar una partida libre */

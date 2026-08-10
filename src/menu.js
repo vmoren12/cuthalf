@@ -4,10 +4,11 @@ import { CONFIG } from "./config.js";
 import { DAILY, DB } from "./storage.js";
 import { $, S, UI, refreshColors } from "./state.js";
 import { T, lang, setLang } from "./i18n.js";
-import { drawBest, drawRows, localRuns, localSeason } from "./scores.js";
+import { drawBest, drawRows, localRuns, localSeason, worldRows } from "./scores.js";
 import { finishTutor, goHome, paintOver, saveMark, start, startTutor } from "./game.js";
-import { shareCard } from "./share.js";
+import { shareCard, toast } from "./share.js";
 import { BOARDS, boardTime } from "./scoring.js";
+import { ME } from "./player.js";
 
 export let askResolve = null;
 export function ask(question, yesLabel){
@@ -67,27 +68,75 @@ export function drawBoards(){
   }
 }
 
-export function paintScores(){
-  const daily = S.board === "daily";
-  $("season-box").hidden = !daily;
-  if (daily){
-    const s = DAILY.season();
-    $("sea-pts").textContent    = s.pts.toLocaleString();
-    $("sea-days").textContent   = String(s.played);
-    $("sea-streak").textContent = DAILY.streak().n + " " + T("days");
-    drawRows($("tbl-all"), localSeason());
-    return;
+/* Mundo o este aparato. Se abre en el mundo, que es de lo que va
+   esto; lo de casa queda a un toque.                                */
+export function drawScope(){
+  const box = $("seg-scope");
+  box.innerHTML = "";
+  for (const s of ["world", "mine"]){
+    const b = document.createElement("button");
+    b.textContent = T(s === "world" ? "worldTab" : "mineTab");
+    b.className = s === S.scope ? "on" : "";
+    b.addEventListener("click", () => { S.scope = s; DB.set("scope", s); drawScope(); paintScores(); });
+    box.appendChild(b);
   }
-  /* las marcas de antes no sabían con qué reloj se hicieron y están
-     todas aquí: mejor decirlo que dejar que cuadre mal              */
-  const old = S.board === "free-0" && DB.list("free-0").some(r => r.old);
-  drawRows($("tbl-all"), localRuns(S.board, CONFIG.keep), old ? T("oldNote") : "");
+  $("rename").hidden = !ME.tieneNombre();
 }
 
+/* la temporada en curso o el día de hoy, según la tabla */
+const cabeceraLocal = () => {
+  const s = DAILY.season();
+  $("sea-pts").textContent    = s.pts.toLocaleString();
+  $("sea-days").textContent   = String(s.played);
+  $("sea-streak").textContent = DAILY.streak().n + " " + T("days");
+};
+
+export async function paintScores(){
+  const daily = S.board === "daily";
+  $("season-box").hidden = !daily;
+  if (daily) cabeceraLocal();
+
+  if (S.scope === "mine"){
+    if (daily){ drawRows($("tbl-all"), localSeason()); return; }
+    /* las marcas de antes no sabían con qué reloj se hicieron y están
+       todas aquí: mejor decirlo que dejar que cuadre mal            */
+    const old = S.board === "free-0" && DB.list("free-0").some(r => r.old);
+    drawRows($("tbl-all"), localRuns(S.board, CONFIG.keep), old ? T("oldNote") : "");
+    return;
+  }
+
+  /* el mundo hay que ir a buscarlo, así que primero se dice que se
+     está yendo: una tabla vacía sin explicación parece un error    */
+  drawRows($("tbl-all"), [], T("loading"));
+  const marca = ++peticion;
+  const filas = await worldRows(S.board);
+  if (marca !== peticion) return;          // llegó tarde: manda la última
+  drawRows($("tbl-all"), filas.rows, filas.nota);
+}
+
+/* para no pisarse cuando se cambia de pestaña más rápido de lo que
+   contesta el servidor                                              */
+let peticion = 0;
+
 export function openScores(){
-  drawBoards(); paintScores();
+  drawBoards(); drawScope(); paintScores();
   $("scr-scores").hidden = false;
 }
+
+/* El nombre se puede cambiar cuando se quiera: la próxima partida que
+   suba lo lleva, y el servidor actualiza el de todas tus marcas —eres
+   el mismo jugador, sólo que con otro nombre.                       */
+export async function renameMe(){
+  const actual = DB.name();
+  const nuevo = prompt(T("askName"), actual);
+  if (nuevo === null) return;
+  const limpio = nuevo.replace(/\s+/g, " ").trim().slice(0, CONFIG.nameMax);
+  if (!limpio || limpio === actual) return;
+  DB.set("name", limpio);
+  drawBest(); paintScores();
+  toast(T("saved"));
+}
+
 
 /* congelar y descongelar la partida. El reloj de la figura se mide
    contra S.t0, así que al reanudar se le suma lo que ha durado la
@@ -169,6 +218,7 @@ export async function promptInstall(){
 $("close-run").addEventListener("click", quitRun);
 $("open-scores").addEventListener("click", openScores);
 $("scores-close").addEventListener("click", () => { $("scr-scores").hidden = true; });
+$("rename").addEventListener("click", renameMe);
 $("theme-intro").addEventListener("click", () => setTheme(!isDark(), true));
 $("install-intro").addEventListener("click", promptInstall);
 $("ask-yes").addEventListener("click", () => closeAsk(true));

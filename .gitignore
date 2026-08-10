@@ -19,3 +19,7 @@ supabase/.branches/
 Thumbs.db
 Desktop.ini
 .DS_Store
+
+# resultado de la última prueba
+tests/.ultimo-resultado.txt
+tests/.perfil/

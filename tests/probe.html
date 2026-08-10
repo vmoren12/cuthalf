@@ -22,36 +22,47 @@
 /* Prueba de humo del juego entero.
 
    El cuerpo de la página sale del index.html de verdad, no de una
-   copia: así esta prueba no puede quedarse desfasada cuando cambie
-   la interfaz. Los módulos se cargan después, ya con el DOM puesto
-   (los <script> que entran por innerHTML no se ejecutan solos).
+   copia: así esta prueba no puede quedarse desfasada cuando cambie la
+   interfaz. Los módulos se cargan después, ya con el DOM puesto (los
+   <script> que entran por innerHTML no se ejecutan solos).
 
-   Se ejecuta sin ratón ni dedos: llama al juego por dentro, corta
-   figuras a mano y comprueba lo que queda guardado. El resultado va
-   al título de la página, que es lo que lee el navegador sin cara.  */
+   Se juega sin ratón ni dedos: se llama al juego por dentro, se
+   cortan figuras a mano y se comprueba lo que queda guardado. Los
+   últimos pasos hablan con el servidor de verdad: suben una partida
+   y la buscan en la clasificación mundial.
+
+   El resultado de cada paso sale en el título de la página, que es lo
+   que se puede leer desde un navegador sin ventanas.                */
 
 const html = await (await fetch("../index.html")).text();
 document.body.innerHTML = html.split("<body>")[1].split("</body>")[0];
 
-const { S, $ }                          = await import("../src/state.js");
+const { S, $ }                            = await import("../src/state.js");
 const { start, doCut, gameOver, saveMark, goHome } = await import("../src/game.js");
-const { DB, DAILY, qualifies }          = await import("../src/storage.js");
-const { points, freeBoard }             = await import("../src/scoring.js");
-const { normalize, evaluate }           = await import("../src/geometry.js");
-const { SHAPES }                        = await import("../src/shapes.js");
-const { setRNG, mulberry32 }            = await import("../src/rng.js");
+const { DB, DAILY, qualifies }            = await import("../src/storage.js");
+const { points, freeBoard }               = await import("../src/scoring.js");
+const { normalize, evaluate, bisector }   = await import("../src/geometry.js");
+const { SHAPES }                          = await import("../src/shapes.js");
+const { setRNG, mulberry32 }              = await import("../src/rng.js");
 const { applyLang, openScores, paintScores } = await import("../src/menu.js");
-const { shareText }                     = await import("../src/share.js");
-const { paint }                         = await import("../src/render.js");
-const { replay, toShapeSpace }          = await import("../src/replay.js");
-await import("../src/main.js");          // arranque, igual que en la página
+const { shareText }                       = await import("../src/share.js");
+const { paint }                           = await import("../src/render.js");
+const { replay, toShapeSpace }            = await import("../src/replay.js");
+const { ME }                              = await import("../src/player.js");
+const { ENVIO }                           = await import("../src/submit.js");
+const { NET, runSubmit, meFree }          = await import("../src/net.js");
+await import("../src/main.js");            // arranque, igual que en la página
 
 const log = [];
-const step = (name, fn) => {
-  try { fn(); log.push("ok " + name); }
-  catch(e){ log.push("FALLO " + name + ": " + e.message); }
+const step = async (nombre, fn) => {
+  try { await fn(); log.push("ok " + nombre); }
+  catch(e){ log.push("FALLO " + nombre + ": " + e.message); }
   if (!document.title.startsWith("ERROR")) document.title = log.join(" | ");
 };
+/* el reloj del navegador sin ventanas va acelerado; esperar por la red
+   sí cuesta tiempo del de verdad, que es el que mide el servidor */
+const esperar = ms => fetch("/esperar?ms=" + ms).catch(() => {});
+
 /* el corte se mide contra la figura ya proyectada en el lienzo, y de
    eso se encarga el bucle de dibujo: aquí se le pide un fotograma  */
 const frame = () => paint(performance.now());
@@ -59,49 +70,56 @@ const cut = (dx, dy) => {
   const r = $("stage").getBoundingClientRect();
   doCut({ x: r.width/2 - dx, y: r.height/2 - dy }, { x: r.width/2 + dx, y: r.height/2 + dy });
 };
+/* el corte que parte de verdad la figura de este nivel, llevado de la
+   figura a la pantalla — al revés de lo que hace el juego al apuntar */
+const cortePerfecto = angulo => {
+  const b = bisector(S.shape, angulo), m = S.tf;
+  const P = { x: m.cx + (b.P.x*m.c - b.P.y*m.s)*m.sc, y: m.cy + (b.P.x*m.s + b.P.y*m.c)*m.sc };
+  const N = { x: b.N.x*m.c - b.N.y*m.s, y: b.N.x*m.s + b.N.y*m.c };
+  doCut({ x: P.x - N.y*90, y: P.y + N.x*90 }, { x: P.x + N.y*90, y: P.y - N.x*90 });
+};
+const terminarNivel = () => { frame(); paint(S.res.t0 + 5000); };
 
 /* ── geometría ─────────────────────────────────────────────────── */
-step("un diámetro reparte al 50%", () => {
+await step("un diámetro reparte al 50%", () => {
   const r = evaluate(normalize(SHAPES.circle()), { x:0, y:0 }, { x:0, y:1 });
   if (Math.abs(r.err) > 0.5) throw new Error("da " + r.err + "% de error");
 });
-step("misma semilla, misma figura", () => {
+await step("misma semilla, misma figura", () => {
   setRNG(mulberry32(1234)); const a = JSON.stringify(normalize(SHAPES.blob()));
   setRNG(mulberry32(1234)); const b = JSON.stringify(normalize(SHAPES.blob()));
   if (a !== b) throw new Error("la semilla no reproduce la figura");
 });
 
 /* ── partida ───────────────────────────────────────────────────── */
-step("saltar la práctica", () => { DB.set("tutorDone", true); });
-step("juego libre: empieza", () => {
-  S.timer = 3;                                  // con reloj de 3 s
-  start("free");
+await step("saltar la práctica", () => { DB.set("tutorDone", true); });
+
+await step("juego libre: empieza con el reloj elegido", async () => {
+  S.timer = 3;
+  await start("free");
   if (S.phase !== "play") throw new Error("no arranca, fase " + S.phase);
-  if (S.runTimer !== 3) throw new Error("no coge el reloj elegido");
+  if (S.runTimer !== 3) throw new Error("reloj " + S.runTimer + " en vez de 3");
 });
-frame();
-step("juego libre: cortar", () => {
-  cut(0, 140);
+await step("juego libre: cortar", () => {
+  frame(); cut(0, 140);
   if (!S.res || !(S.res.err >= 0)) throw new Error("el corte no se ha medido");
 });
-step("juego libre: la marca guarda su reloj", () => {
+await step("la marca guarda su reloj y no se mezcla", () => {
   S.cuts = [98.2, 97.1];
   gameOver();
   if (S.score.tl !== 3) throw new Error("la marca no recuerda el reloj");
   if (!shareText()) throw new Error("el texto para compartir sale vacío");
-  $("name").value = "PRUEBA";
-  saveMark();
-  if (DB.list("free-3")[0].n !== "PRUEBA") throw new Error("no ha entrado en la tabla de 3 s");
-  if (DB.list("free-0").some(r => r.n === "PRUEBA")) throw new Error("se ha colado en la tabla de ∞");
+  $("name").value = "SONDA";
+  saveMark();                                   // primera vez: guarda el nombre
+  if (!ME.tieneNombre()) throw new Error("no ha guardado el nombre");
+  if (DB.list("free-3")[0].n !== "SONDA") throw new Error("no ha entrado en la tabla de 3 s");
+  if (DB.list("free-0").some(r => r.n === "SONDA")) throw new Error("se ha colado en la de ∞");
   goHome();
 });
-step("reto diario: empieza", () => {
-  start("daily");
+await step("reto diario: se juega y cuenta el intento", async () => {
+  await start("daily");
   if (S.mode !== "daily") throw new Error("no entra en el reto");
-});
-frame();
-step("reto diario: corte y cierre", () => {
-  cut(0, 140);
+  frame(); cut(0, 140);
   if (!S.res) throw new Error("el corte no se ha medido");
   S.cuts = [95];
   gameOver();
@@ -109,9 +127,9 @@ step("reto diario: corte y cierre", () => {
   goHome();
 });
 
-/* ── repetición: lo que hará el servidor ───────────────────────── */
-step("un corte mide igual en la pantalla que en la figura", () => {
-  S.timer = 0; start("free"); frame();
+/* ── repetición: lo que hace el servidor ───────────────────────── */
+await step("un corte mide igual en la pantalla que en la figura", async () => {
+  S.timer = 0; await start("free"); frame();
   const P = { x: 100, y: 210 }, N = { x: 0.6, y: 0.8 };
   const enPantalla = evaluate(S.world, P, N).err;
   const m = toShapeSpace(S.tf, P, N);
@@ -120,73 +138,118 @@ step("un corte mide igual en la pantalla que en la figura", () => {
     throw new Error(enPantalla.toFixed(4) + " frente a " + enLaFigura.toFixed(4));
 });
 
-step("el servidor repite la partida y le sale lo mismo", () => {
+await step("repetir la partida da lo mismo que jugarla", async () => {
   S.timer = 0;
-  start("free", 20260811);                       // semilla fija, como la dará el servidor
+  await start("free", 20260811);
   const semilla = S.seed;
-  /* seis cortes por sitios distintos: unos entrarán y otros no, que es
-     justo lo que interesa — así se recorren aciertos, fallos y vidas */
   for (const [dx, dy] of [[0,150],[150,0],[60,140],[0,150],[130,60],[0,150]]){
     if (S.phase === "over") break;
-    frame();
-    cut(dx, dy);
-    frame();                                      // el resultado en pantalla
-    paint(S.res.t0 + 5000);                       // y su final, que pasa de nivel
+    frame(); cut(dx, dy); terminarNivel();
   }
-  const nivelJugado = S.level, cortesJugados = S.cuts.slice();
-
+  const nivel = S.level, cortes = S.cuts.slice();
   const r = replay(semilla, S.trace);
-  if (!r.ok) throw new Error("el servidor rechaza la partida: " + r.reason);
-  if (r.level !== nivelJugado)
-    throw new Error("nivel " + nivelJugado + " jugado, " + r.level + " repetido");
-  if (r.cuts !== cortesJugados.length)
-    throw new Error("cortes: " + cortesJugados.length + " jugados, " + r.cuts + " repetidos");
-  const avJugado = +(cortesJugados.reduce((a,b)=>a+b,0) / (cortesJugados.length||1)).toFixed(1);
-  if (Math.abs(r.av - avJugado) > 0.15)
-    throw new Error("precisión " + avJugado + " frente a " + r.av);
-  if (!S.trace.length) throw new Error("no se ha apuntado ningún corte");
+  if (!r.ok) throw new Error("rechaza la partida: " + r.reason);
+  if (r.level !== nivel) throw new Error("nivel " + nivel + " jugado, " + r.level + " repetido");
+  if (r.cuts !== cortes.length) throw new Error("cortes: " + cortes.length + " y " + r.cuts);
+  const av = +(cortes.reduce((a,b)=>a+b,0) / (cortes.length||1)).toFixed(1);
+  if (Math.abs(r.av - av) > 0.15) throw new Error("precisión " + av + " frente a " + r.av);
   goHome();
 });
 
-step("una partida inventada no cuela", () => {
-  /* cortes al azar, de los que no parten nada por la mitad */
+await step("una partida inventada no cuela", () => {
   const basura = Array.from({length: 12}, () => ({ P:{x:.9,y:.9}, N:{x:1,y:0}, ms: 300 }));
   const r = replay(20260811, basura);
-  if (r.level > 3) throw new Error("acepta un nivel " + r.level + " con cortes de mentira");
+  if (r.level > 3) throw new Error("le da nivel " + r.level + " a cortes de mentira");
   if (!r.over) throw new Error("debería quedarse sin vidas");
 });
 
-/* ── clasificaciones ───────────────────────────────────────────── */
-step("cada reloj, su tabla", () => {
+/* ── clasificaciones locales ───────────────────────────────────── */
+await step("cada reloj, su tabla", () => {
   DB.add({ n:"LENTO",  lv: 9, av: 91, tl: 0, ts: 1 });
   DB.add({ n:"RAPIDO", lv: 4, av: 88, tl: 3, ts: 2 });
   if (DB.list("free-0").some(r => r.tl === 3)) throw new Error("las tablas se mezclan");
-  if (!qualifies(2, 50, 3)) throw new Error("la tabla de 3 s rechaza una marca que le cabe");
+  if (!qualifies(2, 50, 3)) throw new Error("la tabla de 3 s rechaza lo que le cabe");
   if (freeBoard(10) !== "free-10") throw new Error("mal nombre de tabla");
+  if (DB.name() !== "SONDA") throw new Error("guardar una marca ha cambiado el nombre a " + DB.name());
 });
-step("puntos y temporada", () => {
+await step("puntos y temporada", () => {
   if (points(12, 97.4) !== 12974) throw new Error("la fórmula no cuadra: " + points(12, 97.4));
   const s = DAILY.season();
   if (s.pts !== s.days.reduce((a, d) => a + points(d.lv, d.av), 0)) throw new Error("el acumulado no suma");
   if (!s.played) throw new Error("el día jugado no consta en la temporada");
 });
-step("pantalla de clasificaciones", () => {
+await step("la pantalla de clasificaciones", async () => {
+  S.scope = "mine"; S.board = "daily";
   openScores();
-  if ($("seg-board").children.length !== 5) throw new Error("faltan pestañas: " + $("seg-board").children.length);
-  if ($("season-box").hidden) throw new Error("el reto diario no muestra la temporada");
-  if (!$("tbl-all").children.length) throw new Error("la tabla del reto sale vacía");
-  S.board = "free-3"; paintScores();
-  if (!$("season-box").hidden) throw new Error("el juego libre no debería mostrar la temporada");
-  if ($("tbl-all").textContent.includes("LENTO")) throw new Error("la tabla de 3 s enseña marcas de ∞");
-  S.board = "daily"; paintScores();
+  if ($("seg-board").children.length !== 5) throw new Error("faltan pestañas");
+  if ($("seg-scope").children.length !== 2) throw new Error("falta el conmutador mundo/tú");
+  if ($("season-box").hidden) throw new Error("el reto no muestra la temporada");
+  S.board = "free-3"; await paintScores();
+  if (!$("season-box").hidden) throw new Error("el juego libre no lleva temporada");
+  if ($("tbl-all").textContent.includes("LENTO")) throw new Error("la de 3 s enseña marcas de ∞");
 });
-step("cambio de idioma", () => {
+
+/* ── el mundo, de verdad ───────────────────────────────────────── */
+await step("hay identidad, y no cambia", () => {
+  const id = ME.id(), s = ME.secret();
+  if (!/^[0-9a-f-]{36}$/i.test(id)) throw new Error("identificador raro: " + id);
+  if (s.length < 20) throw new Error("secreto corto");
+  if (ME.id() !== id || ME.secret() !== s) throw new Error("cambian entre llamadas");
+});
+
+await step("una partida sube a la clasificación mundial", async () => {
+  S.timer = 0;
+  await start("free");
+  if (!S.ticket) throw new Error("el servidor no ha dado vale");
+  for (let i = 0; i < 5; i++){
+    frame();
+    cortePerfecto(0.3 + i * 0.2);
+    if (!S.res.ok) throw new Error("el corte exacto del nivel " + S.level + " ha fallado: " + S.res.err.toFixed(2) + "%");
+    terminarNivel();
+  }
+  if (S.level !== 6) throw new Error("cinco cortes buenos deberían dejarlo en 6, y está en " + S.level);
+  await esperar(1600);                       // una partida lleva su tiempo
+  gameOver();
+  for (let i = 0; i < 40 && ENVIO.estado !== "hecho" && ENVIO.estado !== "fallo" && ENVIO.estado !== "sin-red"; i++)
+    await esperar(250);
+  if (ENVIO.estado !== "hecho"){
+    const directo = await runSubmit({ ticket: S.ticket, cuts: S.trace, player: ME.credenciales(), name: ME.name() });
+    throw new Error("no ha subido · " + ENVIO.estado + " · net=" + NET.vivo + "/" + NET.ultimoError + " · directo=" + JSON.stringify(directo));
+  }
+  if ($("world-row").hidden) throw new Error("no enseña el puesto mundial");
+  if (!/\d/.test($("world-pos").textContent)) throw new Error("puesto sin número: " + $("world-pos").textContent);
+});
+
+await step("y aparece en la tabla mundial", async () => {
+  S.board = "free-0"; S.scope = "world";
+  openScores();
+  for (let i = 0; i < 40 && /Cargando|Loading/.test($("tbl-all").textContent); i++) await esperar(250);
+  const texto = $("tbl-all").textContent;
+  if (/Cargando|Loading/.test(texto)) throw new Error("se queda cargando");
+  if (!texto.includes("SONDA")) throw new Error("no está la marca recién subida: " + texto.slice(0, 140));
+  if (!$("tbl-all").querySelector(".me")) throw new Error("no destaca tu fila");
+});
+
+await step("la temporada mundial responde", async () => {
+  S.board = "daily";
+  await paintScores();
+  const texto = $("tbl-all").textContent;
+  if (/Cargando|Loading/.test(texto)) throw new Error("se queda cargando");
+  $("scr-scores").hidden = true;
+});
+
+await step("cambio de idioma", () => {
   applyLang("en");
   if ($("go").textContent !== "Play") throw new Error("no traduce: " + $("go").textContent);
   applyLang("es");
 });
 
 if (!document.title.startsWith("ERROR")) document.title = log.join(" | ");
+/* y se lo cuenta al servidor de pruebas, que es quien puede esperar */
+await fetch("/resultado", {
+  method: "POST",
+  body: document.title.startsWith("ERROR") ? document.title : log.join("\n")
+});
 </script>
 </body>
 </html>

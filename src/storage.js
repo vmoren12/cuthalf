@@ -53,7 +53,8 @@ export const DB = (() => {
         const b = freeBoard(x.tl);
         return (seen[b] = (seen[b] || 0) + 1) <= CONFIG.keep;
       });
-      d.name = r.n;
+      /* el nombre no se toca aquí: es quien eres en la clasificación
+         mundial, y se cambia sólo cuando tú lo cambias             */
       write(d);
     },
     days(){ return read().days || {}; },
