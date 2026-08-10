@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>foto</title>
+<meta name="theme-color" content="#DFE1DA">
+<link rel="stylesheet" href="../css/base.css"><link rel="stylesheet" href="../css/game.css"><link rel="stylesheet" href="../css/screens.css">
+</head><body>
+<script type="module">
+/* Retrato de una pantalla, para mirarla con ojos en vez de suponer.
+   ?p=scores | intro | ask   ·   ?medir=1 cuenta los anchos          */
+const html = await (await fetch("../index.html")).text();
+document.body.innerHTML = html.split("<body>")[1].split("</body>")[0];
+localStorage.setItem("half.v1", JSON.stringify({
+  v:2, name:"VICTOR", tutorDone:true,
+  records:[{n:"VICTOR",lv:12,av:97.4,tl:0,ts:1},{n:"VICTOR",lv:7,av:94.1,tl:0,ts:2},{n:"VICTOR",lv:4,av:91,tl:3,ts:3}],
+  days:{"2026-08-11":{lv:9,av:96.2,tries:2},"2026-08-10":{lv:6,av:93,tries:1}}
+}));
+const { S, $ } = await import("../src/state.js");
+const { openScores, paintScores, ask } = await import("../src/menu.js");
+await import("../src/main.js");
+
+const params = new URL(location).searchParams;
+const cual = params.get("p") || "scores";
+if (cual === "scores"){ S.scope = "mine"; S.board = "daily"; openScores(); await paintScores(); }
+if (cual === "libre"){ S.scope = "mine"; S.board = "free-0"; openScores(); await paintScores(); }
+if (cual === "ask"){ ask("Elige un nombre para la clasificación mundial", "Guardar", "VICTOR"); }
+
+if (params.get("medir")){
+  const ancho = el => Math.round(el.getBoundingClientRect().width) + " (contenido " + el.scrollWidth + ")";
+  const s = $("scr-scores");
+  const lineas = [
+    "viewport      " + innerWidth,
+    "documento     " + document.documentElement.scrollWidth,
+    "scr-scores    " + ancho(s)
+  ];
+  for (const el of s.children) lineas.push("  " + el.tagName.toLowerCase() + "." + (el.className || el.id) + "   " + ancho(el));
+  lineas.push("seg-board     " + ancho($("seg-board")));
+  lineas.push("  botones     " + [...$("seg-board").children].map(b => Math.round(b.getBoundingClientRect().width)).join("  "));
+  lineas.push("seg-scope     " + ancho($("seg-scope")));
+  lineas.push("rename        " + ancho($("rename")));
+  await fetch("/resultado", { method: "POST", body: lineas.join("\n") });
+}
+document.title = "listo";
+</script></body></html>

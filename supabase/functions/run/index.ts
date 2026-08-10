@@ -110,7 +110,7 @@ async function empezar(cuerpo: any, origen: string | null){
 }
 
 /* ── entregar ──────────────────────────────────────────────────── */
-async function entregar(cuerpo: any, origen: string | null, pais: string | null){
+async function entregar(cuerpo: any, origen: string | null){
   const vale = await comprobar(cuerpo?.ticket, SECRETO);
   if (!vale) return responder({ error: "vale no válido o caducado" }, 403, origen);
 
@@ -132,7 +132,7 @@ async function entregar(cuerpo: any, origen: string | null, pais: string | null)
   if (!r.ok) return responder({ error: r.reason }, 403, origen);
 
   const ok = await db.rpc("ensure_player", {
-    p_id: id, p_name: limpiarNombre(cuerpo?.name), p_hash: await huella(secreto), p_country: pais
+    p_id: id, p_name: limpiarNombre(cuerpo?.name), p_hash: await huella(secreto)
   });
   if (ok.error)  return responder({ error: "no se ha podido registrar el jugador" }, 500, origen);
   if (ok.data === false) return responder({ error: "ese nombre es de otro aparato" }, 403, origen);
@@ -164,12 +164,15 @@ Deno.serve(async req => {
   try { cuerpo = await req.json(); }
   catch { return responder({ error: "cuerpo ilegible" }, 400, origen); }
 
-  const pais = req.headers.get("cf-ipcountry") || req.headers.get("x-country") || null;
+  /* El país iría aquí, sacado de una cabecera de geolocalización. No
+     hay ninguna: Supabase no la pasa. La columna `country` se queda en
+     la base de datos por si algún día se añade un servicio que lo
+     resuelva, pero nadie la escribe ni la enseña.                    */
   const camino = new URL(req.url).pathname.split("/").filter(Boolean).pop();
 
   try {
     if (camino === "start")  return await empezar(cuerpo, origen);
-    if (camino === "submit") return await entregar(cuerpo, origen, pais && /^[A-Z]{2}$/.test(pais) ? pais : null);
+    if (camino === "submit") return await entregar(cuerpo, origen);
     return responder({ error: "no existe" }, 404, origen);
   } catch (e) {
     console.error(e);

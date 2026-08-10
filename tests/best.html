@@ -1,0 +1,17 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>x</title><meta name="theme-color" content="#DFE1DA"></head><body>
+<script type="module">
+const html = await (await fetch("/index.html")).text();
+document.body.innerHTML = html.split("<body>")[1].split("</body>")[0];
+/* marcas ya guardadas ANTES de arrancar, como cuando abres la app */
+localStorage.setItem("half.v1", JSON.stringify({
+  v:2, name:"SONDA",
+  records:[{n:"SONDA",lv:6,av:99.9,tl:0,ts:1},{n:"SONDA",lv:3,av:88,tl:3,ts:2}],
+  days:{}, tutorDone:true
+}));
+const { $ } = await import("/src/state.js");
+await import("/src/main.js");
+await new Promise(r => setTimeout(r, 300));
+const salida = "best-val = [" + $("best-val").textContent + "]";
+await fetch("/resultado", { method:"POST", body: salida });
+document.title = salida;
+</script></body></html>

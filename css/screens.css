@@ -84,8 +84,11 @@
 
 /* selector de tiempo */
 .seg{display:flex;border:1px solid var(--hair)}
-.seg button{font:inherit;font-size:11px;letter-spacing:.1em;min-width:40px;padding:8px 0;
+/* el aire de los lados es lo que hace que se lean como botones y no
+   como texto pegado a una caja */
+.seg button{font:inherit;font-size:11px;letter-spacing:.1em;min-width:42px;padding:9px 14px;
   background:none;border:0;border-left:1px solid var(--hair);color:var(--ink);opacity:.45;cursor:pointer;
+  white-space:nowrap;
   transition:background .18s,color .18s,opacity .18s}
 .seg button:first-child{border-left:0}
 /* el selector de clasificación ocupa el ancho: son cinco tablas y

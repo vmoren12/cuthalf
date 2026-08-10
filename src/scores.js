@@ -54,7 +54,7 @@ export function localRuns(board, max, mark){
 export function localSeason(){
   return DAILY.season().days.slice().reverse().map(d => ({
     r: d.d.slice(8),
-    n: d.pts.toLocaleString(),
+    n: d.pts.toLocaleString() + " pts",     // si no, es un número suelto
     l: levelText(d.lv),
     a: d.av.toFixed(1) + "%"
   }));
@@ -100,7 +100,18 @@ export function drawTable(el, max, mark, tl){
   drawRows(el, localRuns(freeBoard(tl), max, mark));
 }
 
+/* Lo mejor que tengas, en la portada.
+
+   El nombre sobra —eres tú— y en su sitio va el reloj con el que se
+   hizo, que es lo que distingue una marca de otra. Si sólo juegas el
+   reto diario no tienes marcas de juego libre, así que ahí se enseñan
+   los puntos de la temporada: antes esa gente veía siempre un guion.  */
 export function drawBest(){
   const b = DB.list()[0];
-  $("best-val").textContent = b ? b.n + " · " + levelText(b.lv) : "—";
+  if (b){
+    $("best-val").textContent = levelText(b.lv) + " · " + (b.tl ? b.tl + " s" : "∞");
+    return;
+  }
+  const s = DAILY.season();
+  $("best-val").textContent = s.played ? s.pts.toLocaleString() + " pts" : "—";
 }

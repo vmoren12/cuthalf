@@ -10,17 +10,33 @@ import { shareCard, toast } from "./share.js";
 import { BOARDS, boardTime } from "./scoring.js";
 import { ME } from "./player.js";
 
+/* Preguntar algo con la cara del juego, no con la del navegador.
+
+   Con `valor` se convierte en una casilla de texto y devuelve lo
+   escrito, o null si se cancela. Sin él, devuelve sí o no.          */
 export let askResolve = null;
-export function ask(question, yesLabel){
+let askConTexto = false;
+export function ask(question, yesLabel, valor){
+  askConTexto = valor !== undefined;
   $("ask-q").textContent = question;
   $("ask-yes").textContent = yesLabel;
   $("ask-no").textContent = T("cancel");
+  $("ask-entry").hidden = !askConTexto;
+  if (askConTexto){
+    $("ask-input").value = valor || "";
+    $("ask-input").placeholder = T("yourName");
+  }
   $("scr-ask").hidden = false;
+  if (askConTexto) requestAnimationFrame(() => { $("ask-input").focus(); $("ask-input").select(); });
   return new Promise(r => { askResolve = r; });
 }
 export function closeAsk(v){
   $("scr-ask").hidden = true;
-  if (askResolve){ const r = askResolve; askResolve = null; r(v); }
+  const texto = askConTexto ? $("ask-input").value : null;
+  if (askResolve){
+    const r = askResolve; askResolve = null;
+    r(askConTexto ? (v ? texto : null) : v);
+  }
 }
 
 /* selector de idioma: ES · EN, el activo marcado */
@@ -128,7 +144,7 @@ export function openScores(){
    el mismo jugador, sólo que con otro nombre.                       */
 export async function renameMe(){
   const actual = DB.name();
-  const nuevo = prompt(T("askName"), actual);
+  const nuevo = await ask(T("askName"), T("save"), actual);
   if (nuevo === null) return;
   const limpio = nuevo.replace(/\s+/g, " ").trim().slice(0, CONFIG.nameMax);
   if (!limpio || limpio === actual) return;
@@ -223,6 +239,7 @@ $("theme-intro").addEventListener("click", () => setTheme(!isDark(), true));
 $("install-intro").addEventListener("click", promptInstall);
 $("ask-yes").addEventListener("click", () => closeAsk(true));
 $("ask-no").addEventListener("click", () => closeAsk(false));
+$("ask-input").addEventListener("keydown", e => { if (e.key === "Enter") closeAsk(true); });
 $("go").addEventListener("click", () => start("free"));
 $("go-daily").addEventListener("click", () => start("daily"));
 $("go-tutor").addEventListener("click", () => startTutor(null));

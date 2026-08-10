@@ -37,14 +37,24 @@
 const html = await (await fetch("../index.html")).text();
 document.body.innerHTML = html.split("<body>")[1].split("</body>")[0];
 
+/* Cada pasada empieza en blanco: con marcas o nombre de la anterior,
+   los pasos medirían otra cosa. Lo único que se conserva es la
+   identidad, para no sembrar un jugador nuevo en la clasificación
+   mundial cada vez que se pasa la prueba.                          */
+const antes = JSON.parse(localStorage.getItem("half.v1") || "{}");
+const identidad = { v: 2, records: [], days: {}, pid: antes.pid, psecret: antes.psecret };
+localStorage.clear();
+localStorage.setItem("half.v1", JSON.stringify(identidad));
+
 const { S, $ }                            = await import("../src/state.js");
 const { start, doCut, gameOver, saveMark, goHome } = await import("../src/game.js");
 const { DB, DAILY, qualifies }            = await import("../src/storage.js");
 const { points, freeBoard }               = await import("../src/scoring.js");
+const { drawBest }                        = await import("../src/scores.js");
 const { normalize, evaluate, bisector }   = await import("../src/geometry.js");
 const { SHAPES }                          = await import("../src/shapes.js");
 const { setRNG, mulberry32 }              = await import("../src/rng.js");
-const { applyLang, openScores, paintScores } = await import("../src/menu.js");
+const { applyLang, openScores, paintScores, renameMe } = await import("../src/menu.js");
 const { shareText }                       = await import("../src/share.js");
 const { paint }                           = await import("../src/render.js");
 const { replay, toShapeSpace }            = await import("../src/replay.js");
@@ -243,6 +253,38 @@ await step("cambio de idioma", () => {
   if ($("go").textContent !== "Play") throw new Error("no traduce: " + $("go").textContent);
   applyLang("es");
 });
+
+await step("la portada enseña tu mejor marca", () => {
+  goHome();
+  const v = $("best-val").textContent;
+  if (v === "—") throw new Error("sigue en blanco con marcas guardadas");
+  if (!/N\.\d\d/.test(v)) throw new Error("no enseña el nivel: " + v);
+  /* quien sólo juega el reto no tiene marcas de juego libre y antes
+     veía siempre un guion: ahora ve los puntos de la temporada     */
+  const soloReto = { v:2, name:"X", records:[], days:{ "2026-08-11": { lv:5, av:90, tries:1 } } };
+  localStorage.setItem("half.v1", JSON.stringify(soloReto));
+  drawBest();
+  if (!/pts/.test($("best-val").textContent))
+    throw new Error("sin marcas libres pero con reto, enseña: " + $("best-val").textContent);
+});
+
+await step("el nombre se cambia sin salir del juego", async () => {
+  localStorage.setItem("half.v1", JSON.stringify({ v:2, name:"SONDA", records:[], days:{} }));
+  const promesa = renameMe();
+  await new Promise(r => setTimeout(r, 50));
+  if ($("scr-ask").hidden) throw new Error("no abre la pantalla del juego");
+  if ($("ask-entry").hidden) throw new Error("no enseña la casilla de texto");
+  if ($("ask-input").value !== "SONDA") throw new Error("no trae el nombre actual");
+  $("ask-input").value = "OTRO NOMBRE";
+  $("ask-yes").click();
+  await promesa;
+  if (DB.name() !== "OTRO NOMBRE") throw new Error("no lo ha guardado: " + DB.name());
+});
+
+/* y no deja sus marcas en el navegador donde se ha ejecutado */
+const dentro = JSON.parse(localStorage.getItem("half.v1") || "{}");
+localStorage.clear();
+localStorage.setItem("half.v1", JSON.stringify({ v: 2, records: [], days: {}, pid: dentro.pid, psecret: dentro.psecret }));
 
 if (!document.title.startsWith("ERROR")) document.title = log.join(" | ");
 /* y se lo cuenta al servidor de pruebas, que es quien puede esperar */
