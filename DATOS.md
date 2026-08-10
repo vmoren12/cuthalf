@@ -57,7 +57,8 @@ Una sola clave, `half.v1`, con un objeto:
 | `days{}`    | Reto diario por fecha: `"2026-08-10": { lv, av, tries }` |
 | `streak`    | `{ last, n }` · racha de días seguidos |
 | `name`      | Último nombre usado |
-| `lang` `theme` `timer` `board` | Preferencias |
+| `pid` `psecret` | Quién eres en el mundo (ver abajo) |
+| `lang` `theme` `timer` `board` `scope` | Preferencias |
 | `tutorDone` | Si ya se ha visto la práctica guiada |
 
 En una marca: `n` nombre, `lv` nivel alcanzado, `av` precisión media,
@@ -73,13 +74,22 @@ durante la sesión.
 
 ## 3 · En el servidor · Supabase
 
-> Pendiente de crear. Este es el esquema que vamos a montar, paso a
-> paso, en la fase 3.
+En marcha desde el 11 de agosto de 2026, en el proyecto
+`gfrmnlxadxtnsimansvt`. Las tres migraciones están en
+[supabase/migrations/](supabase/migrations/) y la función que acepta
+las partidas, en [supabase/functions/run/](supabase/functions/run/).
 
 **Sin registro.** Cada aparato genera al vuelo un identificador y un
-secreto que sólo él conoce; el servidor guarda el jugador y el hash del
-secreto. No hay correo, ni contraseña, ni forma de entrar desde otro
-aparato — a cambio, tampoco hay nada que recordar.
+secreto que sólo él conoce (`pid` y `psecret` en el almacén local); el
+servidor guarda el jugador y la huella del secreto. No hay correo, ni
+contraseña, ni forma de entrar desde otro aparato — a cambio, tampoco
+hay nada que recordar. Si borras los datos del navegador, empiezas de
+cero: es el precio de no pedir nada.
+
+El **nombre** se pide una sola vez, al terminar la primera partida, y
+puede cambiarse desde la pantalla de clasificaciones. No es único: dos
+jugadores pueden llamarse igual, y lo que distingue a uno de otro es
+el secreto, no el nombre.
 
 ### `players`
 
@@ -118,11 +128,27 @@ clasificaciones: así una consulta no tiene que recorrer el histórico.
 La temporada sale de `daily_best`: sumar `points` agrupando por jugador
 y mes.
 
+### Cómo se leen
+
+Siete funciones en `0002_lecturas.sql`: `free_board`, `daily_board` y
+`season_board` devuelven la tabla del mundo; `free_me`, `daily_me` y
+`season_me` te sitúan dentro de ella; `board_size` cuenta cuántos
+sois. El puesto se calcula sobre la clasificación **entera** y sólo
+después se recorta, para que el primero de una página no parezca el
+primero del mundo.
+
 ### Permisos
 
 - El cliente **sólo lee** las clasificaciones (clave pública `anon`).
-- **Nadie escribe directamente.** Toda marca entra por una función del
-  servidor, que es la única con permiso.
+- **Nadie escribe directamente.** Toda marca entra por la función del
+  servidor, que es la única con permiso: `submit_run` y
+  `ensure_player` tienen el `execute` retirado para `anon`.
+- `player_secrets` y `runs` tienen RLS activada y **ninguna política**:
+  existen, pero no enseñan nada a nadie.
+
+Comprobado con la clave pública en la mano: leer las clasificaciones
+funciona; leer secretos devuelve vacío; insertar una marca a mano o
+llamar a `submit_run` responde *401 permission denied*.
 
 ---
 
@@ -158,6 +184,27 @@ fórmula ahí, hay que desplegar el servidor a la vez.
 ## 5 · Dominio
 
 Nada en el código apunta a un dominio concreto: las rutas del juego son
-relativas y la dirección del servidor vive en un único fichero de
-configuración. Al pasar de la dirección de Netlify a un dominio propio
-sólo habrá que tocar los orígenes permitidos en Supabase.
+relativas y la dirección del servidor vive en [src/net.js](src/net.js).
+Al pasar de la dirección de Netlify a un dominio propio sólo habrá que
+fijar los orígenes permitidos en Supabase, con un secreto más:
+
+```
+ALLOWED_ORIGINS = https://cuthalf.com,https://tu-sitio.netlify.app
+```
+
+Mientras no exista, la función acepta cualquier origen. No debilita
+nada —la protección está en el vale y en la repetición de la partida—
+pero evita que otra web cuelgue tu clasificación de su página.
+
+## 6 · Limpieza
+
+Las pruebas automáticas juegan de verdad y dejan un jugador llamado
+`SONDA` en la clasificación. Usan siempre el mismo perfil, así que no
+se multiplica. Para borrarlo:
+
+```sql
+delete from players where name in ('SONDA', 'PRUEBA-BORRAR');
+```
+
+Se lleva por delante su secreto, sus partidas y sus marcas: las claves
+ajenas van en cascada.
