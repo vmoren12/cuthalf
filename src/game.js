@@ -11,7 +11,7 @@ import { armBack, disarmBack } from "./menu.js";
 import { clamp, dayKey, dayTimer, hashStr } from "./util.js";
 import { drawBest, drawTable } from "./scores.js";
 import { evaluate, normalize, partsCentroid } from "./geometry.js";
-import { cmp, freeBoard } from "./scoring.js";
+import { cmp, freeBoard, points } from "./scoring.js";
 import { toShapeSpace, trim } from "./replay.js";
 import { runStart } from "./net.js";
 import { ME } from "./player.js";
@@ -258,6 +258,10 @@ export function paintOver(){
     $("d-try").textContent    = "#" + d.tries;
     $("d-best").textContent   = "N." + String(d.lv).padStart(2,"0") + " · " + d.av.toFixed(1) + "%";
     $("d-streak").textContent = st.n + " " + T("days");
+    /* de dónde salen los puntos de la temporada: de aquí, del mejor
+       intento del día. Sin verlos al terminar, en la clasificación
+       parecen un número caído del cielo.                           */
+    $("d-pts").textContent    = points(d.lv, d.av).toLocaleString();
   } else {
     $("daily-over").hidden = true; $("tbl-over").hidden = false;
 

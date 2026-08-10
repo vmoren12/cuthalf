@@ -112,6 +112,13 @@ export function drawBest(){
     $("best-val").textContent = levelText(b.lv) + " · " + (b.tl ? b.tl + " s" : "∞");
     return;
   }
-  const s = DAILY.season();
-  $("best-val").textContent = s.played ? s.pts.toLocaleString() + " pts" : "—";
+  /* Quien sólo juega el reto no tiene marcas de juego libre. Se le
+     enseña su mejor día en el mismo idioma que ve al jugar —nivel y
+     precisión—, no en puntos: los puntos son cosa de la temporada, y
+     aquí no habría con qué compararlos.                             */
+  const dias = Object.values(DB.days());
+  const mejor = dias.sort((x, y) => y.lv - x.lv || y.av - x.av)[0];
+  $("best-val").textContent = mejor
+    ? levelText(mejor.lv) + " · " + T("dailyShort")
+    : "—";
 }

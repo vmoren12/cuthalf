@@ -23,6 +23,7 @@ const cual = params.get("p") || "scores";
 if (cual === "scores"){ S.scope = "mine"; S.board = "daily"; openScores(); await paintScores(); }
 if (cual === "libre"){ S.scope = "mine"; S.board = "free-0"; openScores(); await paintScores(); }
 if (cual === "ask"){ ask("Elige un nombre para la clasificación mundial", "Guardar", "VICTOR"); }
+if (cual === "sobre-scores"){ S.scope="mine"; S.board="daily"; openScores(); await paintScores(); ask("Elige un nombre para la clasificación mundial", "Guardar", "VICTOR"); }
 
 if (params.get("medir")){
   const ancho = el => Math.round(el.getBoundingClientRect().width) + " (contenido " + el.scrollWidth + ")";
