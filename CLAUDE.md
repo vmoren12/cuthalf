@@ -52,6 +52,13 @@ Y `git push` cuando el usuario lo pida. El grafo se versiona: si se
 actualiza el código y no el grafo, la siguiente sesión empieza con un
 mapa equivocado, que es peor que no tener mapa.
 
+Del grafo no hace falta acordarse: hay un hook en `.claude/settings.json`
+que, ante cualquier orden que contenga `git commit`, ejecuta
+`graphify update .` y añade el resultado antes de que el commit se
+haga. Lo ejecuta el programa, no el modelo, así que no depende de que
+nadie lo recuerde. Las pruebas sí hay que lanzarlas a mano: tardan y
+piden red, y un hook que se salta cuando molesta no es una garantía.
+
 ---
 
 ## Cómo está repartido
