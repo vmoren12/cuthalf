@@ -60,7 +60,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_game",
-      "community": 2,
+      "community": 1,
       "norm_label": "game.js"
     },
     {
@@ -80,7 +80,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "src_game_tutorstep",
-      "community": 2,
+      "community": 0,
       "norm_label": "tutorstep()"
     },
     {
@@ -90,7 +90,7 @@
       "source_location": "L67",
       "_origin": "ast",
       "id": "src_game_starttutor",
-      "community": 2,
+      "community": 0,
       "norm_label": "starttutor()"
     },
     {
@@ -110,7 +110,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "src_game_tutorchrome",
-      "community": 2,
+      "community": 0,
       "norm_label": "tutorchrome()"
     },
     {
@@ -157,7 +157,7 @@
       "label": "paintOver()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L233",
+      "source_location": "L236",
       "_origin": "ast",
       "id": "src_game_paintover",
       "community": 1,
@@ -167,7 +167,7 @@
       "label": "subirPartida()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L303",
+      "source_location": "L326",
       "_origin": "ast",
       "id": "src_game_subirpartida",
       "community": 1,
@@ -177,7 +177,7 @@
       "label": "guardarMarca()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L312",
+      "source_location": "L342",
       "_origin": "ast",
       "id": "src_game_guardarmarca",
       "community": 1,
@@ -187,7 +187,7 @@
       "label": "saveMark()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L323",
+      "source_location": "L353",
       "_origin": "ast",
       "id": "src_game_savemark",
       "community": 1,
@@ -197,7 +197,7 @@
       "label": "goHome()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L330",
+      "source_location": "L360",
       "_origin": "ast",
       "id": "src_game_gohome",
       "community": 0,
@@ -207,10 +207,10 @@
       "label": "start()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L344",
+      "source_location": "L374",
       "_origin": "ast",
       "id": "src_game_start",
-      "community": 2,
+      "community": 1,
       "norm_label": "start()"
     },
     {
@@ -317,7 +317,7 @@
       "label": "T()",
       "file_type": "code",
       "source_file": "src/i18n.js",
-      "source_location": "L109",
+      "source_location": "L117",
       "_origin": "ast",
       "id": "src_i18n_t",
       "community": 0,
@@ -327,7 +327,7 @@
       "label": "setLang()",
       "file_type": "code",
       "source_file": "src/i18n.js",
-      "source_location": "L110",
+      "source_location": "L118",
       "_origin": "ast",
       "id": "src_i18n_setlang",
       "community": 0,
@@ -610,7 +610,7 @@
       "source_location": "L292",
       "_origin": "ast",
       "id": "src_menu_armback",
-      "community": 2,
+      "community": 0,
       "norm_label": "armback()"
     },
     {
@@ -1037,7 +1037,7 @@
       "label": "cell()",
       "file_type": "code",
       "source_file": "src/scores.js",
-      "source_location": "L16",
+      "source_location": "L20",
       "_origin": "ast",
       "id": "src_scores_cell",
       "community": 1,
@@ -1047,17 +1047,17 @@
       "label": "drawRows()",
       "file_type": "code",
       "source_file": "src/scores.js",
-      "source_location": "L19",
+      "source_location": "L23",
       "_origin": "ast",
       "id": "src_scores_drawrows",
-      "community": 0,
+      "community": 1,
       "norm_label": "drawrows()"
     },
     {
       "label": "levelText()",
       "file_type": "code",
       "source_file": "src/scores.js",
-      "source_location": "L39",
+      "source_location": "L43",
       "_origin": "ast",
       "id": "src_scores_leveltext",
       "community": 1,
@@ -1067,7 +1067,7 @@
       "label": "localRuns()",
       "file_type": "code",
       "source_file": "src/scores.js",
-      "source_location": "L42",
+      "source_location": "L46",
       "_origin": "ast",
       "id": "src_scores_localruns",
       "community": 0,
@@ -1077,7 +1077,7 @@
       "label": "localSeason()",
       "file_type": "code",
       "source_file": "src/scores.js",
-      "source_location": "L54",
+      "source_location": "L58",
       "_origin": "ast",
       "id": "src_scores_localseason",
       "community": 0,
@@ -1087,17 +1087,47 @@
       "label": "worldRows()",
       "file_type": "code",
       "source_file": "src/scores.js",
-      "source_location": "L70",
+      "source_location": "L74",
       "_origin": "ast",
       "id": "src_scores_worldrows",
       "community": 1,
       "norm_label": "worldrows()"
     },
     {
+      "label": "porDelante()",
+      "file_type": "code",
+      "source_file": "src/scores.js",
+      "source_location": "L115",
+      "_origin": "ast",
+      "id": "src_scores_pordelante",
+      "community": 1,
+      "norm_label": "pordelante()"
+    },
+    {
+      "label": "puestoProyectado()",
+      "file_type": "code",
+      "source_file": "src/scores.js",
+      "source_location": "L124",
+      "_origin": "ast",
+      "id": "src_scores_puestoproyectado",
+      "community": 1,
+      "norm_label": "puestoproyectado()"
+    },
+    {
+      "label": "textoPuesto()",
+      "file_type": "code",
+      "source_file": "src/scores.js",
+      "source_location": "L151",
+      "_origin": "ast",
+      "id": "src_scores_textopuesto",
+      "community": 1,
+      "norm_label": "textopuesto()"
+    },
+    {
       "label": "drawTable()",
       "file_type": "code",
       "source_file": "src/scores.js",
-      "source_location": "L99",
+      "source_location": "L159",
       "_origin": "ast",
       "id": "src_scores_drawtable",
       "community": 1,
@@ -1107,7 +1137,7 @@
       "label": "drawBest()",
       "file_type": "code",
       "source_file": "src/scores.js",
-      "source_location": "L109",
+      "source_location": "L169",
       "_origin": "ast",
       "id": "src_scores_drawbest",
       "community": 0,
@@ -1440,7 +1470,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "src_storage_daily",
-      "community": 0,
+      "community": 1,
       "norm_label": "daily"
     },
     {
@@ -1520,7 +1550,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_util",
-      "community": 2,
+      "community": 1,
       "norm_label": "util.js"
     },
     {
@@ -1530,7 +1560,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_util_hashstr",
-      "community": 2,
+      "community": 1,
       "norm_label": "hashstr()"
     },
     {
@@ -1550,7 +1580,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_util_daytimer",
-      "community": 2,
+      "community": 1,
       "norm_label": "daytimer()"
     },
     {
@@ -2567,7 +2597,7 @@
       "label": "Trampas que ya nos han mordido",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L151",
+      "source_location": "L159",
       "_origin": "ast",
       "id": "claude_trampas_que_ya_nos_han_mordido",
       "community": 12,
@@ -2577,7 +2607,7 @@
       "label": "C\u00f3mo se prueba",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L174",
+      "source_location": "L182",
       "_origin": "ast",
       "id": "claude_c\u00f3mo_se_prueba",
       "community": 12,
@@ -2587,7 +2617,7 @@
       "label": "Estilo",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L187",
+      "source_location": "L195",
       "_origin": "ast",
       "id": "claude_estilo",
       "community": 12,
@@ -3204,9 +3234,9 @@
       "source_file": "src/game.js",
       "source_location": "L303",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_game",
-      "target": "src_game_subirpartida",
-      "confidence_score": 1.0
+      "target": "src_game_subirpartida"
     },
     {
       "relation": "contains",
@@ -3512,6 +3542,28 @@
       "confidence_score": 1.0,
       "source": "src_game",
       "target": "src_scores_drawtable"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/game.js",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_game",
+      "target": "src_scores_puestoproyectado",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/game.js",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_game",
+      "target": "src_scores_textopuesto",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -4322,6 +4374,39 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/game.js",
+      "source_location": "L300",
+      "weight": 1.0,
+      "source": "src_game_paintover",
+      "target": "src_scores_puestoproyectado"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/game.js",
+      "source_location": "L304",
+      "weight": 1.0,
+      "source": "src_game_paintover",
+      "target": "src_scores_textopuesto"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/game.js",
+      "source_location": "L300",
+      "weight": 1.0,
+      "source": "src_game_paintover",
+      "target": "src_scoring_freeboard"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/game.js",
       "source_location": "L264",
       "weight": 1.0,
       "source": "src_game_paintover",
@@ -4389,9 +4474,9 @@
       "source_file": "src/game.js",
       "source_location": "L306",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_game_subirpartida",
-      "target": "src_game_paintover",
-      "confidence_score": 1.0
+      "target": "src_game_paintover"
     },
     {
       "relation": "imports",
@@ -4421,6 +4506,17 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/game.js",
+      "source_location": "L331",
+      "weight": 1.0,
+      "source": "src_game_subirpartida",
+      "target": "src_state"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/game.js",
       "source_location": "L305",
       "weight": 1.0,
       "source": "src_game_subirpartida",
@@ -4433,9 +4529,9 @@
       "source_file": "src/menu.js",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_menu",
-      "target": "src_game_subirpartida",
-      "confidence_score": 1.0
+      "target": "src_game_subirpartida"
     },
     {
       "relation": "calls",
@@ -5195,6 +5291,17 @@
       "source_location": "L23",
       "weight": 1.0,
       "source": "src_scores_drawrows",
+      "target": "src_i18n_t"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/scores.js",
+      "source_location": "L153",
+      "weight": 1.0,
+      "source": "src_scores_textopuesto",
       "target": "src_i18n_t"
     },
     {
@@ -6802,10 +6909,43 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/scores.js",
+      "source_location": "L129",
+      "weight": 1.0,
+      "source": "src_scores_puestoproyectado",
+      "target": "src_net_worldfree"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/scores.js",
       "source_location": "L76",
       "weight": 1.0,
       "source": "src_scores_worldrows",
       "target": "src_net_worldfree"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scores.js",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_scores",
+      "target": "src_net_worlddaily",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/scores.js",
+      "source_location": "L128",
+      "weight": 1.0,
+      "source": "src_scores_puestoproyectado",
+      "target": "src_net_worlddaily"
     },
     {
       "relation": "imports",
@@ -6846,6 +6986,17 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/scores.js",
+      "source_location": "L129",
+      "weight": 1.0,
+      "source": "src_scores_puestoproyectado",
+      "target": "src_net_mefree"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/scores.js",
       "source_location": "L76",
       "weight": 1.0,
       "source": "src_scores_worldrows",
@@ -6872,6 +7023,28 @@
       "weight": 1.0,
       "source": "src_submit_enviarpartida",
       "target": "src_net_mefree"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scores.js",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_scores",
+      "target": "src_net_medaily",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/scores.js",
+      "source_location": "L128",
+      "weight": 1.0,
+      "source": "src_scores_puestoproyectado",
+      "target": "src_net_medaily"
     },
     {
       "relation": "imports",
@@ -7741,6 +7914,36 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/scores.js",
+      "source_location": "L115",
+      "weight": 1.0,
+      "source": "src_scores",
+      "target": "src_scores_pordelante",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scores.js",
+      "source_location": "L124",
+      "weight": 1.0,
+      "source": "src_scores",
+      "target": "src_scores_puestoproyectado",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scores.js",
+      "source_location": "L151",
+      "weight": 1.0,
+      "source": "src_scores",
+      "target": "src_scores_textopuesto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scores.js",
       "source_location": "L70",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -7768,6 +7971,17 @@
       "confidence_score": 1.0,
       "source": "src_scores",
       "target": "src_scoring_freeboard"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scores.js",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "src_scores",
+      "target": "src_scoring_points",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -7921,6 +8135,50 @@
       "source_location": "L72",
       "weight": 1.0,
       "source": "src_scores_worldrows",
+      "target": "src_util_daykey"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/scores.js",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "src_scores_pordelante",
+      "target": "src_scoring_points"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scores.js",
+      "source_location": "L136",
+      "weight": 1.0,
+      "source": "src_scores_puestoproyectado",
+      "target": "src_scores_pordelante",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/scores.js",
+      "source_location": "L125",
+      "weight": 1.0,
+      "source": "src_scores_puestoproyectado",
+      "target": "src_scoring_points"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/scores.js",
+      "source_location": "L125",
+      "weight": 1.0,
+      "source": "src_scores_puestoproyectado",
       "target": "src_util_daykey"
     },
     {
@@ -10829,5 +11087,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "0bf5315f2b81256928ce27a840fcc38078d9d38a"
+  "built_at_commit": "2bb9b9f094f7abf7df660d9f16a60a54e7cbcea4"
 }

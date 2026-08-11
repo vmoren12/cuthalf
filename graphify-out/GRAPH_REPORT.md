@@ -1,16 +1,16 @@
 # Graph Report - cuthalf  (2026-08-11)
 
 ## Corpus Check
-- 43 files · ~28,541 words
+- 43 files · ~29,694 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 279 nodes · 752 edges · 13 communities (11 shown, 2 thin omitted)
+- 282 nodes · 773 edges · 13 communities (11 shown, 2 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `0bf5315f`
+- Built from commit: `2bb9b9f0`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -30,16 +30,16 @@
 - [[_COMMUNITY_Community 12|Community 12]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `$()` - 52 edges
-2. `T()` - 29 edges
-3. `paintOver()` - 14 edges
+1. `$()` - 53 edges
+2. `T()` - 30 edges
+3. `paintOver()` - 17 edges
 4. `start()` - 14 edges
 5. `paint()` - 13 edges
 6. `applyLang()` - 12 edges
 7. `enviarPartida()` - 12 edges
 8. `paintScores()` - 11 edges
 9. `worldRows()` - 11 edges
-10. `goHome()` - 10 edges
+10. `freeBoard()` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `partidaPerfecta()` --calls--> `bisector()`  [EXTRACTED]
@@ -50,8 +50,8 @@
   tools/test-core.mjs → supabase/functions/_shared/core/rng.js
 - `partidaPerfecta()` --calls--> `setRNG()`  [EXTRACTED]
   tools/test-core.mjs → supabase/functions/_shared/core/rng.js
-- `tutorStep()` --calls--> `T()`  [EXTRACTED]
-  src/game.js → src/i18n.js
+- `tutorStep()` --calls--> `normalize()`  [EXTRACTED]
+  src/game.js → src/geometry.js
 
 ## Import Cycles
 - None detected.
@@ -59,16 +59,16 @@
 ## Communities (13 total, 2 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.10
-Nodes (53): finishTutor(), goHome(), L, setLang(), T(), savedTheme, applyLang(), ask() (+45 more)
+Cohesion: 0.09
+Nodes (55): finishTutor(), goHome(), startTutor(), tutorChrome(), tutorStep(), L, setLang(), T() (+47 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.12
-Nodes (35): gameOver(), guardarMarca(), paintOver(), saveMark(), subirPartida(), hayRemoto(), meDaily(), meFree() (+27 more)
+Nodes (43): gameOver(), guardarMarca(), paintOver(), saveMark(), start(), subirPartida(), hayRemoto(), meDaily() (+35 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.11
-Nodes (44): CONFIG, levelConfig(), STAGES, TUTOR, advance(), doCut(), newLevel(), start() (+36 more)
+Nodes (37): CONFIG, levelConfig(), STAGES, TUTOR, advance(), doCut(), newLevel(), timeUp() (+29 more)
 
 ### Community 3 - "Community 3"
 Cohesion: 0.11
@@ -111,16 +111,16 @@ Nodes (10): Al desplegar, Al empezar una sesión, Al terminar cualquier cambio, 
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `$()` connect `Community 0` to `Community 1`, `Community 2`?**
-  _High betweenness centrality (0.055) - this node is a cross-community bridge._
+  _High betweenness centrality (0.056) - this node is a cross-community bridge._
 - **Why does `T()` connect `Community 0` to `Community 1`, `Community 2`?**
-  _High betweenness centrality (0.018) - this node is a cross-community bridge._
+  _High betweenness centrality (0.019) - this node is a cross-community bridge._
+- **Why does `evaluate()` connect `Community 2` to `Community 1`?**
+  _High betweenness centrality (0.005) - this node is a cross-community bridge._
 - **What connects `STAGES`, `L`, `savedTheme` to the rest of the system?**
   _55 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.09548022598870057 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09201480698043363 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.11517165005537099 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.12191582002902758 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
-  _Cohesion score 0.11320754716981132 - nodes in this community are weakly interconnected._
-- **Should `Community 3` be split into smaller, more focused modules?**
-  _Cohesion score 0.10756302521008404 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1109936575052854 - nodes in this community are weakly interconnected._

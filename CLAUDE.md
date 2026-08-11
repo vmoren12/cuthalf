@@ -133,6 +133,14 @@ para conseguir lo mismo que no hacer nada sobra siempre. Y sin vale del
 servidor la oferta ni aparece —esa partida no se puede comprobar—: en
 su sitio se dice que no ha subido.
 
+Encima del botón van el nombre con el que se sube —relleno, editable— y
+**el puesto que ocuparía**, que se cuenta aquí (`puestoProyectado()` en
+`src/scores.js`) sobre los cien primeros de la tabla, no se le pregunta
+al servidor: es contar cuántos van por delante de una cifra y no
+merecía una función nueva. Si tu marca de esa tabla ya era mejor, se
+dice que seguirías donde estás — el servidor se queda con la mejor de
+las dos, así que subir no te movería.
+
 **Nada se escribe desde el navegador.** La clave `anon` sólo lee.
 `submit_run` y `ensure_player` tienen el `execute` retirado para
 `anon`; la única forma de entrar en la clasificación es jugando.
@@ -174,7 +182,7 @@ juega igual, con semilla local y sin subir nada.
 ## Cómo se prueba
 
 ```sh
-node tools/probar.mjs       # 21 comprobaciones, con red: juega y sube
+node tools/probar.mjs       # 22 comprobaciones, con red: juega y sube
 node tools/test-core.mjs    # 9 comprobaciones de las reglas, sin red
 node tools/probar.mjs && node tools/test-core.mjs
 node tests/serve.mjs        # http://localhost:8765 para mirarlo a ojo

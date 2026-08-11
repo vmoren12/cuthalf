@@ -149,6 +149,10 @@
 .record{font-family:var(--sans);font-weight:600;letter-spacing:-.02em;color:var(--signal);
   font-size:clamp(26px,8vw,40px);line-height:1;animation:capIn .45s cubic-bezier(.2,.8,.2,1)}
 .daily{display:flex;flex-direction:column;gap:11px}
+/* la firma de la casa, al pie de la portada: centrada y lo bastante
+   apagada como para no competir con nada de lo que hay encima     */
+.foot{font-size:10px;letter-spacing:.24em;text-transform:uppercase;
+  text-align:center;opacity:.28}
 
 /* Los puntos son el resultado de la partida —de ellos sale la
    temporada—, así que no pueden quedar como una cifra más al final de
@@ -160,8 +164,11 @@
 .pts .lbl{opacity:.7}
 .pts .val{font-size:clamp(30px,9.5vw,40px);color:var(--signal)}
 
-/* Subir la partida. Va separado por una raya, como la entrada de
-   nombre: es lo único que hay que decidir, y pegado a «volver a
-   empezar» parecería un botón más de navegación.                   */
-.keep{display:flex;flex-direction:column;
+/* Subir la partida: con qué nombre se sube, qué puesto ocuparía y el
+   botón, en ese orden y en el mismo bloque — son un solo gesto. Va
+   separado por una raya porque, pegado a «volver a empezar»,
+   parecería un botón más de navegación. La raya la pone el bloque, no
+   la casilla del nombre: dos seguidas se ven como un error.        */
+.keep{display:flex;flex-direction:column;gap:16px;
   border-top:1px solid var(--hair);padding-top:16px}
+.keep .entry{border-top:0;padding-top:0}

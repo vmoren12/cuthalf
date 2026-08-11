@@ -61,7 +61,7 @@ const { S, $ }                            = await import("../src/state.js");
 const { start, doCut, gameOver, saveMark, goHome } = await import("../src/game.js");
 const { DB, DAILY, qualifies }            = await import("../src/storage.js");
 const { points, freeBoard }               = await import("../src/scoring.js");
-const { drawBest }                        = await import("../src/scores.js");
+const { drawBest, porDelante }            = await import("../src/scores.js");
 const { normalize, evaluate, bisector }   = await import("../src/geometry.js");
 const { SHAPES }                          = await import("../src/shapes.js");
 const { setRNG, mulberry32 }              = await import("../src/rng.js");
@@ -150,7 +150,9 @@ await step("la marca se guarda sola, pero no se sube sola", async () => {
   if (ENVIO.estado !== "") throw new Error("ha subido sin que se lo pidan: " + ENVIO.estado);
   /* y se ofrece subir exactamente cuando se puede: sin vale el
      servidor no podría comprobar la partida                        */
-  if ($("keep").hidden === !!S.ticket) throw new Error("el botón de subir no cuadra con el vale");
+  if ($("keep-up").hidden === !!S.ticket) throw new Error("el botón de subir no cuadra con el vale");
+  /* con el nombre delante y ya puesto, que es con el que se sube */
+  if ($("name").value !== DB.name()) throw new Error("el nombre no viene puesto: " + $("name").value);
   goHome();
 });
 await step("reto diario: se juega y cuenta el intento", async () => {
@@ -217,6 +219,29 @@ await step("puntos y temporada", () => {
   if (s.pts !== s.days.reduce((a, d) => a + points(d.lv, d.av), 0)) throw new Error("el acumulado no suma");
   if (!s.played) throw new Error("el día jugado no consta en la temporada");
 });
+/* El puesto que se enseña antes de subir sale de contar cuántos van
+   por delante en la tabla del mundo. Sin red no se puede pedir esa
+   tabla, pero sí ponerle una delante y comprobar la cuenta.         */
+await step("qué puesto ocuparía una partida", () => {
+  const tabla = [
+    { player_id:"a",  level:15, accuracy:99.0, points:15990 },
+    { player_id:"yo", level:14, accuracy:98.0, points:14980 },
+    { player_id:"b",  level: 9, accuracy:96.2, points: 9962 },
+    { player_id:"c",  level: 4, accuracy:91.0, points: 4910 }
+  ];
+  const pos = (sc, board = "free-0") => porDelante(tabla, "yo", board, sc) + 1;
+  if (pos({ lv:20, av:99 }) !== 1) throw new Error("la mejor de todas no queda primera");
+  if (pos({ lv:1, av:10 }) !== 4) throw new Error("la peor de todas no queda última");
+  if (pos({ lv:9, av:96.3 }) !== 2) throw new Error("una décima más no adelanta");
+  /* empate a nivel y precisión: manda quien llegó antes, y una partida
+     recién jugada nunca llegó antes                                  */
+  if (pos({ lv:9, av:96.2 }) !== 3) throw new Error("un empate se cuela por delante");
+  /* tu propia fila no cuenta: la sustituyes, no te sumas */
+  if (pos({ lv:10, av:50 }) !== 2) throw new Error("te cuentas a ti mismo");
+  /* y en el reto del día ordenan los puntos, no el nivel */
+  if (pos({ lv:9, av:96.2 }, "daily") !== 3) throw new Error("el reto no ordena por puntos");
+});
+
 await step("la pantalla de clasificaciones", async () => {
   S.scope = "mine"; S.board = "daily";
   openScores();

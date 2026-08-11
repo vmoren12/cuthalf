@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "src/game.js": {
-    "mtime": 1786458607.2912278,
-    "ast_hash": "e3959c0fc8c9a3d6c2db087117078623",
+    "mtime": 1786481118.0386841,
+    "ast_hash": "2da321d47c133bff5e3b4c9a5f9ada6b",
     "semantic_hash": ""
   },
   "src/geometry.js": {
@@ -15,8 +15,8 @@
     "semantic_hash": ""
   },
   "src/i18n.js": {
-    "mtime": 1786458520.3659809,
-    "ast_hash": "6998eb2d276a975bd478728cbbe5a170",
+    "mtime": 1786481049.7942767,
+    "ast_hash": "29052ccdfe11b4e86c5267987aef9a3c",
     "semantic_hash": ""
   },
   "src/input.js": {
@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   "src/pwa.js": {
-    "mtime": 1786458707.2431347,
-    "ast_hash": "8abc5f1885f94dc1250bcda229830819",
+    "mtime": 1786481309.6521971,
+    "ast_hash": "05050e83c0d686aa22f9dc6b3cc97af1",
     "semantic_hash": ""
   },
   "src/render.js": {
@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "src/scores.js": {
-    "mtime": 1786405212.5642266,
-    "ast_hash": "46a11e15be32f895be5d0a5886ea43cf",
+    "mtime": 1786481190.9145386,
+    "ast_hash": "4a2224cb5591046bbd444669f269b527",
     "semantic_hash": ""
   },
   "src/scoring.js": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "sw.js": {
-    "mtime": 1786458707.225041,
-    "ast_hash": "733236417d3ed840e3ed3d778db4fcb9",
+    "mtime": 1786481309.634474,
+    "ast_hash": "6cf4dbc9525f7271bbe11c1419b3ee04",
     "semantic_hash": ""
   },
   "tests/serve.mjs": {
@@ -215,18 +215,18 @@
     "semantic_hash": ""
   },
   "index.html": {
-    "mtime": 1786458763.0047045,
-    "ast_hash": "51ffdff2269c7b8f81c65aa2d15a9239",
+    "mtime": 1786481019.3977027,
+    "ast_hash": "280add2dcdd433e7e98fa8629d7b1435",
     "semantic_hash": ""
   },
   "tests/foto.html": {
-    "mtime": 1786458660.322724,
-    "ast_hash": "c90d3864bfef13cb21994f142a576db3",
+    "mtime": 1786481253.7118318,
+    "ast_hash": "1a475c3e70f5cb5ec9fe5819d87c90b1",
     "semantic_hash": ""
   },
   "tests/probe.html": {
-    "mtime": 1786458646.8174329,
-    "ast_hash": "8729f3f5bd6ab010ad9ec24041aa6a95",
+    "mtime": 1786481209.0192952,
+    "ast_hash": "d2866c6acb4a05114e82b4366292de68",
     "semantic_hash": ""
   },
   "icons/icon-192-any.png": {
@@ -245,8 +245,8 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1786458670.6310828,
-    "ast_hash": "421c494ac928a99fcd967e1a27763504",
+    "mtime": 1786481309.7104063,
+    "ast_hash": "db21de839a435d5caa86015956c2dc6c",
     "semantic_hash": ""
   }
 }

@@ -9,7 +9,7 @@ import { T } from "./i18n.js";
 import { applyUpdate, pendingReload, swReg } from "./pwa.js";
 import { armBack, disarmBack } from "./menu.js";
 import { clamp, dayKey, dayTimer, hashStr } from "./util.js";
-import { drawBest, drawTable } from "./scores.js";
+import { drawBest, drawTable, puestoProyectado, textoPuesto } from "./scores.js";
 import { evaluate, normalize, partsCentroid } from "./geometry.js";
 import { cmp, freeBoard, points } from "./scoring.js";
 import { toShapeSpace, trim } from "./replay.js";
@@ -225,6 +225,9 @@ export function gameOver(){
     const prev = DB.list(freeBoard(S.runTimer))[0];
     S.score.record = !!prev && cmp({ lv:S.score.lv, av:S.score.av, ts:0 }, prev) < 0;
   }
+  /* el nombre viene puesto: casi siempre es el de siempre, y quien
+     quiera cambiarlo lo tiene delante sin buscarlo                 */
+  $("name").value = DB.name();
   paintOver();
   $("scr-over").hidden = false;
   if (pendingReload && swReg) swReg.update().catch(() => {});
@@ -242,10 +245,11 @@ export function paintOver(){
   $("again").textContent = T(S.mode === "daily" ? "retry" : "again");
   $("rec-badge").hidden = !S.score.record;
 
-  /* El nombre se pide una sola vez en la vida del aparato. Mientras
-     no lo haya, no se sube nada: primero hay que saber quién eres. */
+  /* La casilla del nombre ya no aparece sólo la primera vez: viene
+     rellena con el de siempre y está donde hace falta, justo encima
+     del botón de subir, porque es el nombre con el que se sube.    */
   const primeraVez = !ME.tieneNombre();
-  $("entry").hidden = !primeraVez;
+  $("save").textContent = T(primeraVez ? "save" : "rename");
 
   if (S.mode === "daily"){
     const d = S.score.daily, st = DAILY.streak();
@@ -280,7 +284,26 @@ export function paintOver(){
      puede fallar se dice lo que pasa.                               */
   const conVale = !!S.ticket && S.trace.length > 0;
   const enMarcha = ENVIO.estado !== "" && ENVIO.estado !== "sin-red";
-  $("keep").hidden = primeraVez || !conVale || enMarcha;
+  /* El bloque se queda también sin vale la primera vez: sin nombre no
+     hay marca ni en casa, así que la casilla tiene que estar aunque no
+     haya nada que subir. Lo que se va entonces es el botón.         */
+  $("keep").hidden = (!conVale && !primeraVez) || enMarcha;
+  $("keep-up").hidden = !conVale;
+
+  /* Y con el número delante, que decidir a ciegas no es decidir. Se
+     pregunta una sola vez por partida —`proy` deja de ser undefined en
+     cuanto se pide— y se vuelve a pintar cuando llega. Si para
+     entonces ya se está en otra partida, no se toca nada.           */
+  const sc = S.score;
+  if (sc.proy === undefined && conVale){
+    sc.proy = null;
+    puestoProyectado(S.mode === "daily" ? "daily" : freeBoard(sc.tl), sc)
+      .then(p => { sc.proy = p; if (S.score === sc) paintOver(); })
+      .catch(() => {});
+  }
+  const texto = textoPuesto(sc.proy);
+  $("rank-note").textContent = texto;
+  $("rank-note").hidden = !texto;
 
   /* La nota de debajo: quién eres, o que esta partida no ha podido
      subir, o que no le ha dado para la tabla de casa. Mientras haya
@@ -302,6 +325,13 @@ export function paintOver(){
    no puede costar la marca.                                          */
 export async function subirPartida(){
   if (!S.score) return;
+  /* Se sube con lo que ponga en la casilla, se haya pulsado «cambiar»
+     o no: quien escribe un nombre y le da a subir espera subir con
+     ése, no con el anterior. Vacía no hay a quién atribuir la marca. */
+  const raw = $("name").value.replace(/\s+/g," ").trim().slice(0, CONFIG.nameMax);
+  if (!raw){ $("name").focus(); return; }
+  DB.set("name", raw);
+
   const envio = enviarPartida();   // deja el envío en marcha al momento
   paintOver();                     // y con eso el botón ya se ha retirado
   await envio;
