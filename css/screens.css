@@ -95,6 +95,14 @@
    ninguna es más importante que las otras */
 .seg--full{width:100%}
 .seg--full button{flex:1;min-width:0}
+/* el conmutador y, debajo, con quién estás compitiendo: el nombre con
+   el que suben tus marcas, que si no sólo se ve cuando sales en la
+   tabla — y quien empieza no sale                                   */
+.scope{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.who{display:flex;align-items:baseline;gap:16px;max-width:100%}
+.who b{font-family:var(--sans);font-weight:500;font-size:19px;letter-spacing:-.01em;
+  min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who .lnk{flex:none}
 .seg button.on{background:var(--ink);color:var(--ground);opacity:1}
 #scr-scores{z-index:7;justify-content:flex-start;gap:18px}
 /* preguntar siempre va por encima de lo que se estaba mirando: desde

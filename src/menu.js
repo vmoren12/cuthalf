@@ -96,7 +96,11 @@ export function drawScope(){
     b.addEventListener("click", () => { S.scope = s; DB.set("scope", s); drawScope(); paintScores(); });
     box.appendChild(b);
   }
-  $("rename").hidden = !ME.tieneNombre();
+  /* Mientras no haya nombre no hay nada que enseñar: se pide al
+     terminar la primera partida, y hasta entonces no se ha subido
+     ninguna marca.                                                  */
+  $("me-row").hidden = !ME.tieneNombre();
+  $("me-name").textContent = DB.name();
 }
 
 /* la temporada en curso o el día de hoy, según la tabla */
@@ -149,7 +153,7 @@ export async function renameMe(){
   const limpio = nuevo.replace(/\s+/g, " ").trim().slice(0, CONFIG.nameMax);
   if (!limpio || limpio === actual) return;
   DB.set("name", limpio);
-  drawBest(); paintScores();
+  drawBest(); drawScope(); paintScores();
   toast(T("saved"));
 }
 

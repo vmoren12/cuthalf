@@ -292,6 +292,10 @@ await step("el nombre se cambia sin salir del juego", async () => {
   $("ask-yes").click();
   await promesa;
   if (DB.name() !== "OTRO NOMBRE") throw new Error("no lo ha guardado: " + DB.name());
+  /* y se ve con quién estás compitiendo, sin tener que salir en la tabla */
+  if ($("me-row").hidden) throw new Error("no enseña tu nombre en las clasificaciones");
+  if ($("me-name").textContent !== "OTRO NOMBRE")
+    throw new Error("enseña un nombre viejo: " + $("me-name").textContent);
 });
 
 /* y no deja sus marcas en el navegador donde se ha ejecutado */
