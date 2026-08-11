@@ -7,6 +7,14 @@
   display:flex;flex-direction:column;justify-content:center;gap:22px;
   padding:max(22px,env(safe-area-inset-top)) 26px max(26px,env(safe-area-inset-bottom));
   overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;
+  /* Centrado mientras quepa; cuando no quepa, pegado arriba.
+     Un `center` a secas reparte el sobrante a los dos lados también
+     cuando el sobrante es negativo: la mitad de más se va por encima
+     del principio del desplazamiento, donde no se puede llegar ni
+     arrastrando. En un móvil, con la pantalla de fin entera, eso se
+     comía el titular. `safe` es exactamente esto: centra, salvo que
+     centrar esconda el principio.                                   */
+  justify-content:safe center;
 }
 .screen[hidden]{display:none}
 /* la ayuda ocupa en la portada el mismo hueco que «Cerrar» en las
@@ -116,7 +124,7 @@
 /* preguntar siempre va por encima de lo que se estaba mirando: desde
    las clasificaciones se puede cambiar el nombre, y el cuadro tiene
    que salir delante, no detrás */
-#scr-ask{z-index:10;justify-content:center}
+#scr-ask{z-index:10;justify-content:center;justify-content:safe center}
 .toast{
   /* el aviso, por encima de todo: también del cuadro de preguntar */
   position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));z-index:11;
