@@ -5,7 +5,7 @@ import { DAILY, DB } from "./storage.js";
 import { $, S, UI, refreshColors } from "./state.js";
 import { T, lang, setLang } from "./i18n.js";
 import { drawBest, drawRows, localRuns, localSeason, worldRows } from "./scores.js";
-import { finishTutor, goHome, paintOver, saveMark, start, startTutor } from "./game.js";
+import { finishTutor, goHome, guardarPartida, paintOver, saveMark, start, startTutor } from "./game.js";
 import { shareCard, toast } from "./share.js";
 import { BOARDS, boardTime } from "./scoring.js";
 import { ME } from "./player.js";
@@ -253,6 +253,9 @@ $("home").addEventListener("click", goHome);
 $("share").addEventListener("click", shareCard);
 $("save").addEventListener("click", saveMark);
 $("name").addEventListener("keydown", e => { if (e.key === "Enter") saveMark(); });
+$("keep-up").addEventListener("click", () => guardarPartida("mundo"));
+$("keep-here").addEventListener("click", () => guardarPartida("aparato"));
+$("keep-no").addEventListener("click", () => guardarPartida("nada"));
 addEventListener("keydown", e => {
   /* lo que se atienda aquí se marca como consumido: si no, CloseWatcher
      recogería el mismo Escape y lo volvería a atender por su cuenta   */

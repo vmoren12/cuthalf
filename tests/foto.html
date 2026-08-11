@@ -6,12 +6,15 @@
 </head><body>
 <script type="module">
 /* Retrato de una pantalla, para mirarla con ojos en vez de suponer.
-   ?p=scores | intro | ask   ·   ?medir=1 cuenta los anchos          */
+   ?p=scores | libre | intro | ask | fin | fin-libre
+   ?medir=1 cuenta los anchos                                        */
 const html = await (await fetch("../index.html")).text();
 document.body.innerHTML = html.split("<body>")[1].split("</body>")[0];
 localStorage.setItem("half.v1", JSON.stringify({
   v:2, name:"VICTOR", tutorDone:true,
-  records:[{n:"VICTOR",lv:12,av:97.4,tl:0,ts:1},{n:"VICTOR",lv:7,av:94.1,tl:0,ts:2},{n:"VICTOR",lv:4,av:91,tl:3,ts:3}],
+  /* una marca vieja a propósito: es lo que hace salir el pie de la
+     tabla, que es donde peor se ve si algo se apretuja               */
+  records:[{n:"VICTOR",lv:12,av:97.4,tl:0,ts:1},{n:"VICTOR",lv:7,av:94.1,tl:0,ts:2,old:1},{n:"VICTOR",lv:4,av:91,tl:3,ts:3}],
   days:{"2026-08-11":{lv:9,av:96.2,tries:2},"2026-08-10":{lv:6,av:93,tries:1}}
 }));
 const { S, $ } = await import("../src/state.js");
@@ -24,6 +27,20 @@ if (cual === "scores"){ S.scope = "mine"; S.board = "daily"; openScores(); await
 if (cual === "libre"){ S.scope = "mine"; S.board = "free-0"; openScores(); await paintScores(); }
 if (cual === "ask"){ ask("Elige un nombre para la clasificación mundial", "Guardar", "VICTOR"); }
 if (cual === "sobre-scores"){ S.scope="mine"; S.board="daily"; openScores(); await paintScores(); ask("Elige un nombre para la clasificación mundial", "Guardar", "VICTOR"); }
+
+/* El final de partida no se puede retratar jugando: hay que ponerle
+   una partida terminada delante. Es la pantalla con más cosas que
+   colocar —puntos, marca, tabla y las tres opciones—, así que es la
+   que más falta hace ver.                                          */
+if (cual === "fin" || cual === "fin-libre"){
+  const { paintOver } = await import("../src/game.js");
+  S.mode = cual === "fin" ? "daily" : "free";
+  S.runTimer = 0; S.cuts = [97.2, 95.8, 98.9];
+  S.score = { lv:9, av:96.2, best:98.9, tl:0, saved:false, destino:"", record:false };
+  if (S.mode === "daily") S.score.daily = { d:"2026-08-11", lv:9, av:96.2, tries:2 };
+  paintOver();
+  $("scr-intro").hidden = true; $("scr-over").hidden = false;
+}
 
 if (params.get("medir")){
   const ancho = el => Math.round(el.getBoundingClientRect().width) + " (contenido " + el.scrollWidth + ")";

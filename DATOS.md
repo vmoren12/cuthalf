@@ -70,6 +70,10 @@ Se guardan **100 marcas por tabla** y **400 días** de reto. Si el
 navegador no deja escribir (modo privado), todo funciona igual pero sólo
 durante la sesión.
 
+Nada de esto se escribe solo: al terminar una partida se pregunta qué
+hacer con ella, y hasta que no se responde no entra ni en `records[]`
+ni en `days{}` — tampoco el intento del día.
+
 ---
 
 ## 3 · En el servidor · Supabase
@@ -162,9 +166,12 @@ determinista, se puede comprobar de verdad:
    semilla y un vale firmado con la hora. En el reto diario la semilla
    es la del día; en juego libre la elige el servidor, para que nadie
    pueda probar mil semillas y quedarse con la más fácil.
-2. **Al terminar**, el cliente envía el vale y la lista de cortes: por
-   cada nivel, la recta del corte **en coordenadas de la figura**, no de
-   la pantalla, y el momento en que se hizo.
+2. **Al terminar**, el cliente pregunta qué hacer con la partida —subirla,
+   guardarla sólo en el aparato o nada— y sólo si se pide subirla envía
+   el vale y la lista de cortes: por cada nivel, la recta del corte **en
+   coordenadas de la figura**, no de la pantalla, y el momento en que se
+   hizo. Mientras no se elija, no se escribe ni se manda nada; en el reto
+   diario eso incluye el intento del día.
 3. **El servidor repite la partida**: genera las mismas figuras con la
    misma semilla, aplica cada corte con la misma geometría y saca su
    propio resultado. Si no coincide con lo declarado, la marca no entra.

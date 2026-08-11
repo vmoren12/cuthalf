@@ -20,7 +20,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "src_config_config",
-      "community": 1,
+      "community": 2,
       "norm_label": "config"
     },
     {
@@ -60,7 +60,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_game",
-      "community": 1,
+      "community": 2,
       "norm_label": "game.js"
     },
     {
@@ -80,7 +80,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "src_game_tutorstep",
-      "community": 0,
+      "community": 2,
       "norm_label": "tutorstep()"
     },
     {
@@ -90,7 +90,7 @@
       "source_location": "L67",
       "_origin": "ast",
       "id": "src_game_starttutor",
-      "community": 0,
+      "community": 2,
       "norm_label": "starttutor()"
     },
     {
@@ -110,7 +110,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "src_game_tutorchrome",
-      "community": 0,
+      "community": 2,
       "norm_label": "tutorchrome()"
     },
     {
@@ -157,17 +157,27 @@
       "label": "paintOver()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L233",
+      "source_location": "L235",
       "_origin": "ast",
       "id": "src_game_paintover",
       "community": 1,
       "norm_label": "paintover()"
     },
     {
+      "label": "guardarPartida()",
+      "file_type": "code",
+      "source_file": "src/game.js",
+      "source_location": "L299",
+      "_origin": "ast",
+      "id": "src_game_guardarpartida",
+      "community": 1,
+      "norm_label": "guardarpartida()"
+    },
+    {
       "label": "guardarMarca()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L283",
+      "source_location": "L311",
       "_origin": "ast",
       "id": "src_game_guardarmarca",
       "community": 1,
@@ -177,7 +187,7 @@
       "label": "saveMark()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L294",
+      "source_location": "L323",
       "_origin": "ast",
       "id": "src_game_savemark",
       "community": 1,
@@ -187,7 +197,7 @@
       "label": "goHome()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L302",
+      "source_location": "L330",
       "_origin": "ast",
       "id": "src_game_gohome",
       "community": 0,
@@ -197,10 +207,10 @@
       "label": "start()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L316",
+      "source_location": "L344",
       "_origin": "ast",
       "id": "src_game_start",
-      "community": 0,
+      "community": 2,
       "norm_label": "start()"
     },
     {
@@ -307,7 +317,7 @@
       "label": "T()",
       "file_type": "code",
       "source_file": "src/i18n.js",
-      "source_location": "L107",
+      "source_location": "L113",
       "_origin": "ast",
       "id": "src_i18n_t",
       "community": 0,
@@ -317,7 +327,7 @@
       "label": "setLang()",
       "file_type": "code",
       "source_file": "src/i18n.js",
-      "source_location": "L108",
+      "source_location": "L114",
       "_origin": "ast",
       "id": "src_i18n_setlang",
       "community": 0,
@@ -597,17 +607,17 @@
       "label": "armBack()",
       "file_type": "code",
       "source_file": "src/menu.js",
-      "source_location": "L291",
+      "source_location": "L294",
       "_origin": "ast",
       "id": "src_menu_armback",
-      "community": 0,
+      "community": 2,
       "norm_label": "armback()"
     },
     {
       "label": "disarmBack()",
       "file_type": "code",
       "source_file": "src/menu.js",
-      "source_location": "L308",
+      "source_location": "L311",
       "_origin": "ast",
       "id": "src_menu_disarmback",
       "community": 0,
@@ -617,7 +627,7 @@
       "label": "handleBack()",
       "file_type": "code",
       "source_file": "src/menu.js",
-      "source_location": "L331",
+      "source_location": "L334",
       "_origin": "ast",
       "id": "src_menu_handleback",
       "community": 0,
@@ -1030,7 +1040,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_scores_cell",
-      "community": 0,
+      "community": 1,
       "norm_label": "cell()"
     },
     {
@@ -1040,7 +1050,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_scores_drawrows",
-      "community": 0,
+      "community": 1,
       "norm_label": "drawrows()"
     },
     {
@@ -1060,7 +1070,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_scores_localruns",
-      "community": 0,
+      "community": 1,
       "norm_label": "localruns()"
     },
     {
@@ -1130,7 +1140,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_scoring_points",
-      "community": 1,
+      "community": 2,
       "norm_label": "points()"
     },
     {
@@ -1140,7 +1150,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_scoring_boards",
-      "community": 0,
+      "community": 1,
       "norm_label": "boards"
     },
     {
@@ -1380,7 +1390,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "src_state_flash",
-      "community": 0,
+      "community": 2,
       "norm_label": "flash()"
     },
     {
@@ -1437,7 +1447,7 @@
       "label": "qualifies()",
       "file_type": "code",
       "source_file": "src/storage.js",
-      "source_location": "L113",
+      "source_location": "L121",
       "_origin": "ast",
       "id": "src_storage_qualifies",
       "community": 1,
@@ -1467,7 +1477,7 @@
       "label": "pintar()",
       "file_type": "code",
       "source_file": "src/submit.js",
-      "source_location": "L21",
+      "source_location": "L25",
       "_origin": "ast",
       "id": "src_submit_pintar",
       "community": 1,
@@ -1477,17 +1487,17 @@
       "label": "limpiarEnvio()",
       "file_type": "code",
       "source_file": "src/submit.js",
-      "source_location": "L35",
+      "source_location": "L40",
       "_origin": "ast",
       "id": "src_submit_limpiarenvio",
-      "community": 1,
+      "community": 0,
       "norm_label": "limpiarenvio()"
     },
     {
       "label": "enviarPartida()",
       "file_type": "code",
       "source_file": "src/submit.js",
-      "source_location": "L41",
+      "source_location": "L46",
       "_origin": "ast",
       "id": "src_submit_enviarpartida",
       "community": 1,
@@ -1497,7 +1507,7 @@
       "label": "repintarEnvio()",
       "file_type": "code",
       "source_file": "src/submit.js",
-      "source_location": "L72",
+      "source_location": "L81",
       "_origin": "ast",
       "id": "src_submit_repintarenvio",
       "community": 1,
@@ -1510,7 +1520,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_util",
-      "community": 1,
+      "community": 2,
       "norm_label": "util.js"
     },
     {
@@ -1520,7 +1530,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_util_hashstr",
-      "community": 1,
+      "community": 2,
       "norm_label": "hashstr()"
     },
     {
@@ -1540,7 +1550,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_util_daytimer",
-      "community": 1,
+      "community": 2,
       "norm_label": "daytimer()"
     },
     {
@@ -2557,7 +2567,7 @@
       "label": "Trampas que ya nos han mordido",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L139",
+      "source_location": "L145",
       "_origin": "ast",
       "id": "claude_trampas_que_ya_nos_han_mordido",
       "community": 12,
@@ -2567,7 +2577,7 @@
       "label": "C\u00f3mo se prueba",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L162",
+      "source_location": "L168",
       "_origin": "ast",
       "id": "claude_c\u00f3mo_se_prueba",
       "community": 12,
@@ -2577,7 +2587,7 @@
       "label": "Estilo",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L175",
+      "source_location": "L181",
       "_origin": "ast",
       "id": "claude_estilo",
       "community": 12,
@@ -2627,7 +2637,7 @@
       "label": "3 \u00b7 En el servidor \u00b7 Supabase",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L75",
+      "source_location": "L79",
       "_origin": "ast",
       "id": "datos_3_en_el_servidor_supabase",
       "community": 5,
@@ -2637,7 +2647,7 @@
       "label": "`players`",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L94",
+      "source_location": "L98",
       "_origin": "ast",
       "id": "datos_players",
       "community": 5,
@@ -2647,7 +2657,7 @@
       "label": "`runs` \u2014 hist\u00f3rico de partidas aceptadas",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L104",
+      "source_location": "L108",
       "_origin": "ast",
       "id": "datos_runs_hist\u00f3rico_de_partidas_aceptadas",
       "community": 5,
@@ -2657,7 +2667,7 @@
       "label": "`free_best` y `daily_best` \u2014 lo que se consulta",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L121",
+      "source_location": "L125",
       "_origin": "ast",
       "id": "datos_free_best_y_daily_best_lo_que_se_consulta",
       "community": 5,
@@ -2667,7 +2677,7 @@
       "label": "C\u00f3mo se leen",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L131",
+      "source_location": "L135",
       "_origin": "ast",
       "id": "datos_c\u00f3mo_se_leen",
       "community": 5,
@@ -2677,7 +2687,7 @@
       "label": "Permisos",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L140",
+      "source_location": "L144",
       "_origin": "ast",
       "id": "datos_permisos",
       "community": 5,
@@ -2687,7 +2697,7 @@
       "label": "4 \u00b7 C\u00f3mo se comprueba que una marca es real",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L155",
+      "source_location": "L159",
       "_origin": "ast",
       "id": "datos_4_c\u00f3mo_se_comprueba_que_una_marca_es_real",
       "community": 5,
@@ -2697,7 +2707,7 @@
       "label": "5 \u00b7 Dominio",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L184",
+      "source_location": "L191",
       "_origin": "ast",
       "id": "datos_5_dominio",
       "community": 5,
@@ -2707,7 +2717,7 @@
       "label": "6 \u00b7 Limpieza",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L199",
+      "source_location": "L206",
       "_origin": "ast",
       "id": "datos_6_limpieza",
       "community": 5,
@@ -3137,6 +3147,16 @@
       "confidence_score": 1.0,
       "source": "src_game",
       "target": "src_game_guardarmarca"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/game.js",
+      "source_location": "L299",
+      "weight": 1.0,
+      "source": "src_game",
+      "target": "src_game_guardarpartida",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -4268,6 +4288,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/game.js",
+      "source_location": "L306",
+      "weight": 1.0,
+      "source": "src_game_guardarpartida",
+      "target": "src_game_paintover",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/game.js",
       "source_location": "L269",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -4383,6 +4414,50 @@
       "weight": 1.0,
       "source": "src_menu_applylang",
       "target": "src_game_paintover"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/game.js",
+      "source_location": "L304",
+      "weight": 1.0,
+      "source": "src_game_guardarpartida",
+      "target": "src_game_guardarmarca",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/game.js",
+      "source_location": "L304",
+      "weight": 1.0,
+      "source": "src_game_guardarpartida",
+      "target": "src_storage_qualifies"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/game.js",
+      "source_location": "L307",
+      "weight": 1.0,
+      "source": "src_game_guardarpartida",
+      "target": "src_submit_enviarpartida"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/menu.js",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_menu",
+      "target": "src_game_guardarpartida",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -10776,5 +10851,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "f14e65c0b6f616cf986e1db45f0a0110f7d7ce56"
+  "built_at_commit": "eebe0d0766095dd2de2e6e5626d00d8e3253bb61"
 }

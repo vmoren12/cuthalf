@@ -1,16 +1,16 @@
 # Graph Report - cuthalf  (2026-08-11)
 
 ## Corpus Check
-- 43 files · ~27,585 words
+- 43 files · ~28,495 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 278 nodes · 748 edges · 13 communities (11 shown, 2 thin omitted)
+- 279 nodes · 754 edges · 13 communities (11 shown, 2 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f14e65c0`
+- Built from commit: `eebe0d07`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -32,13 +32,13 @@
 ## God Nodes (most connected - your core abstractions)
 1. `$()` - 52 edges
 2. `T()` - 29 edges
-3. `start()` - 14 edges
-4. `paintOver()` - 13 edges
+3. `paintOver()` - 14 edges
+4. `start()` - 14 edges
 5. `paint()` - 13 edges
 6. `applyLang()` - 12 edges
-7. `paintScores()` - 11 edges
-8. `worldRows()` - 11 edges
-9. `enviarPartida()` - 11 edges
+7. `enviarPartida()` - 12 edges
+8. `paintScores()` - 11 edges
+9. `worldRows()` - 11 edges
 10. `goHome()` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
@@ -50,8 +50,8 @@
   tools/test-core.mjs → supabase/functions/_shared/core/rng.js
 - `partidaPerfecta()` --calls--> `setRNG()`  [EXTRACTED]
   tools/test-core.mjs → supabase/functions/_shared/core/rng.js
-- `tutorStep()` --calls--> `normalize()`  [EXTRACTED]
-  src/game.js → src/geometry.js
+- `tutorStep()` --calls--> `T()`  [EXTRACTED]
+  src/game.js → src/i18n.js
 
 ## Import Cycles
 - None detected.
@@ -59,16 +59,16 @@
 ## Communities (13 total, 2 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.09
-Nodes (58): finishTutor(), goHome(), start(), startTutor(), tutorChrome(), tutorStep(), L, setLang() (+50 more)
+Cohesion: 0.10
+Nodes (49): finishTutor(), goHome(), L, setLang(), T(), savedTheme, applyLang(), ask() (+41 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.13
-Nodes (37): CONFIG, gameOver(), guardarMarca(), paintOver(), saveMark(), hayRemoto(), meDaily(), meFree() (+29 more)
+Cohesion: 0.11
+Nodes (37): gameOver(), guardarMarca(), guardarPartida(), paintOver(), saveMark(), hayRemoto(), meDaily(), meFree() (+29 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.11
-Nodes (36): levelConfig(), STAGES, TUTOR, advance(), doCut(), newLevel(), timeUp(), area() (+28 more)
+Nodes (46): CONFIG, levelConfig(), STAGES, TUTOR, advance(), doCut(), newLevel(), start() (+38 more)
 
 ### Community 3 - "Community 3"
 Cohesion: 0.11
@@ -114,13 +114,13 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.055) - this node is a cross-community bridge._
 - **Why does `T()` connect `Community 0` to `Community 1`, `Community 2`?**
   _High betweenness centrality (0.018) - this node is a cross-community bridge._
-- **Why does `evaluate()` connect `Community 2` to `Community 1`?**
-  _High betweenness centrality (0.005) - this node is a cross-community bridge._
 - **What connects `STAGES`, `L`, `savedTheme` to the rest of the system?**
   _55 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.0875 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1038961038961039 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.12950971322849214 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1111111111111111 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
-  _Cohesion score 0.11184939091915837 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.10909090909090909 - nodes in this community are weakly interconnected._
+- **Should `Community 3` be split into smaller, more focused modules?**
+  _Cohesion score 0.10756302521008404 - nodes in this community are weakly interconnected._

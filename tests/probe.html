@@ -133,18 +133,39 @@ await step("la marca guarda su reloj y no se mezcla", () => {
   $("name").value = "SONDA";
   saveMark();                                   // primera vez: guarda el nombre
   if (!ME.tieneNombre()) throw new Error("no ha guardado el nombre");
+  $("keep-here").click();                       // y con nombre, a la tabla de casa
   if (DB.list("free-3")[0].n !== "SONDA") throw new Error("no ha entrado en la tabla de 3 s");
   if (DB.list("free-0").some(r => r.n === "SONDA")) throw new Error("se ha colado en la de ∞");
   goHome();
 });
-await step("reto diario: se juega y cuenta el intento", async () => {
+await step("la partida no se guarda ni se sube sin permiso", async () => {
+  S.timer = 0;
+  await start("free");
+  frame(); cut(0, 140);
+  S.cuts = [96.4];
+  const antes = DB.list(freeBoard(0)).length;
+  gameOver();
+  if ($("keep").hidden) throw new Error("no pregunta qué hacer con la partida");
+  if (DB.list(freeBoard(0)).length !== antes) throw new Error("ha guardado sin preguntar");
+  if (ENVIO.estado !== "") throw new Error("ha subido sin preguntar: " + ENVIO.estado);
+  $("keep-no").click();
+  if (!$("keep").hidden) throw new Error("sigue preguntando después de decidir");
+  if ($("entry-note").hidden) throw new Error("no dice qué ha pasado con la partida");
+  if (DB.list(freeBoard(0)).length !== antes) throw new Error("guarda una partida descartada");
+  if (ENVIO.estado !== "") throw new Error("sube una partida descartada: " + ENVIO.estado);
+  goHome();
+});
+await step("reto diario: se juega y el intento cuenta si se guarda", async () => {
   await start("daily");
   if (S.mode !== "daily") throw new Error("no entra en el reto");
   frame(); cut(0, 140);
   if (!S.res) throw new Error("el corte no se ha medido");
   S.cuts = [95];
+  const antes = DAILY.today().tries;
   gameOver();
-  if (!DAILY.today().tries) throw new Error("el intento de hoy no se ha contado");
+  if (DAILY.today().tries !== antes) throw new Error("apunta el intento antes de preguntar");
+  $("keep-here").click();
+  if (DAILY.today().tries !== antes + 1) throw new Error("el intento de hoy no se ha contado");
   goHome();
 });
 
@@ -231,6 +252,7 @@ await step("una partida sube a la clasificación mundial", async () => {
   if (S.level !== 6) throw new Error("cinco cortes buenos deberían dejarlo en 6, y está en " + S.level);
   await esperar(1600);                       // una partida lleva su tiempo
   gameOver();
+  $("keep-up").click();                      // ahora sube porque se lo piden
   for (let i = 0; i < 40 && ENVIO.estado !== "hecho" && ENVIO.estado !== "fallo" && ENVIO.estado !== "sin-red"; i++)
     await esperar(250);
   if (ENVIO.estado !== "hecho"){

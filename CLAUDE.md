@@ -121,6 +121,12 @@ redondeo no rechazan a nadie.
 **La semilla del juego libre la reparte el servidor.** Si la eligiera
 el jugador, podría probar mil hasta dar con una cómoda.
 
+**La partida no se guarda sola.** Al terminar se pregunta qué hacer con
+ella: subirla a la clasificación, guardarla sólo en el aparato o nada.
+Hasta que se responde no se escribe nada —ni la marca, ni el intento del
+día del reto— ni se manda nada al servidor. `guardarPartida()` en
+`src/game.js` es el único sitio donde eso ocurre.
+
 **Nada se escribe desde el navegador.** La clave `anon` sólo lee.
 `submit_run` y `ensure_player` tienen el `execute` retirado para
 `anon`; la única forma de entrar en la clasificación es jugando.
@@ -162,7 +168,7 @@ juega igual, con semilla local y sin subir nada.
 ## Cómo se prueba
 
 ```sh
-node tools/probar.mjs       # 20 comprobaciones, con red: juega y sube
+node tools/probar.mjs       # 21 comprobaciones, con red: juega y sube
 node tools/test-core.mjs    # 9 comprobaciones de las reglas, sin red
 node tools/probar.mjs && node tools/test-core.mjs
 node tests/serve.mjs        # http://localhost:8765 para mirarlo a ojo

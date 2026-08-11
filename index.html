@@ -64,6 +64,7 @@
 <!-- ── fin de partida ──────────────────────────────────────────── -->
 <section class="screen" id="scr-over" hidden>
   <h1 class="headline" id="over-mark">FIN</h1>
+  <div class="pts" id="pts-row" hidden><span class="lbl" data-t="dayPoints">Puntos para la temporada</span><b class="val" id="d-pts">—</b></div>
   <div class="stats">
     <div class="stat"><span class="lbl" data-t="reached">Nivel alcanzado</span><b class="val" id="s-lvl">01</b></div>
     <div class="stat"><span class="lbl" data-t="avg">Precisión media</span><b class="val" id="s-avg">—</b></div>
@@ -77,12 +78,18 @@
     <div class="stat"><span class="lbl" data-t="attempt">Intento de hoy</span><b class="val" id="d-try">—</b></div>
     <div class="stat"><span class="lbl" data-t="bestToday">Tu mejor de hoy</span><b class="val" id="d-best">—</b></div>
     <div class="stat"><span class="lbl" data-t="streak">Racha</span><b class="val" id="d-streak">—</b></div>
-    <div class="stat"><span class="lbl" data-t="dayPoints">Puntos para la temporada</span><b class="val" id="d-pts">—</b></div>
   </div>
 
   <div class="entry" id="entry" hidden>
     <input class="tag" id="name" maxlength="14" data-tp="yourName" data-ta="yourName" autocomplete="off" spellcheck="false">
     <button class="lnk" id="save" data-t="save">Guardar</button>
+  </div>
+
+  <div class="keep" id="keep" hidden>
+    <p class="lbl" data-t="keepAsk">¿Qué hacemos con esta partida?</p>
+    <button class="btn btn--sm" id="keep-up" data-t="keepUp">Subir a la clasificación</button>
+    <button class="btn btn--sm btn--ghost" id="keep-here" data-t="keepHere">Guardar sólo en este aparato</button>
+    <div class="row row--left"><button class="lnk" id="keep-no" data-t="keepNone">No guardar</button></div>
   </div>
   <p class="note" id="entry-note" hidden></p>
 

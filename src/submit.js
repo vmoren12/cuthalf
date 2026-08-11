@@ -18,11 +18,16 @@ import { dayKey } from "./util.js";
 /* cómo va el envío de la partida que se acaba de terminar */
 export const ENVIO = { estado: "", texto: "" };
 
+/* La nota de debajo la comparten dos cosas: lo que ha pasado con la
+   partida —que lo escribe la pantalla de fin— y lo que pasa con el
+   envío. Mientras el envío tenga algo que contar, manda él; cuando no
+   hay envío en marcha ni acaba de terminar uno, no se toca.        */
 function pintar(){
   const fila = $("world-row"), nota = $("entry-note");
   if (ENVIO.estado === "hecho"){
     fila.hidden = false;
     $("world-pos").textContent = ENVIO.texto;
+    nota.hidden = true;                 // el puesto ya lo cuenta todo
   } else {
     fila.hidden = true;
   }
@@ -39,8 +44,13 @@ export function limpiarEnvio(){
 }
 
 export async function enviarPartida(){
-  /* sin vale no hay partida que comprobar: se jugó sin conexión */
-  if (S.enviada || !S.ticket || !S.trace.length || !ME.tieneNombre()) return;
+  if (S.enviada || !ME.tieneNombre()) return;
+  /* Sin vale no hay partida que comprobar: se jugó sin conexión. Antes
+     esto se llamaba solo y callar era lo correcto; ahora lo ha pedido
+     alguien, y a una petición hay que contestarle algo.             */
+  if (!S.ticket || !S.trace.length){
+    ENVIO.estado = "sin-red"; ENVIO.texto = T("offline"); pintar(); return;
+  }
   S.enviada = true;
 
   ENVIO.estado = "enviando"; ENVIO.texto = T("sending"); pintar();
@@ -63,7 +73,6 @@ export async function enviarPartida(){
   const fila = Array.isArray(puesto) ? puesto[0] : null;
   ENVIO.estado = "hecho";
   ENVIO.texto  = fila ? T("rankOf")(fila.pos, fila.total) : "—";
-  $("entry-note").hidden = true;
   pintar();
 }
 

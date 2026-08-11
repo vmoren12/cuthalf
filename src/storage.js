@@ -89,13 +89,21 @@ export const DAILY = {
     }
     return st;
   },
-  close(score){
+  /* Cómo quedaría el día si esta partida contara. No escribe nada: al
+     terminar se enseña primero y sólo se guarda si quien ha jugado
+     dice que sí — por eso la cuenta y el apunte van separados.      */
+  preview(score){
     const cur = DAILY.today();
     cur.tries++;
     const better = score.lv > cur.lv || (score.lv === cur.lv && score.av > cur.av);
     if (better){ cur.lv = score.lv; cur.av = score.av; }
-    DB.setDay(cur.d, { lv: cur.lv, av: cur.av, tries: cur.tries });
     return { cur, better };
+  },
+  commit(cur){ DB.setDay(cur.d, { lv: cur.lv, av: cur.av, tries: cur.tries }); },
+  close(score){
+    const r = DAILY.preview(score);
+    DAILY.commit(r.cur);
+    return r;
   },
   /* Temporada: lo acumulado en el mes natural. Cuenta el mejor
      intento de cada día, que es lo que sube a la clasificación.    */
