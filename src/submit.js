@@ -62,7 +62,10 @@ export async function enviarPartida(){
     name:   ME.name()
   });
 
-  if (!r){ ENVIO.estado = "sin-red"; ENVIO.texto = T("offline"); pintar(); return; }
+  /* Sin respuesta no se sabe si llegó. Se deja volver a intentarlo —si
+     había llegado, el vale único lo dirá— porque perder la marca por
+     un túnel es peor que un mensaje raro.                           */
+  if (!r){ S.enviada = false; ENVIO.estado = "sin-red"; ENVIO.texto = T("offline"); pintar(); return; }
   if (r.error){ ENVIO.estado = "fallo"; ENVIO.texto = T("notSent") + " · " + r.error; pintar(); return; }
 
   /* ya está dentro: ahora se pregunta en qué puesto ha quedado */

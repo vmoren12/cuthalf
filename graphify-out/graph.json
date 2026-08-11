@@ -157,27 +157,27 @@
       "label": "paintOver()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L235",
+      "source_location": "L233",
       "_origin": "ast",
       "id": "src_game_paintover",
       "community": 1,
       "norm_label": "paintover()"
     },
     {
-      "label": "guardarPartida()",
+      "label": "subirPartida()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L299",
+      "source_location": "L303",
       "_origin": "ast",
-      "id": "src_game_guardarpartida",
+      "id": "src_game_subirpartida",
       "community": 1,
-      "norm_label": "guardarpartida()"
+      "norm_label": "subirpartida()"
     },
     {
       "label": "guardarMarca()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L311",
+      "source_location": "L312",
       "_origin": "ast",
       "id": "src_game_guardarmarca",
       "community": 1,
@@ -317,7 +317,7 @@
       "label": "T()",
       "file_type": "code",
       "source_file": "src/i18n.js",
-      "source_location": "L113",
+      "source_location": "L109",
       "_origin": "ast",
       "id": "src_i18n_t",
       "community": 0,
@@ -327,7 +327,7 @@
       "label": "setLang()",
       "file_type": "code",
       "source_file": "src/i18n.js",
-      "source_location": "L114",
+      "source_location": "L110",
       "_origin": "ast",
       "id": "src_i18n_setlang",
       "community": 0,
@@ -607,7 +607,7 @@
       "label": "armBack()",
       "file_type": "code",
       "source_file": "src/menu.js",
-      "source_location": "L294",
+      "source_location": "L292",
       "_origin": "ast",
       "id": "src_menu_armback",
       "community": 2,
@@ -617,7 +617,7 @@
       "label": "disarmBack()",
       "file_type": "code",
       "source_file": "src/menu.js",
-      "source_location": "L311",
+      "source_location": "L309",
       "_origin": "ast",
       "id": "src_menu_disarmback",
       "community": 0,
@@ -627,7 +627,7 @@
       "label": "handleBack()",
       "file_type": "code",
       "source_file": "src/menu.js",
-      "source_location": "L334",
+      "source_location": "L332",
       "_origin": "ast",
       "id": "src_menu_handleback",
       "community": 0,
@@ -1050,7 +1050,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_scores_drawrows",
-      "community": 1,
+      "community": 0,
       "norm_label": "drawrows()"
     },
     {
@@ -1070,7 +1070,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_scores_localruns",
-      "community": 1,
+      "community": 0,
       "norm_label": "localruns()"
     },
     {
@@ -1140,7 +1140,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_scoring_points",
-      "community": 2,
+      "community": 1,
       "norm_label": "points()"
     },
     {
@@ -1390,7 +1390,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "src_state_flash",
-      "community": 2,
+      "community": 0,
       "norm_label": "flash()"
     },
     {
@@ -1440,14 +1440,14 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "src_storage_daily",
-      "community": 1,
+      "community": 0,
       "norm_label": "daily"
     },
     {
       "label": "qualifies()",
       "file_type": "code",
       "source_file": "src/storage.js",
-      "source_location": "L121",
+      "source_location": "L113",
       "_origin": "ast",
       "id": "src_storage_qualifies",
       "community": 1,
@@ -1507,7 +1507,7 @@
       "label": "repintarEnvio()",
       "file_type": "code",
       "source_file": "src/submit.js",
-      "source_location": "L81",
+      "source_location": "L84",
       "_origin": "ast",
       "id": "src_submit_repintarenvio",
       "community": 1,
@@ -2567,7 +2567,7 @@
       "label": "Trampas que ya nos han mordido",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L145",
+      "source_location": "L151",
       "_origin": "ast",
       "id": "claude_trampas_que_ya_nos_han_mordido",
       "community": 12,
@@ -2577,7 +2577,7 @@
       "label": "C\u00f3mo se prueba",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L168",
+      "source_location": "L174",
       "_origin": "ast",
       "id": "claude_c\u00f3mo_se_prueba",
       "community": 12,
@@ -2587,7 +2587,7 @@
       "label": "Estilo",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L181",
+      "source_location": "L187",
       "_origin": "ast",
       "id": "claude_estilo",
       "community": 12,
@@ -2707,7 +2707,7 @@
       "label": "5 \u00b7 Dominio",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L191",
+      "source_location": "L192",
       "_origin": "ast",
       "id": "datos_5_dominio",
       "community": 5,
@@ -2717,7 +2717,7 @@
       "label": "6 \u00b7 Limpieza",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L206",
+      "source_location": "L207",
       "_origin": "ast",
       "id": "datos_6_limpieza",
       "community": 5,
@@ -3152,16 +3152,6 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/game.js",
-      "source_location": "L299",
-      "weight": 1.0,
-      "source": "src_game",
-      "target": "src_game_guardarpartida",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/game.js",
       "source_location": "L21",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -3207,6 +3197,16 @@
       "confidence_score": 1.0,
       "source": "src_game",
       "target": "src_game_starttutor"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/game.js",
+      "source_location": "L303",
+      "weight": 1.0,
+      "source": "src_game",
+      "target": "src_game_subirpartida",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -4288,17 +4288,6 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/game.js",
-      "source_location": "L306",
-      "weight": 1.0,
-      "source": "src_game_guardarpartida",
-      "target": "src_game_paintover",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/game.js",
       "source_location": "L269",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -4394,6 +4383,17 @@
       "target": "src_game_paintover"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/game.js",
+      "source_location": "L306",
+      "weight": 1.0,
+      "source": "src_game_subirpartida",
+      "target": "src_game_paintover",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -4419,33 +4419,11 @@
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
-      "source_file": "src/game.js",
-      "source_location": "L304",
-      "weight": 1.0,
-      "source": "src_game_guardarpartida",
-      "target": "src_game_guardarmarca",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/game.js",
-      "source_location": "L304",
+      "source_location": "L305",
       "weight": 1.0,
-      "source": "src_game_guardarpartida",
-      "target": "src_storage_qualifies"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/game.js",
-      "source_location": "L307",
-      "weight": 1.0,
-      "source": "src_game_guardarpartida",
+      "source": "src_game_subirpartida",
       "target": "src_submit_enviarpartida"
     },
     {
@@ -4456,7 +4434,7 @@
       "source_location": "L8",
       "weight": 1.0,
       "source": "src_menu",
-      "target": "src_game_guardarpartida",
+      "target": "src_game_subirpartida",
       "confidence_score": 1.0
     },
     {
@@ -10851,5 +10829,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "eebe0d0766095dd2de2e6e5626d00d8e3253bb61"
+  "built_at_commit": "0bf5315f2b81256928ce27a840fcc38078d9d38a"
 }

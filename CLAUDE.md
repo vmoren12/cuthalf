@@ -121,11 +121,17 @@ redondeo no rechazan a nadie.
 **La semilla del juego libre la reparte el servidor.** Si la eligiera
 el jugador, podría probar mil hasta dar con una cómoda.
 
-**La partida no se guarda sola.** Al terminar se pregunta qué hacer con
-ella: subirla a la clasificación, guardarla sólo en el aparato o nada.
-Hasta que se responde no se escribe nada —ni la marca, ni el intento del
-día del reto— ni se manda nada al servidor. `guardarPartida()` en
-`src/game.js` es el único sitio donde eso ocurre.
+**Guardar es automático; publicar, no.** Guardar en el aparato no le
+cuesta nada a nadie ni se ve desde fuera, así que la marca entra en su
+tabla —y el intento en el reto del día— al terminar, como siempre.
+Subir a la clasificación se hace delante de todo el mundo, así que se
+pide: un solo botón, `subirPartida()` en `src/game.js`, que al pulsarlo
+se convierte en el puesto mundial. Irse sin tocarlo no pierde nada.
+
+Por eso no hay un botón de «no subir»: una opción que cuesta un toque
+para conseguir lo mismo que no hacer nada sobra siempre. Y sin vale del
+servidor la oferta ni aparece —esa partida no se puede comprobar—: en
+su sitio se dice que no ha subido.
 
 **Nada se escribe desde el navegador.** La clave `anon` sólo lee.
 `submit_run` y `ensure_player` tienen el `execute` retirado para

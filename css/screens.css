@@ -160,9 +160,8 @@
 .pts .lbl{opacity:.7}
 .pts .val{font-size:clamp(30px,9.5vw,40px);color:var(--signal)}
 
-/* Qué hacer con la partida recién terminada. Va separado por una raya
-   como la entrada de nombre: son las cifras de arriba y, debajo, lo
-   único que queda por decidir — si se mezcla con «volver a empezar»
-   parecen cinco botones y ninguno manda.                            */
-.keep{display:flex;flex-direction:column;gap:12px;
+/* Subir la partida. Va separado por una raya, como la entrada de
+   nombre: es lo único que hay que decidir, y pegado a «volver a
+   empezar» parecería un botón más de navegación.                   */
+.keep{display:flex;flex-direction:column;
   border-top:1px solid var(--hair);padding-top:16px}

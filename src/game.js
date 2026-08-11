@@ -216,11 +216,9 @@ export function gameOver(){
   const best = S.cuts.length ? Math.max(...S.cuts) : 0;
   /* el reloj con el que se ha jugado va en la marca: una partida sin
      límite y otra de tres segundos por figura no son comparables   */
-  S.score = { lv: S.level, av: +avg.toFixed(1), best: +best.toFixed(1), tl: S.runTimer, saved: false, destino: "" };
+  S.score = { lv: S.level, av: +avg.toFixed(1), best: +best.toFixed(1), tl: S.runTimer, saved: false };
   if (S.mode === "daily"){
-    /* se calcula cómo quedaría el día, pero no se apunta: eso espera a
-       que se diga qué hacer con la partida                           */
-    const prev = DAILY.today(), r = DAILY.preview(S.score);
+    const prev = DAILY.today(), r = DAILY.close(S.score);
     S.score.daily  = r.cur;
     S.score.record = r.better && prev.tries > 0;
   } else {
@@ -249,12 +247,6 @@ export function paintOver(){
   const primeraVez = !ME.tieneNombre();
   $("entry").hidden = !primeraVez;
 
-  /* Y hasta que no se dice qué hacer con ella, la partida no se
-     guarda ni se sube: es de quien la ha jugado. Elegido el destino,
-     las opciones se retiran — ya no hay nada que decidir.           */
-  const destino = S.score.destino;
-  $("keep").hidden = primeraVez || !!destino;
-
   if (S.mode === "daily"){
     const d = S.score.daily, st = DAILY.streak();
     $("daily-over").hidden = false;
@@ -269,19 +261,34 @@ export function paintOver(){
     $("d-pts").textContent    = points(d.lv, d.av).toLocaleString();
   } else {
     $("daily-over").hidden = true; $("tbl-over").hidden = false; $("pts-row").hidden = true;
+
+    /* La marca es de casa: entra en su tabla sin preguntar, como
+       siempre. Guardar en el propio aparato no le cuesta nada a nadie
+       ni se ve desde fuera — lo que pide permiso es publicarla.     */
+    if (!primeraVez && !S.score.saved && qualifies(S.score.lv, S.score.av, S.score.tl)) guardarMarca();
     drawTable($("tbl-over"), S.score.saved ? 6 : 5, S.score.ts || null, S.score.tl);
   }
 
-  /* La nota de debajo dice, por este orden: quién eres —si aún no se
-     sabe—, que la partida se ha descartado, que no le daba para entrar
-     en la tabla de casa —que va antes de decir «guardada», porque si
-     no cabía no se ha guardado nada— y, ya sí, dónde ha quedado.
-     Cuando hay un envío en marcha la escribe él, y aquí no se toca. */
+  /* Subir es lo único que se hace delante de todo el mundo, así que es
+     lo único que se pregunta, y con un botón que al pulsarlo se
+     convierte en su resultado: el puesto mundial, ahí arriba. Irse sin
+     tocarlo no rompe nada — la partida está guardada — y no subir es
+     la salida prudente, que no hay que explicarle a nadie.
+
+     Sin vale no hay nada que ofrecer: el servidor no puede comprobar
+     una partida que no empezó él, así que en vez de un botón que sólo
+     puede fallar se dice lo que pasa.                               */
+  const conVale = !!S.ticket && S.trace.length > 0;
+  const enMarcha = ENVIO.estado !== "" && ENVIO.estado !== "sin-red";
+  $("keep").hidden = primeraVez || !conVale || enMarcha;
+
+  /* La nota de debajo: quién eres, o que esta partida no ha podido
+     subir, o que no le ha dado para la tabla de casa. Mientras haya
+     envío del que hablar la escribe él, y aquí no se toca.          */
   if (ENVIO.estado === ""){
     const nota = primeraVez ? T("askName")
-      : destino === "nada"  ? T("keptNone")
-      : destino && S.mode !== "daily" && !S.score.saved ? T("noTable")
-      : destino === "aparato" ? T("keptHere")
+      : !conVale ? T("offline")
+      : S.mode !== "daily" && !S.score.saved ? T("noTable")
       : "";
     $("entry-note").textContent = nota;
     $("entry-note").hidden = !nota;
@@ -289,22 +296,16 @@ export function paintOver(){
   repintarEnvio();
 }
 
-/* Qué se hace con la partida que se acaba de terminar: subirla a la
-   clasificación mundial, guardarla sólo aquí, o nada.
-
-   «mundo» guarda también en casa: subir sin dejar rastro en el propio
-   aparato sería raro. Y «nada» no es no hacer nada a medias — en el
-   reto diario tampoco cuenta el intento, que es lo único que se
-   apuntaría.                                                        */
-export function guardarPartida(destino){
-  if (!S.score || S.score.destino || !ME.tieneNombre()) return;
-  S.score.destino = destino;
-  if (destino !== "nada"){
-    if (S.mode === "daily") DAILY.commit(S.score.daily);
-    else if (!S.score.saved && qualifies(S.score.lv, S.score.av, S.score.tl)) guardarMarca();
-  }
-  paintOver();
-  if (destino === "mundo") enviarPartida();
+/* El único paso que no se da solo: publicar la partida. Se espera al
+   envío para volver a pintar, porque si se queda sin contestar el
+   botón tiene que volver a estar ahí — un intento perdido por un túnel
+   no puede costar la marca.                                          */
+export async function subirPartida(){
+  if (!S.score) return;
+  const envio = enviarPartida();   // deja el envío en marcha al momento
+  paintOver();                     // y con eso el botón ya se ha retirado
+  await envio;
+  paintOver();                     // vuelve sólo si se quedó sin contestar
 }
 
 /* la marca en la tabla de este aparato */
@@ -317,9 +318,8 @@ function guardarMarca(){
 }
 
 /* El botón de la entrada de nombre. Sólo aparece la primera vez:
-   guarda el nombre para siempre y, con él ya sabido, aparecen las
-   opciones de qué hacer con la partida. De ahí en adelante lo único
-   que se pregunta al terminar es eso.                               */
+   guarda el nombre para siempre y, con él ya sabido, la marca entra en
+   su tabla y aparece la oferta de subirla.                           */
 export function saveMark(){
   if (!S.score) return;
   const raw = $("name").value.replace(/\s+/g," ").trim().slice(0, CONFIG.nameMax);
