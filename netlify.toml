@@ -1,8 +1,7 @@
 # CUTHALF · despliegue
 #
 # El juego no se compila: lo que hay en el repositorio es lo que se
-# sirve. Por eso no hay orden de construcción y el directorio que se
-# publica es la raíz.
+# sirve. Por eso no hay orden de construcción y se publica la raíz.
 
 [build]
   publish = "."
@@ -11,32 +10,39 @@
 # Del repositorio se publica todo, así que hay que cerrar lo que no es
 # el juego. Importa sobre todo tests/: esa página se ejecuta sola al
 # abrirla, juega una partida y la sube a la clasificación mundial. Con
-# la carpeta abierta, cualquiera que entre siembra un jugador nuevo.
+# la carpeta abierta, cada visita sembraría un jugador nuevo.
+#
+# `force` no es opcional: sin él, un fichero que existe de verdad gana
+# a la regla y ésta no llega a aplicarse nunca. Es exactamente lo que
+# pasó en el primer despliegue.
 [[redirects]]
   from = "/tests/*"
-  to = "/index.html"
+  to = "/404.html"
   status = 404
+  force = true
 
-# Lo demás no es peligroso —el código es público en GitHub— pero no
-# pinta nada en un servidor de juego.
 [[redirects]]
   from = "/tools/*"
-  to = "/index.html"
+  to = "/404.html"
   status = 404
+  force = true
 
 [[redirects]]
   from = "/supabase/*"
-  to = "/index.html"
+  to = "/404.html"
   status = 404
+  force = true
 
 [[redirects]]
   from = "/build/*"
-  to = "/index.html"
+  to = "/404.html"
   status = 404
+  force = true
 
 [[redirects]]
   from = "/backup/*"
-  to = "/index.html"
+  to = "/404.html"
   status = 404
+  force = true
 
 # Las cabeceras siguen en el fichero _headers, que es donde estaban.

@@ -34,6 +34,17 @@
    El resultado de cada paso sale en el título de la página, que es lo
    que se puede leer desde un navegador sin ventanas.                */
 
+/* Esta página juega sola y sube la partida a la clasificación
+   mundial. Publicada por error, cada visita sembraría un jugador. El
+   servidor la tapa, pero eso depende de una configuración que un día
+   puede cambiar o mudarse a otro alojamiento: aquí no se ejecuta
+   fuera de casa, y punto.                                           */
+if (!["localhost", "127.0.0.1", "[::1]"].includes(location.hostname)){
+  document.title = "sólo para desarrollo";
+  document.body.textContent = "Esta página es la prueba automática del juego y sólo se ejecuta en local.";
+  throw new Error("la prueba no se ejecuta fuera de localhost");
+}
+
 const html = await (await fetch("../index.html")).text();
 document.body.innerHTML = html.split("<body>")[1].split("</body>")[0];
 
