@@ -12,7 +12,10 @@
   Cache-Control: public, max-age=0, must-revalidate
 /css/*
   Cache-Control: public, max-age=0, must-revalidate
+# Netlify no conoce la extensión y lo sirve como fichero binario; sin
+# el tipo correcto, el navegador puede negarse a instalar la aplicación
 /manifest.webmanifest
+  Content-Type: application/manifest+json; charset=utf-8
   Cache-Control: public, max-age=0, must-revalidate
 /icons/*
   Cache-Control: public, max-age=604800
