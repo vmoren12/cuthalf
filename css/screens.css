@@ -33,7 +33,9 @@
 .mark svg{display:block;width:100%;height:auto}
 .mark::after{content:"";position:absolute;top:51%;left:-40vw;right:-40vw;height:2px;
   background:var(--signal);transform:translateY(-50%)}
-.mark--sm{width:150px}
+/* el ancho se mide para que el alto salga como el del logotipo viejo:
+   la palabra es más larga, así que 150 px la dejaban en un hilo */
+.mark--sm{width:200px}
 .mark--sm::after{display:none}
 .headline{
   font-family:var(--sans);font-weight:600;

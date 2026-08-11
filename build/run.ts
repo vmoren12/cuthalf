@@ -1,4 +1,4 @@
-/* CUTHALF · función «run», en un solo fichero.
+/* SPLITINHALF · función «run», en un solo fichero.
  *
  * GENERADO por tools/build-function.mjs · no se edita aquí.
  * Los originales son src/*.js, _shared/vale.ts y run/index.ts.
@@ -488,7 +488,7 @@ export async function huella(secreto: string): Promise<string> {
 
 /* ══ supabase/functions/run/index.ts ═══════════════════════════════ */
 
-/* CUTHALF · la puerta de la clasificación mundial.
+/* SPLITINHALF · la puerta de la clasificación mundial.
  *
  * Dos llamadas:
  *

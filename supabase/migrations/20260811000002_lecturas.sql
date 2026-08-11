@@ -1,4 +1,4 @@
--- CUTHALF · clasificaciones mundiales
+-- SPLITINHALF · clasificaciones mundiales
 -- Paso 2: cómo se leen.
 --
 -- Siete funciones y ninguna sorpresa: tres devuelven una tabla del

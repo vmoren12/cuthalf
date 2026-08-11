@@ -1,4 +1,4 @@
-# CUTHALF · lo que hay que saber antes de tocar nada
+# SPLITINHALF · lo que hay que saber antes de tocar nada
 
 Juego de web instalable (PWA) con clasificaciones mundiales sin
 registro. Sin dependencias, sin compilación: lo que hay en el

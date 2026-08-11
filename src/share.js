@@ -4,7 +4,12 @@ import { $, COL, S } from "./state.js";
 import { DAILY } from "./storage.js";
 import { T } from "./i18n.js";
 
-export const WORD_D = "M0 0H56V14H0Z M0 86H56V100H0Z M0 0H15V100H0Z M66 0H81V100H66Z M113 0H128V100H113Z M66 86H128V100H66Z M138 0H196V14H138Z M159.5 0H174.5V100H159.5Z M206 0H221V100H206Z M253 0H268V100H253Z M221 44H253V58H221Z M304 0H318L293 100H278Z M304 0H318L344 100H329Z M293 66H330V80H293Z M354 0H369V100H354Z M354 86H406V100H354Z M400 0H460L455.8 14H400Z M400 44H446.8L442.6 58H400Z M446 0H460L430 100H416Z";
+/* El logotipo, el mismo dibujo que el de index.html. Se repite aquí
+   porque el lienzo no puede leerlo del DOM: si se toca una letra, hay
+   que tocarla en los dos sitios. 638 unidades de ancho por 100 de
+   alto, y la raya de corte a la altura 51.                          */
+export const WORD_D = "M0 0H56V14H0Z M0 0H15V58H0Z M0 44H56V58H0Z M41 44H56V100H41Z M0 86H56V100H0Z M66 0H122V14H66Z M66 0H81V100H66Z M107 0H122V58H107Z M66 44H122V58H66Z M132 0H147V100H132Z M132 86H184V100H132Z M194 0H209V100H194Z M219 0H277V14H219Z M240.5 0H255.5V100H240.5Z M287 0H302V100H287Z M312 0H327V100H312Z M359 0H374V100H359Z M312 0H327L374 100H359Z M384 0H399V100H384Z M431 0H446V100H431Z M399 44H431V58H399Z M482 0H496L471 100H456Z M482 0H496L522 100H507Z M471 66H508V80H471Z M532 0H547V100H532Z M532 86H584V100H532Z M578 0H638L633.8 14H578Z M578 44H624.8L620.6 58H578Z M624 0H638L608 100H594Z";
+export const WORD_W = 638;
 export const stamp = () => {
   const d = new Date();
   return String(d.getDate()).padStart(2,"0") + "." + String(d.getMonth()+1).padStart(2,"0") + "." + d.getFullYear();
@@ -13,7 +18,7 @@ export const modeLine = () => (S.mode === "daily" ? T("cardDaily") + " " + stamp
   + " \u00B7 " + (S.runTimer ? S.runTimer + " s" : T("noLimit"));
 
 export function shareText(){
-  return "CUTHAL7 \u00B7 " + modeLine() + "\n"
+  return "SPLITINHAL7 \u00B7 " + modeLine() + "\n"
        + T("levelWord") + " " + String(S.score.lv).padStart(2,"0") + " \u00B7 " + S.score.av.toFixed(1) + "%"
        + (/^https?:/.test(location.protocol) ? "\n" + location.href.split("?")[0] : "");
 }
@@ -27,8 +32,11 @@ export async function buildCard(){
   g.fillStyle = getComputedStyle(document.body).getPropertyValue("--ground").trim();
   g.fillRect(0, 0, Z, Z);
 
-  /* logotipo y su línea de corte, de borde a borde */
-  const k = 620/462, wy = 120;
+  /* Logotipo y su línea de corte, de borde a borde. Se dibuja a 800 px
+     de ancho —no a 620— porque el nombre nuevo es medio ancho más
+     largo, y a igual ancho la palabra quedaba una banda fina: lo que
+     se mantiene es el alto, que es lo que le da presencia.          */
+  const k = 800/WORD_W, wy = 120;
   g.save(); g.translate(PAD, wy); g.scale(k, k);
   g.fillStyle = INK; g.fill(new Path2D(WORD_D));
   g.restore();
@@ -79,13 +87,13 @@ export async function shareCard(){
   try { card = await buildCard(); } catch(e){ console.error(e); toast(T("cardFail")); return; }
   const blob = await new Promise(r => card.toBlob(r, "image/png"));
   if (!blob){ toast(T("cardFail")); return; }
-  const file = new File([blob], "cuthalf.png", { type: "image/png" });
+  const file = new File([blob], "splitinhalf.png", { type: "image/png" });
   if (navigator.canShare && navigator.canShare({ files: [file] })){
     try { await navigator.share({ files: [file], text }); return; }
     catch(e){ if (e && e.name === "AbortError") return; }
   }
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob); a.download = "cuthalf.png"; a.click();
+  a.href = URL.createObjectURL(blob); a.download = "splitinhalf.png"; a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 4000);
   try { await navigator.clipboard.writeText(text); } catch(e){}
   toast(T("cardSaved"));

@@ -46,6 +46,9 @@ body{
   font:inherit;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--ink);background:none;border:0;padding:2px 0;cursor:pointer;
   border-bottom:1px solid var(--ink);
+  /* son dos palabras contadas: si la fila se estrecha, que ceda el
+     logotipo —que se reescala— y no «Cerrar» partido en dos          */
+  white-space:nowrap;
 }
 .lnk[hidden]{display:none}
 .lnk:focus-visible,.btn:focus-visible,.tag:focus-visible{outline:2px solid var(--signal);outline-offset:3px}

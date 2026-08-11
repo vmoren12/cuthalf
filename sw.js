@@ -1,4 +1,4 @@
-/* CUTHALF · service worker
+/* SPLITINHALF · service worker
    Sube VERSION en cada despliegue: invalida la caché anterior.
 
    Estrategia:
@@ -11,8 +11,8 @@
    Desde que el juego está repartido en módulos, la instalación se
    los lleva todos de una vez: con una lista incompleta el HTML nuevo
    podría acabar cargando módulos de la versión anterior.            */
-const VERSION = "2026.08.11f";
-const CACHE   = "cuthalf-" + VERSION;
+const VERSION = "2026.08.12";
+const CACHE   = "splitinhalf-" + VERSION;
 const PAGE    = new URL(location).searchParams.get("page") || "./";
 
 const ASSETS = [

@@ -1267,7 +1267,7 @@
       "label": "stamp()",
       "file_type": "code",
       "source_file": "src/share.js",
-      "source_location": "L8",
+      "source_location": "L13",
       "_origin": "ast",
       "id": "src_share_stamp",
       "community": 0,
@@ -1277,7 +1277,7 @@
       "label": "modeLine()",
       "file_type": "code",
       "source_file": "src/share.js",
-      "source_location": "L12",
+      "source_location": "L17",
       "_origin": "ast",
       "id": "src_share_modeline",
       "community": 0,
@@ -1287,7 +1287,7 @@
       "label": "shareText()",
       "file_type": "code",
       "source_file": "src/share.js",
-      "source_location": "L15",
+      "source_location": "L20",
       "_origin": "ast",
       "id": "src_share_sharetext",
       "community": 0,
@@ -1297,7 +1297,7 @@
       "label": "buildCard()",
       "file_type": "code",
       "source_file": "src/share.js",
-      "source_location": "L21",
+      "source_location": "L26",
       "_origin": "ast",
       "id": "src_share_buildcard",
       "community": 0,
@@ -1307,7 +1307,7 @@
       "label": "toast()",
       "file_type": "code",
       "source_file": "src/share.js",
-      "source_location": "L69",
+      "source_location": "L77",
       "_origin": "ast",
       "id": "src_share_toast",
       "community": 0,
@@ -1317,7 +1317,7 @@
       "label": "shareCard()",
       "file_type": "code",
       "source_file": "src/share.js",
-      "source_location": "L75",
+      "source_location": "L83",
       "_origin": "ast",
       "id": "src_share_sharecard",
       "community": 0,
@@ -2524,14 +2524,14 @@
       "norm_label": "claude.md"
     },
     {
-      "label": "CUTHALF \u00b7 lo que hay que saber antes de tocar nada",
+      "label": "SPLITINHALF \u00b7 lo que hay que saber antes de tocar nada",
       "file_type": "document",
       "source_file": "CLAUDE.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "claude_cuthalf_lo_que_hay_que_saber_antes_de_tocar_nada",
+      "id": "claude_splitinhalf_lo_que_hay_que_saber_antes_de_tocar_nada",
       "community": 12,
-      "norm_label": "cuthalf \u00b7 lo que hay que saber antes de tocar nada"
+      "norm_label": "splitinhalf \u00b7 lo que hay que saber antes de tocar nada"
     },
     {
       "label": "Al empezar una sesi\u00f3n",
@@ -2634,14 +2634,14 @@
       "norm_label": "datos.md"
     },
     {
-      "label": "CUTHALF \u00b7 datos y clasificaciones",
+      "label": "SPLITINHALF \u00b7 datos y clasificaciones",
       "file_type": "document",
       "source_file": "DATOS.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "datos_cuthalf_datos_y_clasificaciones",
+      "id": "datos_splitinhalf_datos_y_clasificaciones",
       "community": 5,
-      "norm_label": "cuthalf \u00b7 datos y clasificaciones"
+      "norm_label": "splitinhalf \u00b7 datos y clasificaciones"
     },
     {
       "label": "1 \u00b7 Las cinco clasificaciones",
@@ -2764,14 +2764,14 @@
       "norm_label": "readme.md"
     },
     {
-      "label": "CUTHALF",
+      "label": "SPLITINHALF",
       "file_type": "document",
       "source_file": "README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "readme_cuthalf",
+      "id": "readme_splitinhalf",
       "community": 7,
-      "norm_label": "cuthalf"
+      "norm_label": "splitinhalf"
     },
     {
       "label": "En marcha",
@@ -10811,19 +10811,19 @@
       "source_file": "CLAUDE.md",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "claude",
-      "target": "claude_cuthalf_lo_que_hay_que_saber_antes_de_tocar_nada"
+      "target": "claude_splitinhalf_lo_que_hay_que_saber_antes_de_tocar_nada",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L90",
+      "source_location": "L103",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "claude_cuthalf_lo_que_hay_que_saber_antes_de_tocar_nada",
-      "target": "claude_al_desplegar"
+      "source": "claude_splitinhalf_lo_que_hay_que_saber_antes_de_tocar_nada",
+      "target": "claude_al_desplegar",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10831,79 +10831,79 @@
       "source_file": "CLAUDE.md",
       "source_location": "L12",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "claude_cuthalf_lo_que_hay_que_saber_antes_de_tocar_nada",
-      "target": "claude_al_empezar_una_sesi\u00f3n"
+      "source": "claude_splitinhalf_lo_que_hay_que_saber_antes_de_tocar_nada",
+      "target": "claude_al_empezar_una_sesi\u00f3n",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L41",
+      "source_location": "L47",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "claude_cuthalf_lo_que_hay_que_saber_antes_de_tocar_nada",
-      "target": "claude_al_terminar_cualquier_cambio"
+      "source": "claude_splitinhalf_lo_que_hay_que_saber_antes_de_tocar_nada",
+      "target": "claude_al_terminar_cualquier_cambio",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L57",
+      "source_location": "L70",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "claude_cuthalf_lo_que_hay_que_saber_antes_de_tocar_nada",
-      "target": "claude_c\u00f3mo_est\u00e1_repartido"
+      "source": "claude_splitinhalf_lo_que_hay_que_saber_antes_de_tocar_nada",
+      "target": "claude_c\u00f3mo_est\u00e1_repartido",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L149",
+      "source_location": "L182",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "claude_cuthalf_lo_que_hay_que_saber_antes_de_tocar_nada",
-      "target": "claude_c\u00f3mo_se_prueba"
+      "source": "claude_splitinhalf_lo_que_hay_que_saber_antes_de_tocar_nada",
+      "target": "claude_c\u00f3mo_se_prueba",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L98",
+      "source_location": "L111",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "claude_cuthalf_lo_que_hay_que_saber_antes_de_tocar_nada",
-      "target": "claude_decisiones_que_no_son_evidentes"
+      "source": "claude_splitinhalf_lo_que_hay_que_saber_antes_de_tocar_nada",
+      "target": "claude_decisiones_que_no_son_evidentes",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L162",
+      "source_location": "L195",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "claude_cuthalf_lo_que_hay_que_saber_antes_de_tocar_nada",
-      "target": "claude_estilo"
+      "source": "claude_splitinhalf_lo_que_hay_que_saber_antes_de_tocar_nada",
+      "target": "claude_estilo",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L74",
+      "source_location": "L87",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "claude_cuthalf_lo_que_hay_que_saber_antes_de_tocar_nada",
-      "target": "claude_si_cambias_una_regla_del_juego"
+      "source": "claude_splitinhalf_lo_que_hay_que_saber_antes_de_tocar_nada",
+      "target": "claude_si_cambias_una_regla_del_juego",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L126",
+      "source_location": "L159",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "claude_cuthalf_lo_que_hay_que_saber_antes_de_tocar_nada",
-      "target": "claude_trampas_que_ya_nos_han_mordido"
+      "source": "claude_splitinhalf_lo_que_hay_que_saber_antes_de_tocar_nada",
+      "target": "claude_trampas_que_ya_nos_han_mordido",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10911,9 +10911,9 @@
       "source_file": "DATOS.md",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "datos",
-      "target": "datos_cuthalf_datos_y_clasificaciones"
+      "target": "datos_splitinhalf_datos_y_clasificaciones",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10921,9 +10921,9 @@
       "source_file": "DATOS.md",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "datos_cuthalf_datos_y_clasificaciones",
-      "target": "datos_1_las_cinco_clasificaciones"
+      "source": "datos_splitinhalf_datos_y_clasificaciones",
+      "target": "datos_1_las_cinco_clasificaciones",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10931,49 +10931,49 @@
       "source_file": "DATOS.md",
       "source_location": "L49",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "datos_cuthalf_datos_y_clasificaciones",
-      "target": "datos_2_en_el_aparato_localstorage"
+      "source": "datos_splitinhalf_datos_y_clasificaciones",
+      "target": "datos_2_en_el_aparato_localstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DATOS.md",
-      "source_location": "L75",
+      "source_location": "L79",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "datos_cuthalf_datos_y_clasificaciones",
-      "target": "datos_3_en_el_servidor_supabase"
+      "source": "datos_splitinhalf_datos_y_clasificaciones",
+      "target": "datos_3_en_el_servidor_supabase",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DATOS.md",
-      "source_location": "L155",
+      "source_location": "L159",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "datos_cuthalf_datos_y_clasificaciones",
-      "target": "datos_4_c\u00f3mo_se_comprueba_que_una_marca_es_real"
+      "source": "datos_splitinhalf_datos_y_clasificaciones",
+      "target": "datos_4_c\u00f3mo_se_comprueba_que_una_marca_es_real",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DATOS.md",
-      "source_location": "L184",
+      "source_location": "L192",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "datos_cuthalf_datos_y_clasificaciones",
-      "target": "datos_5_dominio"
+      "source": "datos_splitinhalf_datos_y_clasificaciones",
+      "target": "datos_5_dominio",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DATOS.md",
-      "source_location": "L199",
+      "source_location": "L207",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "datos_cuthalf_datos_y_clasificaciones",
-      "target": "datos_6_limpieza"
+      "source": "datos_splitinhalf_datos_y_clasificaciones",
+      "target": "datos_6_limpieza",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11031,9 +11031,9 @@
       "source_file": "README.md",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "readme",
-      "target": "readme_cuthalf"
+      "target": "readme_splitinhalf",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11041,9 +11041,9 @@
       "source_file": "README.md",
       "source_location": "L71",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_cuthalf",
-      "target": "readme_al_desplegar"
+      "source": "readme_splitinhalf",
+      "target": "readme_al_desplegar",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11051,9 +11051,9 @@
       "source_file": "README.md",
       "source_location": "L35",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_cuthalf",
-      "target": "readme_c\u00f3mo_est\u00e1_repartido"
+      "source": "readme_splitinhalf",
+      "target": "readme_c\u00f3mo_est\u00e1_repartido",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11061,9 +11061,9 @@
       "source_file": "README.md",
       "source_location": "L14",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_cuthalf",
-      "target": "readme_en_marcha"
+      "source": "readme_splitinhalf",
+      "target": "readme_en_marcha",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11071,9 +11071,9 @@
       "source_file": "README.md",
       "source_location": "L23",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_cuthalf",
-      "target": "readme_prueba"
+      "source": "readme_splitinhalf",
+      "target": "readme_prueba",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11081,11 +11081,11 @@
       "source_file": "README.md",
       "source_location": "L53",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_cuthalf",
-      "target": "readme_si_cambias_una_regla_del_juego"
+      "source": "readme_splitinhalf",
+      "target": "readme_si_cambias_una_regla_del_juego",
+      "confidence_score": 1.0
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "96eb2efff362b40685e3525ad043b795e01622f5"
+  "built_at_commit": "414bb056767c1312223867485298f4c389fb5713"
 }

@@ -1,4 +1,4 @@
-# CUTHALF
+# SPLITINHALF
 
 Parte cada figura en dos mitades iguales. El error no puede pasar
 del 7 %.

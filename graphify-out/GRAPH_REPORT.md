@@ -1,7 +1,7 @@
 # Graph Report - cuthalf  (2026-08-11)
 
 ## Corpus Check
-- 43 files · ~30,007 words
+- 43 files · ~30,349 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `96eb2eff`
+- Built from commit: `414bb056`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -80,7 +80,7 @@ Nodes (22): CONFIG, levelConfig(), STAGES, TUTOR, area(), bisector(), centroid()
 
 ### Community 5 - "Community 5"
 Cohesion: 0.15
-Nodes (12): 1 · Las cinco clasificaciones, 2 · En el aparato · `localStorage`, 3 · En el servidor · Supabase, 4 · Cómo se comprueba que una marca es real, 5 · Dominio, 6 · Limpieza, CUTHALF · datos y clasificaciones, Cómo se leen (+4 more)
+Nodes (12): 1 · Las cinco clasificaciones, 2 · En el aparato · `localStorage`, 3 · En el servidor · Supabase, 4 · Cómo se comprueba que una marca es real, 5 · Dominio, 6 · Limpieza, Cómo se leen, `free_best` y `daily_best` — lo que se consulta (+4 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.25
@@ -88,7 +88,7 @@ Nodes (6): fallos, navegador, NAVEGADORES, RESULTADO, ROOT, servidor
 
 ### Community 7 - "Community 7"
 Cohesion: 0.29
-Nodes (6): Al desplegar, CUTHALF, Cómo está repartido, En marcha, Prueba, Si cambias una regla del juego
+Nodes (6): Al desplegar, Cómo está repartido, En marcha, Prueba, Si cambias una regla del juego, SPLITINHALF
 
 ### Community 8 - "Community 8"
 Cohesion: 0.33
@@ -100,7 +100,7 @@ Nodes (5): DESTINO, NUCLEO, ORIGEN, ROOT, soloComprueba
 
 ### Community 12 - "Community 12"
 Cohesion: 0.18
-Nodes (10): Al desplegar, Al empezar una sesión, Al terminar cualquier cambio, CUTHALF · lo que hay que saber antes de tocar nada, Cómo está repartido, Cómo se prueba, Decisiones que no son evidentes, Estilo (+2 more)
+Nodes (10): Al desplegar, Al empezar una sesión, Al terminar cualquier cambio, Cómo está repartido, Cómo se prueba, Decisiones que no son evidentes, Estilo, Si cambias una regla del juego (+2 more)
 
 ## Knowledge Gaps
 - **55 isolated node(s):** `STAGES`, `L`, `savedTheme`, `REMOTO`, `cv` (+50 more)

@@ -30,7 +30,7 @@ const PIEZAS = [
   "supabase/functions/run/index.ts"
 ];
 
-const cabecera = `/* CUTHALF · función «run», en un solo fichero.
+const cabecera = `/* SPLITINHALF · función «run», en un solo fichero.
  *
  * GENERADO por tools/build-function.mjs · no se edita aquí.
  * Los originales son src/*.js, _shared/vale.ts y run/index.ts.

@@ -1,4 +1,4 @@
-# CUTHALF · datos y clasificaciones
+# SPLITINHALF · datos y clasificaciones
 
 Todo lo que se guarda, dónde se guarda y con qué criterio se ordena.
 
@@ -197,7 +197,7 @@ Al pasar de la dirección de Netlify a un dominio propio sólo habrá que
 fijar los orígenes permitidos en Supabase, con un secreto más:
 
 ```
-ALLOWED_ORIGINS = https://cuthalf.com,https://tu-sitio.netlify.app
+ALLOWED_ORIGINS = https://splitinhalf.com,https://tu-sitio.netlify.app
 ```
 
 Mientras no exista, la función acepta cualquier origen. No debilita

@@ -58,4 +58,4 @@ createServer((req, res) => {
     "Cache-Control": "no-store"
   });
   res.end(readFileSync(p));
-}).listen(PORT, () => console.log("CUTHALF en http://localhost:" + PORT));
+}).listen(PORT, () => console.log("SPLITINHALF en http://localhost:" + PORT));

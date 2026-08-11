@@ -1,4 +1,4 @@
--- CUTHALF · clasificaciones mundiales
+-- SPLITINHALF · clasificaciones mundiales
 -- Paso 3: la puerta de entrada.
 --
 -- Estas dos funciones son las únicas que escriben, y no puede

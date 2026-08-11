@@ -1,4 +1,4 @@
--- CUTHALF · clasificaciones mundiales
+-- SPLITINHALF · clasificaciones mundiales
 -- Paso 1: las tablas y quién puede tocar cada cosa.
 --
 -- Regla de la casa: el juego SÓLO LEE. Ninguna marca entra desde el

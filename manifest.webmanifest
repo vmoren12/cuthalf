@@ -1,6 +1,6 @@
 {
-  "name": "CUTHALF",
-  "short_name": "CUTHALF",
+  "name": "SPLITINHALF",
+  "short_name": "SPLITINHALF",
   "description": "Corta cada figura en dos mitades iguales. Error admitido: 7%.",
   "display": "standalone",
   "orientation": "portrait",

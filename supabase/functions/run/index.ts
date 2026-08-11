@@ -1,4 +1,4 @@
-/* CUTHALF · la puerta de la clasificación mundial.
+/* SPLITINHALF · la puerta de la clasificación mundial.
  *
  * Dos llamadas:
  *

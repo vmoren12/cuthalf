@@ -6,7 +6,7 @@
 </head><body>
 <script type="module">
 /* Retrato de una pantalla, para mirarla con ojos en vez de suponer.
-   ?p=scores | libre | intro | ask | fin | fin-libre | cafe
+   ?p=scores | libre | intro | ask | fin | fin-libre | cafe | tarjeta
    ?medir=1 cuenta los anchos                                        */
 const html = await (await fetch("../index.html")).text();
 document.body.innerHTML = html.split("<body>")[1].split("</body>")[0];
@@ -27,6 +27,18 @@ if (cual === "scores"){ S.scope = "mine"; S.board = "daily"; openScores(); await
 if (cual === "libre"){ S.scope = "mine"; S.board = "free-0"; openScores(); await paintScores(); }
 if (cual === "ask"){ ask("Elige un nombre para la clasificación mundial", "Guardar", "VICTOR"); }
 if (cual === "cafe"){ $("go-donate").click(); }
+
+/* La tarjeta de compartir es lo único del juego que nadie ve sin
+   compartirlo: se dibuja en un lienzo aparte y se va. Aquí se pega en
+   la página para poder mirarla.                                     */
+if (cual === "tarjeta"){
+  const { buildCard } = await import("../src/share.js");
+  S.mode = "daily"; S.runTimer = 0;
+  S.score = { lv:9, av:96.2, best:98.9, tl:0 };
+  const c = await buildCard();
+  c.style.cssText = "width:540px;max-width:100%;display:block;margin:0 auto";
+  document.body.innerHTML = ""; document.body.appendChild(c);
+}
 if (cual === "sobre-scores"){ S.scope="mine"; S.board="daily"; openScores(); await paintScores(); ask("Elige un nombre para la clasificación mundial", "Guardar", "VICTOR"); }
 
 /* El final de partida no se puede retratar jugando: hay que ponerle
