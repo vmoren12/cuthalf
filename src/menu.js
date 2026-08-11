@@ -238,6 +238,8 @@ export async function promptInstall(){
 $("close-run").addEventListener("click", quitRun);
 $("open-scores").addEventListener("click", openScores);
 $("scores-close").addEventListener("click", () => { $("scr-scores").hidden = true; });
+$("go-donate").addEventListener("click", () => { $("scr-donate").hidden = false; });
+$("donate-close").addEventListener("click", () => { $("scr-donate").hidden = true; });
 $("rename").addEventListener("click", renameMe);
 $("theme-intro").addEventListener("click", () => setTheme(!isDark(), true));
 $("install-intro").addEventListener("click", promptInstall);
@@ -259,6 +261,7 @@ addEventListener("keydown", e => {
      recogería el mismo Escape y lo volvería a atender por su cuenta   */
   if (e.key === "Escape"){
     if (!$("scr-ask").hidden) closeAsk(false);
+    else if (!$("scr-donate").hidden) $("scr-donate").hidden = true;
     else if (!$("scr-scores").hidden) $("scr-scores").hidden = true;
     else if (S.mode === "tutor" && S.phase !== "intro") finishTutor(false);
     else return;                      // sin overlay: que lo recoja quien toque
@@ -334,6 +337,7 @@ export function handleBack(){
      siguiente atrás tiene que seguir encontrando la trampa puesta   */
   armBack();
   if (!$("scr-ask").hidden){ closeAsk(false); return; }
+  if (!$("scr-donate").hidden){ $("scr-donate").hidden = true; return; }
   if (!$("scr-scores").hidden){ $("scr-scores").hidden = true; return; }
   if (S.mode === "tutor"){ finishTutor(false); return; }
   if (S.phase === "play" || S.phase === "result" || S.pause){ quitRun(); return; }

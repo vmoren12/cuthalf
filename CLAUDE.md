@@ -182,7 +182,7 @@ juega igual, con semilla local y sin subir nada.
 ## Cómo se prueba
 
 ```sh
-node tools/probar.mjs       # 22 comprobaciones, con red: juega y sube
+node tools/probar.mjs       # 23 comprobaciones, con red: juega y sube
 node tools/test-core.mjs    # 9 comprobaciones de las reglas, sin red
 node tools/probar.mjs && node tools/test-core.mjs
 node tests/serve.mjs        # http://localhost:8765 para mirarlo a ojo

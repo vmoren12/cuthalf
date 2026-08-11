@@ -40,6 +40,7 @@
 
 <!-- ── inicio ──────────────────────────────────────────────────── -->
 <section class="screen" id="scr-intro">
+  <button class="cup" id="go-donate" data-ta="donate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5h13v5.5A4.5 4.5 0 0 1 12 18.5H8a4.5 4.5 0 0 1-4.5-4.5z"/><path d="M16.5 10h1.75a2.75 2.75 0 0 1 0 5.5H16.5"/><path d="M7.5 5.5V3M12.5 5.5V3"/></svg></button>
   <button class="lnk" id="go-tutor" data-t="howTo">Cómo se juega</button>
   <h1 class="mark"><svg viewBox="0 0 462 100" role="img" aria-label="CUTHALF"><path fill="currentColor" d="M0 0H56V14H0Z M0 86H56V100H0Z M0 0H15V100H0Z M66 0H81V100H66Z M113 0H128V100H113Z M66 86H128V100H66Z M138 0H196V14H138Z M159.5 0H174.5V100H159.5Z M206 0H221V100H206Z M253 0H268V100H253Z M221 44H253V58H221Z M304 0H318L293 100H278Z M304 0H318L344 100H329Z M293 66H330V80H293Z M354 0H369V100H354Z M354 86H406V100H354Z M400 0H460L455.8 14H400Z M400 44H446.8L442.6 58H400Z M446 0H460L430 100H416Z"/></svg></h1>
   <p class="lede" data-t="lede">Parte cada figura en dos mitades iguales. El error no puede pasar del 7%.</p>
@@ -117,6 +118,18 @@
     <div class="stat"><span class="lbl" data-t="streak">Racha</span><b class="val" id="sea-streak">—</b></div>
   </div>
   <ol class="tbl" id="tbl-all"></ol>
+</section>
+
+<!-- ── donativos ───────────────────────────────────────────────── -->
+<section class="screen" id="scr-donate" hidden>
+  <div class="row">
+    <span class="mark mark--sm"><svg viewBox="0 0 462 100" role="img" aria-label="CUTHALF"><path fill="currentColor" d="M0 0H56V14H0Z M0 86H56V100H0Z M0 0H15V100H0Z M66 0H81V100H66Z M113 0H128V100H113Z M66 86H128V100H66Z M138 0H196V14H138Z M159.5 0H174.5V100H159.5Z M206 0H221V100H206Z M253 0H268V100H253Z M221 44H253V58H221Z M304 0H318L293 100H278Z M304 0H318L344 100H329Z M293 66H330V80H293Z M354 0H369V100H354Z M354 86H406V100H354Z M400 0H460L455.8 14H400Z M400 44H446.8L442.6 58H400Z M446 0H460L430 100H416Z"/></svg></span>
+    <button class="lnk" id="donate-close" data-t="close">Cerrar</button>
+  </div>
+  <span class="cup-xl" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5h13v5.5A4.5 4.5 0 0 1 12 18.5H8a4.5 4.5 0 0 1-4.5-4.5z"/><path d="M16.5 10h1.75a2.75 2.75 0 0 1 0 5.5H16.5"/><path d="M7.5 5.5V3M12.5 5.5V3"/></svg></span>
+  <h1 class="headline headline--sm" data-t="donate">Invítame a un café</h1>
+  <p class="lede" data-t="donateNote">CUTHALF no tiene anuncios, ni cuentas, ni te pide nada para jugar. Si te apetece echar una mano, aquí se podrá.</p>
+  <p class="soon" data-t="soon">Próximamente</p>
 </section>
 
 <section class="screen" id="scr-ask" hidden>

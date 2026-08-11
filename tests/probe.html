@@ -303,6 +303,15 @@ await step("la temporada mundial responde", async () => {
   $("scr-scores").hidden = true;
 });
 
+await step("la taza lleva a los donativos, y avisa de que aún no", () => {
+  $("go-donate").click();
+  if ($("scr-donate").hidden) throw new Error("la taza no abre nada");
+  if (!/Próximamente|Coming soon/.test($("scr-donate").textContent))
+    throw new Error("no dice que todavía no está");
+  $("donate-close").click();
+  if (!$("scr-donate").hidden) throw new Error("no se cierra");
+});
+
 await step("cambio de idioma", () => {
   applyLang("en");
   if ($("go").textContent !== "Play") throw new Error("no traduce: " + $("go").textContent);

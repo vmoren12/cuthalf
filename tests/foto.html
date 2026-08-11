@@ -6,7 +6,7 @@
 </head><body>
 <script type="module">
 /* Retrato de una pantalla, para mirarla con ojos en vez de suponer.
-   ?p=scores | libre | intro | ask | fin | fin-libre
+   ?p=scores | libre | intro | ask | fin | fin-libre | cafe
    ?medir=1 cuenta los anchos                                        */
 const html = await (await fetch("../index.html")).text();
 document.body.innerHTML = html.split("<body>")[1].split("</body>")[0];
@@ -26,6 +26,7 @@ const cual = params.get("p") || "scores";
 if (cual === "scores"){ S.scope = "mine"; S.board = "daily"; openScores(); await paintScores(); }
 if (cual === "libre"){ S.scope = "mine"; S.board = "free-0"; openScores(); await paintScores(); }
 if (cual === "ask"){ ask("Elige un nombre para la clasificación mundial", "Guardar", "VICTOR"); }
+if (cual === "cafe"){ $("go-donate").click(); }
 if (cual === "sobre-scores"){ S.scope="mine"; S.board="daily"; openScores(); await paintScores(); ask("Elige un nombre para la clasificación mundial", "Guardar", "VICTOR"); }
 
 /* El final de partida no se puede retratar jugando: hay que ponerle
