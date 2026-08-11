@@ -20,6 +20,10 @@ Servidor: Supabase, proyecto `gfrmnlxadxtnsimansvt`.
    graphify path "src/game.js" "src/net.js"   # cómo se llega de A a B
    ```
 
+   El skill `/graphify` está instalado en `~/.claude/skills/`, así que
+   también vale preguntar en lenguaje llano por la arquitectura y deja
+   que él consulte el grafo.
+
    Aviso: el núcleo del juego está **dos veces** en el grafo, en
    `src/` y en la copia que ejecuta el servidor
    (`supabase/functions/_shared/core/`). No es un error, es lo que
