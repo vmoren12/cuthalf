@@ -1,0 +1,163 @@
+# CUTHALF · lo que hay que saber antes de tocar nada
+
+Juego de web instalable (PWA) con clasificaciones mundiales sin
+registro. Sin dependencias, sin compilación: lo que hay en el
+repositorio es lo que se sirve.
+
+En línea: **cuthal7.netlify.app** · código: **github.com/vmoren12/cuthalf**
+Servidor: Supabase, proyecto `gfrmnlxadxtnsimansvt`.
+
+---
+
+## Al empezar una sesión
+
+1. **Leer el grafo del proyecto**: `graphify-out/GRAPH_REPORT.md`.
+   Dice qué módulos hay, cuáles son los nodos más conectados y por
+   dónde pasa todo. Para preguntas concretas:
+
+   ```sh
+   graphify explain "doCut()"                 # qué hace y con quién habla
+   graphify path "src/game.js" "src/net.js"   # cómo se llega de A a B
+   ```
+
+   Aviso: el núcleo del juego está **dos veces** en el grafo, en
+   `src/` y en la copia que ejecuta el servidor
+   (`supabase/functions/_shared/core/`). No es un error, es lo que
+   hace que las dos partes puntúen igual — pero deja nombres
+   repetidos, así que `path` entre funciones sueltas suele avisar de
+   ambigüedad. Entre ficheros funciona bien, y `explain` también.
+
+2. **Comprobar si el grafo está al día**: `GRAPH_REPORT.md` dice de qué
+   commit se construyó. Si no coincide con `git rev-parse HEAD`, hay
+   que regenerarlo (ver más abajo).
+
+3. Si se va a tocar puntuación, clasificaciones o el servidor, leer
+   antes [DATOS.md](DATOS.md): explica el modelo de datos entero.
+
+## Al terminar cualquier cambio
+
+Tres pasos, siempre, en este orden:
+
+```sh
+node tools/probar.mjs      # el juego entero, incluida la clasificación
+graphify update .          # el grafo, que si no queda mintiendo
+git add -A && git commit   # con un mensaje que explique el porqué
+```
+
+Y `git push` cuando el usuario lo pida. El grafo se versiona: si se
+actualiza el código y no el grafo, la siguiente sesión empieza con un
+mapa equivocado, que es peor que no tener mapa.
+
+---
+
+## Cómo está repartido
+
+```
+index.html    estructura, nada más
+css/          base · partida · pantallas
+src/          config i18n rng util scoring geometry shapes replay
+              storage scores state game render share input menu pwa
+              net player submit main
+supabase/     migraciones y la función que comprueba las partidas
+tools/        pruebas, sincronización del núcleo y empaquetado
+tests/        prueba de humo, servidor local y retratos de pantalla
+```
+
+**El núcleo** —`config.js`, `rng.js`, `util.js`, `scoring.js`,
+`geometry.js`, `shapes.js`, `replay.js`— no toca el navegador. El
+servidor ejecuta esos mismos ficheros para comprobar las partidas.
+
+## Si cambias una regla del juego
+
+La tolerancia del 7 %, las vidas, la curva de dificultad o la fórmula
+de puntos viven a los dos lados:
+
+```sh
+node tools/sync-core.mjs        # lleva el núcleo a la función
+node tools/build-function.mjs   # rehace build/run.ts
+node tools/test-core.mjs        # comprueba que sigue cuadrando
+```
+
+y hay que **volver a desplegar la función** en Supabase (pegar
+`build/run.ts` en el editor de Edge Functions). Si el navegador juega
+con reglas nuevas y el servidor con las viejas, empezará a rechazar
+partidas buenas.
+
+## Al desplegar
+
+Sube la versión en `sw.js` **y** en `src/pwa.js` a la vez. El service
+worker se lleva todos los módulos juntos al instalar; con una lista
+vieja, la página nueva cargaría piezas de la anterior.
+
+---
+
+## Decisiones que no son evidentes
+
+**Las partidas se comprueban repitiéndolas.** El juego es determinista:
+con la misma semilla salen las mismas figuras. El cliente apunta cada
+corte **en coordenadas de la figura**, no de la pantalla —el error es
+una proporción de áreas, y una proporción no cambia al mover, girar o
+agrandar—, y el servidor vuelve a jugar la partida. No compara con lo
+que diga el navegador: calcula él. Por eso los casos límite de
+redondeo no rechazan a nadie.
+
+**La semilla del juego libre la reparte el servidor.** Si la eligiera
+el jugador, podría probar mil hasta dar con una cómoda.
+
+**Nada se escribe desde el navegador.** La clave `anon` sólo lee.
+`submit_run` y `ensure_player` tienen el `execute` retirado para
+`anon`; la única forma de entrar en la clasificación es jugando.
+
+**Cinco tablas, no una.** Sin límite y con 3 s por figura no son el
+mismo juego. Cada marca guarda con qué reloj se hizo.
+
+**Los puntos son el resultado de una partida**, no un marcador que
+sube mientras juegas: `nivel × 1000 + precisión × 10`. Por eso no
+están en el HUD —cambiarían con cada corte— sino al terminar el reto
+del día, que es de donde sale el acumulado de la temporada.
+
+**Nada del juego depende de que el servidor responda.** Sin red se
+juega igual, con semilla local y sin subir nada.
+
+## Trampas que ya nos han mordido
+
+- **`_headers` sin extensión.** Se llamaba `_headers.txt` y Netlify
+  nunca lo leyó: el HTML y el service worker se cacheaban.
+- **En Netlify, un fichero que existe gana a la regla de redirección.**
+  Sin `force = true`, la regla no llega a aplicarse. Así estuvo
+  `tests/probe.html` abierto al público, jugando solo y sembrando
+  jugadores en el ranking. Ahora la propia página se niega a
+  ejecutarse fuera de `localhost`.
+- **`.graphifyignore` sustituye a `.gitignore`**, no se suma. Al
+  crearlo, el perfil de Chrome de las pruebas entró en el grafo y lo
+  multiplicó por cien.
+- **`DB.add` sobrescribía el nombre del jugador** con el de cada marca.
+  El nombre es la identidad en la clasificación: se cambia sólo cuando
+  lo cambia el usuario.
+- **Las pruebas no pueden depender del reloj del navegador sin
+  ventanas**: va acelerado, y el servidor mide el tiempo por su
+  cuenta. Por eso `tests/serve.mjs` tiene una ruta `/esperar` que
+  cuesta segundos de verdad.
+- **Chrome en Windows no abre ventanas de menos de ~500 px**: una
+  captura de 420 recorta la página y parece un fallo de diseño que no
+  existe. Medir con `tests/foto.html?medir=1` antes de tocar CSS.
+
+## Cómo se prueba
+
+```sh
+node tools/probar.mjs       # 20 comprobaciones, con red: juega y sube
+node tools/test-core.mjs    # 9 comprobaciones de las reglas, sin red
+node tools/probar.mjs && node tools/test-core.mjs
+node tests/serve.mjs        # http://localhost:8765 para mirarlo a ojo
+```
+
+`tests/probe.html` carga el `index.html` de verdad, no una copia, así
+que no puede quedarse desfasada cuando cambie la interfaz.
+`tests/foto.html?p=scores` retrata una pantalla y mide sus anchos.
+
+## Estilo
+
+Comentarios y mensajes de commit **en castellano**, explicando el
+porqué y no el qué. El código sigue el estilo que ya hay: sin
+dependencias, sin abreviaturas crípticas y con las decisiones
+raras justificadas ahí mismo, donde se leen.

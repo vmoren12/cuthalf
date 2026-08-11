@@ -1,0 +1,247 @@
+{
+  "src/config.js": {
+    "mtime": 1786397390.6315615,
+    "ast_hash": "f83e4fd8c020d19b448565d4b1b2098b",
+    "semantic_hash": ""
+  },
+  "src/game.js": {
+    "mtime": 1786405212.5632205,
+    "ast_hash": "e413bd48d36d1adf3c5267bf38bc6468",
+    "semantic_hash": ""
+  },
+  "src/geometry.js": {
+    "mtime": 1786396293.680843,
+    "ast_hash": "38fa36e112d60a1638eb34e7132b936c",
+    "semantic_hash": ""
+  },
+  "src/i18n.js": {
+    "mtime": 1786405212.5642266,
+    "ast_hash": "d38468c30d21705fdc42f0b4213fead5",
+    "semantic_hash": ""
+  },
+  "src/input.js": {
+    "mtime": 1786396293.6843958,
+    "ast_hash": "e50b7e4e7755b1f006c4037de9038e78",
+    "semantic_hash": ""
+  },
+  "src/main.js": {
+    "mtime": 1786402137.825835,
+    "ast_hash": "862a162c005a72fa0ce9c00375ba4095",
+    "semantic_hash": ""
+  },
+  "src/menu.js": {
+    "mtime": 1786407259.9932613,
+    "ast_hash": "7ba3bf6dc680d13836e02e735678105f",
+    "semantic_hash": ""
+  },
+  "src/net.js": {
+    "mtime": 1786401873.9515731,
+    "ast_hash": "a1936e964a675704fd29ab14ccbf5db2",
+    "semantic_hash": ""
+  },
+  "src/player.js": {
+    "mtime": 1786401886.5710318,
+    "ast_hash": "d93090aa768c1bccb0a47f60d0e49a27",
+    "semantic_hash": ""
+  },
+  "src/pwa.js": {
+    "mtime": 1786396925.6390846,
+    "ast_hash": "b0006f06f5bd15fb65f026b4c234ae4c",
+    "semantic_hash": ""
+  },
+  "src/render.js": {
+    "mtime": 1786399985.5601392,
+    "ast_hash": "8fa5aec93d5b463f400d1064cc01ad7f",
+    "semantic_hash": ""
+  },
+  "src/replay.js": {
+    "mtime": 1786400017.90521,
+    "ast_hash": "a7eeae656a7caaad97b807dd3a3012cd",
+    "semantic_hash": ""
+  },
+  "src/rng.js": {
+    "mtime": 1786396293.6798127,
+    "ast_hash": "2634f68551948c64a131813e673d939e",
+    "semantic_hash": ""
+  },
+  "src/scores.js": {
+    "mtime": 1786405212.5642266,
+    "ast_hash": "46a11e15be32f895be5d0a5886ea43cf",
+    "semantic_hash": ""
+  },
+  "src/scoring.js": {
+    "mtime": 1786397328.0346968,
+    "ast_hash": "1668d881f0ee0ac2534284e63f84cb98",
+    "semantic_hash": ""
+  },
+  "src/shapes.js": {
+    "mtime": 1786396293.680843,
+    "ast_hash": "6e9c66d68aabd959b5eb49c8d54a0ec9",
+    "semantic_hash": ""
+  },
+  "src/share.js": {
+    "mtime": 1786396584.4183311,
+    "ast_hash": "7efb2f82bdaa9280ddfd459808e0b17d",
+    "semantic_hash": ""
+  },
+  "src/state.js": {
+    "mtime": 1786402137.8248382,
+    "ast_hash": "e8e9acde6917924f3aa8fdfaa6f9f65a",
+    "semantic_hash": ""
+  },
+  "src/storage.js": {
+    "mtime": 1786402950.80467,
+    "ast_hash": "6df1896a25d81b18de096fd2e1eeedcb",
+    "semantic_hash": ""
+  },
+  "src/submit.js": {
+    "mtime": 1786401969.828629,
+    "ast_hash": "d79d9025f59948130de3e6a9a1cbc268",
+    "semantic_hash": ""
+  },
+  "src/util.js": {
+    "mtime": 1786396293.6798127,
+    "ast_hash": "56917d0160ca15cb09d8120784a52816",
+    "semantic_hash": ""
+  },
+  "supabase/functions/_shared/core/config.js": {
+    "mtime": 1786400478.038657,
+    "ast_hash": "f19cd37e388b5781856e24767d13bea2",
+    "semantic_hash": ""
+  },
+  "supabase/functions/_shared/core/geometry.js": {
+    "mtime": 1786400478.0433216,
+    "ast_hash": "7a623419de354f8acb1014d96eefbc98",
+    "semantic_hash": ""
+  },
+  "supabase/functions/_shared/core/replay.js": {
+    "mtime": 1786400478.0446415,
+    "ast_hash": "c40e5e893efbfc1ac079b586abae4f51",
+    "semantic_hash": ""
+  },
+  "supabase/functions/_shared/core/rng.js": {
+    "mtime": 1786400478.0412538,
+    "ast_hash": "c33b2a9645409cdbb6075d630f01768c",
+    "semantic_hash": ""
+  },
+  "supabase/functions/_shared/core/scoring.js": {
+    "mtime": 1786400478.0423033,
+    "ast_hash": "ef03ea6e2eebf66164adb3adf151e57d",
+    "semantic_hash": ""
+  },
+  "supabase/functions/_shared/core/shapes.js": {
+    "mtime": 1786400478.0433216,
+    "ast_hash": "9cd4886a8abfe639a36333ad50f7a648",
+    "semantic_hash": ""
+  },
+  "supabase/functions/_shared/core/util.js": {
+    "mtime": 1786400478.0412538,
+    "ast_hash": "fdcc5ec46a1422db8ed12b84d1497125",
+    "semantic_hash": ""
+  },
+  "supabase/functions/_shared/vale.ts": {
+    "mtime": 1786400519.5557582,
+    "ast_hash": "ccd3b4d37db229fe455c28f4f163bf77",
+    "semantic_hash": ""
+  },
+  "supabase/functions/run/index.ts": {
+    "mtime": 1786404285.9971735,
+    "ast_hash": "dc050275756c7fbab426109a0ef79d9e",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260811000001_tablas.sql": {
+    "mtime": 1786399461.2655287,
+    "ast_hash": "46d18c93f2829a563fccde83cb23c146",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260811000002_lecturas.sql": {
+    "mtime": 1786399662.6119804,
+    "ast_hash": "784d7f0f7d52a8f55c873ffb5c9577fa",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260811000003_entrega.sql": {
+    "mtime": 1786400451.3422527,
+    "ast_hash": "1ec3f850cb9d1f2d1135d8f6c585333b",
+    "semantic_hash": ""
+  },
+  "sw.js": {
+    "mtime": 1786402137.825835,
+    "ast_hash": "09373f3f91acb6e7f802cc6cf3b35773",
+    "semantic_hash": ""
+  },
+  "tests/serve.mjs": {
+    "mtime": 1786402543.417114,
+    "ast_hash": "de24d9fb73b151d46afe2252cf30635c",
+    "semantic_hash": ""
+  },
+  "tools/build-function.mjs": {
+    "mtime": 1786400830.7776513,
+    "ast_hash": "b6027a57ca8f12a19753e55b371ebb27",
+    "semantic_hash": ""
+  },
+  "tools/probar.mjs": {
+    "mtime": 1786403030.5963905,
+    "ast_hash": "8f11f741d1e8d7750a5ad1663036bc0b",
+    "semantic_hash": ""
+  },
+  "tools/sync-core.mjs": {
+    "mtime": 1786400469.717641,
+    "ast_hash": "8129c9871c7a50aff77fefe3f043963f",
+    "semantic_hash": ""
+  },
+  "tools/test-core.mjs": {
+    "mtime": 1786400654.4498942,
+    "ast_hash": "91f0de0ac76af5188dbe2254dc45d67b",
+    "semantic_hash": ""
+  },
+  "tools/test-vale.ts": {
+    "mtime": 1786400868.0555377,
+    "ast_hash": "a60dfe4a1eb44662879f20889fb477c7",
+    "semantic_hash": ""
+  },
+  "404.html": {
+    "mtime": 1786407813.0889523,
+    "ast_hash": "1d16e00a6f565f9be575c971c6f14b79",
+    "semantic_hash": ""
+  },
+  "DATOS.md": {
+    "mtime": 1786403375.559883,
+    "ast_hash": "dfcc23d24f32d638cd07fb9e9e6ddddd",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1786403315.975891,
+    "ast_hash": "a373e1c1d70bf6b3d994e37bfbc88cc7",
+    "semantic_hash": ""
+  },
+  "index.html": {
+    "mtime": 1786407245.9774013,
+    "ast_hash": "770655f7eb036efd60136be445c8780c",
+    "semantic_hash": ""
+  },
+  "tests/foto.html": {
+    "mtime": 1786405261.88333,
+    "ast_hash": "4de9316e17c9fceacba78fc1864334b2",
+    "semantic_hash": ""
+  },
+  "tests/probe.html": {
+    "mtime": 1786407803.5263932,
+    "ast_hash": "2a477e3601088000912a3f05ed8d0d53",
+    "semantic_hash": ""
+  },
+  "icons/icon-192-any.png": {
+    "mtime": 1786396362.2258694,
+    "ast_hash": "d6b5c2d135d55bd9b13fe08e0e880adb",
+    "semantic_hash": ""
+  },
+  "icons/icon-512-any.png": {
+    "mtime": 1786396362.2293358,
+    "ast_hash": "c5acb4afe3ced3fa2f0632d1fcc51cd4",
+    "semantic_hash": ""
+  },
+  "icons/icon-512-maskable.png": {
+    "mtime": 1786396362.2293358,
+    "ast_hash": "2ca68a81cb26e3f1be9487e16a75ca93",
+    "semantic_hash": ""
+  }
+}

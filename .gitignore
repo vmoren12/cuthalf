@@ -23,3 +23,8 @@ Desktop.ini
 # resultado de la última prueba
 tests/.ultimo-resultado.txt
 tests/.perfil/
+
+# el grafo se versiona (graph.json y el informe), pero no lo pesado
+# ni lo derivado: se regenera con `graphify update .`
+graphify-out/cache/
+graphify-out/graph.html

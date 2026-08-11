@@ -1,0 +1,28 @@
+# Qué queda fuera del grafo del proyecto.
+#
+# Ojo: en cuanto existe este fichero, graphify deja de mirar el
+# .gitignore. Todo lo que haya que excluir tiene que estar aquí,
+# incluido lo que ya estaba ignorado por git.
+
+# el perfil del navegador de las pruebas: miles de ficheros que no son
+# de nadie y que, sin esta línea, multiplican el grafo por cien
+tests/.perfil/
+tests/.ultimo-resultado.txt
+
+# el propio grafo
+graphify-out/
+
+# el juego de antes de repartirlo en módulos: está entero en el
+# historial de git y duplicaría cada función del juego actual
+backup/
+
+# generado a partir de src/ y de la función; sus nodos ya están en el
+# grafo por los originales
+build/
+
+# dependencias y ajustes personales
+node_modules/
+.claude/
+.vscode/
+.idea/
+.git/
