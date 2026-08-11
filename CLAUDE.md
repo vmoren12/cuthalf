@@ -31,9 +31,15 @@ Servidor: Supabase, proyecto `gfrmnlxadxtnsimansvt`.
    repetidos, así que `path` entre funciones sueltas suele avisar de
    ambigüedad. Entre ficheros funciona bien, y `explain` también.
 
-2. **Comprobar si el grafo está al día**: `GRAPH_REPORT.md` dice de qué
-   commit se construyó. Si no coincide con `git rev-parse HEAD`, hay
-   que regenerarlo (ver más abajo).
+2. **Comprobar si el grafo está al día.** El hook lo reconstruye justo
+   *antes* de cada commit, así que su contenido es el del código que
+   se confirma, aunque el «Built from commit» del informe lleve el
+   hash del commit **anterior** — no puede llevar el de uno que
+   todavía no existe. Ese desfase de uno es normal y no significa que
+   esté viejo.
+
+   Está viejo de verdad si `git status` enseña cambios sin confirmar
+   en `src/` o en `supabase/`. Entonces: `graphify update .`
 
 3. Si se va a tocar puntuación, clasificaciones o el servidor, leer
    antes [DATOS.md](DATOS.md): explica el modelo de datos entero.
