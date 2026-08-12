@@ -4,7 +4,9 @@ Juego de web instalable (PWA) con clasificaciones mundiales sin
 registro. Sin dependencias, sin compilación: lo que hay en el
 repositorio es lo que se sirve.
 
-En línea: **cuthal7.netlify.app** · código: **github.com/vmoren12/cuthalf**
+En línea: **splitinhalf.com** (y la dirección vieja,
+cuthal7.netlify.app, que sigue viva porque hay gente con el juego
+instalado desde ella) · código: **github.com/vmoren12/cuthalf**
 Servidor: Supabase, proyecto `gfrmnlxadxtnsimansvt`.
 
 ---

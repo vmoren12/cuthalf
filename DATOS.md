@@ -204,18 +204,39 @@ fórmula ahí, hay que desplegar el servidor a la vez.
 
 ## 5 · Dominio
 
+El juego vive en **splitinhalf.com** desde el 13 de agosto de 2026. El
+DNS lo gestiona Netlify (los cuatro `nsone.net`, delegados desde
+Hostinger, que es donde está registrado), el certificado lo renueva
+Netlify solo, `www` redirige a la raíz y `http` a `https`.
+
 Nada en el código apunta a un dominio concreto: las rutas del juego son
-relativas y la dirección del servidor vive en [src/net.js](src/net.js).
-Al pasar de la dirección de Netlify a un dominio propio sólo habrá que
-fijar los orígenes permitidos en Supabase, con un secreto más:
+relativas —el manifiesto arranca en `./`— y la única dirección escrita
+es la del servidor, en [src/net.js](src/net.js). Cambiar de dominio no
+toca una línea; lo que sí hay que tocar es la lista de orígenes que el
+servidor acepta, que es un secreto de la función:
 
 ```
-ALLOWED_ORIGINS = https://splitinhalf.com,https://tu-sitio.netlify.app
+ALLOWED_ORIGINS = https://splitinhalf.com,https://www.splitinhalf.com,https://cuthal7.netlify.app
 ```
 
-Mientras no exista, la función acepta cualquier origen. No debilita
-nada —la protección está en el vale y en la repetición de la partida—
-pero evita que otra web cuelgue tu clasificación de su página.
+Se lee al arrancar la función, así que **cambiar el secreto no basta:
+hay que volver a desplegarla**. Si el origen no está en la lista, la
+respuesta lleva el primero de ella y el navegador bloquea la llamada:
+se puede jugar, pero no pedir vale ni subir marcas.
+
+La dirección vieja de Netlify sigue en la lista a propósito. Quien
+instalara el juego desde ella lo tiene instalado *ahí* —para el
+navegador son dos orígenes distintos, y una aplicación instalada no se
+muda—, así que quitarla le dejaría sin poder subir nada.
+
+Y por lo mismo, el jugador de un dominio no es el del otro: `pid`,
+`psecret` y las marcas locales viven en el almacén de cada origen. Al
+abrir splitinhalf.com se empieza de cero. No tiene arreglo sin cuentas,
+y cuentas es justo lo que este juego no pide.
+
+Mientras no exista el secreto, la función acepta cualquier origen. No
+debilita nada —la protección está en el vale y en la repetición de la
+partida— pero evita que otra web cuelgue tu clasificación de su página.
 
 ## 6 · Limpieza
 
