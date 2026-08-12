@@ -12,31 +12,37 @@ distintos.
 
 | Tabla     | Qué mide                                     | Cómo se ordena |
 |-----------|----------------------------------------------|----------------|
-| `daily`   | El reto diario, acumulado por temporadas     | Puntos del mes |
+| `daily`   | El reto de hoy, con las figuras del día      | Mejor partida  |
 | `free-0`  | Juego libre, sin límite de tiempo            | Mejor partida  |
 | `free-10` | Juego libre, 10 s por figura                 | Mejor partida  |
 | `free-5`  | Juego libre, 5 s por figura                  | Mejor partida  |
 | `free-3`  | Juego libre, 3 s por figura                  | Mejor partida  |
 
-**Orden de una partida** (`cmp` en [src/scoring.js](src/scoring.js)):
-primero el nivel alcanzado; a igualdad, la precisión media; y si aun
-así empatan, quien lo consiguió antes.
+Las cinco ordenan igual: **por los puntos de una partida** y, a
+igualdad, quien llegó antes (`cmp` en [src/scoring.js](src/scoring.js)).
 
-**Puntos de una partida**:
+**Los puntos se ganan corte a corte** y no salen de ningún otro sitio:
 
 ```
-puntos = nivel × 1000 + redondeo(precisión × 10)
+puntos del corte = redondeo(100 × mérito × factor de tiempo)
+
+  mérito         = 1 − error / 7      · 1 el corte exacto, 0 el que roza el límite
+  factor tiempo  = ×2 hasta 1,5 s · ×1 a los 4,5 s · suelo de ×0,5
+  fallar (error ≥ 7 %)               · 0 puntos
+
+puntos de la partida = la suma de sus cortes
 ```
 
-Es el mismo criterio, escrito como un número que se puede sumar: un
-nivel más siempre gana, y la precisión sólo desempata. Nivel 12 con
-97,4 % de precisión son 12 974 puntos.
+Un corte perfecto y rápido vale 200; el mismo corte pensado durante
+seis segundos, 50; uno que se salva por los pelos, casi nada. Llegar
+lejos sigue puntuando —cada nivel es un corte más— pero ya no puntúa
+por sí mismo: se paga por cómo se corta, no por cuántas veces.
 
-**Temporada**: el mes natural (`2026-08`). El reto diario acumula, día
-a día, los puntos del **mejor intento de cada día**. Se puede repetir
-el reto tantas veces como se quiera; sólo cuenta el mejor. El día 1 de
-cada mes la clasificación arranca de cero y el mes cerrado pasa al
-histórico.
+**No se acumulan.** Ni por días, ni por meses, ni entre partidas. Los
+puntos son el resultado de **una** partida y se ven en directo
+mientras se juega, en la telemetría de arriba. En el reto diario cada
+día tiene su clasificación y vale su mejor intento: repetirlo mejora
+tu marca del día, jugar muchos días no da más puntos.
 
 El reto es **la misma secuencia de figuras para todo el mundo**: la
 semilla del generador es la fecha (`mulberry32(hashStr("2026-08-10"))`),
@@ -52,9 +58,9 @@ Una sola clave, `half.v1`, con un objeto:
 
 | Campo       | Contenido |
 |-------------|-----------|
-| `v`         | Versión del formato (hoy `2`) |
-| `records[]` | Marcas de juego libre: `{ n, lv, av, tl, ts, old? }` |
-| `days{}`    | Reto diario por fecha: `"2026-08-10": { lv, av, tries }` |
+| `v`         | Versión del formato (hoy `3`) |
+| `records[]` | Marcas de juego libre: `{ n, lv, av, pts, tl, ts, old?, est? }` |
+| `days{}`    | Reto diario por fecha: `"2026-08-10": { lv, av, pts, tries }` |
 | `streak`    | `{ last, n }` · racha de días seguidos |
 | `name`      | Último nombre usado |
 | `pid` `psecret` | Quién eres en el mundo (ver abajo) |
@@ -62,9 +68,12 @@ Una sola clave, `half.v1`, con un objeto:
 | `tutorDone` | Si ya se ha visto la práctica guiada |
 
 En una marca: `n` nombre, `lv` nivel alcanzado, `av` precisión media,
-`tl` límite de tiempo con el que se jugó (`0` = sin límite), `ts` cuándo
-se hizo. `old` marca las que vienen de una versión anterior, que no
-guardaba `tl`: se colocan en «sin límite» y la tabla lo avisa.
+`pts` los puntos de esa partida, `tl` límite de tiempo con el que se
+jugó (`0` = sin límite), `ts` cuándo se hizo. `old` marca las que
+vienen de una versión anterior, que no guardaba `tl`: se colocan en
+«sin límite» y la tabla lo avisa. `est` marca las anteriores a los
+puntos: nadie apuntó lo que se tardó en cada corte, así que sus puntos
+se estiman a ritmo normal al abrirlas y la tabla también lo avisa.
 
 Se guardan **100 marcas por tabla** y **400 días** de reto. Si el
 navegador no deja escribir (modo privado), todo funciona igual pero sólo
@@ -79,7 +88,7 @@ subir a la clasificación mundial (ver el punto 4).
 ## 3 · En el servidor · Supabase
 
 En marcha desde el 11 de agosto de 2026, en el proyecto
-`gfrmnlxadxtnsimansvt`. Las tres migraciones están en
+`gfrmnlxadxtnsimansvt`. Las cuatro migraciones están en
 [supabase/migrations/](supabase/migrations/) y la función que acepta
 las partidas, en [supabase/functions/run/](supabase/functions/run/).
 
@@ -115,7 +124,7 @@ el secreto, no el nombre.
 | `day` | `date` | sólo en el reto diario |
 | `level` | `int` | nivel alcanzado |
 | `accuracy` | `numeric(4,1)` | precisión media |
-| `points` | `int` | calculado con la fórmula de arriba |
+| `points` | `int` | la suma de los cortes, calculada por el servidor |
 | `cuts` | `int` | cortes de la partida |
 | `ms` | `int` | lo que duró |
 | `created_at` | `timestamptz` | |
@@ -128,18 +137,22 @@ Una fila por jugador y tabla (`free_best`, clave `player_id + board`) y
 una por jugador y día (`daily_best`, clave `player_id + day`). Las
 mantiene el servidor al aceptar una partida, y son las que leen las
 clasificaciones: así una consulta no tiene que recorrer el histórico.
+Se queda la mejor de las dos por puntos, así que subir una partida
+peor que la tuya no te mueve.
 
-La temporada sale de `daily_best`: sumar `points` agrupando por jugador
-y mes.
+La columna `daily_best.season` no la lee nadie desde que los puntos no
+se acumulan; se queda porque es la forma barata de agrupar por mes el
+día que haga falta.
 
 ### Cómo se leen
 
-Siete funciones en `0002_lecturas.sql`: `free_board`, `daily_board` y
-`season_board` devuelven la tabla del mundo; `free_me`, `daily_me` y
-`season_me` te sitúan dentro de ella; `board_size` cuenta cuántos
-sois. El puesto se calcula sobre la clasificación **entera** y sólo
-después se recorta, para que el primero de una página no parezca el
-primero del mundo.
+Cinco funciones, entre `0002_lecturas.sql` y `0004_puntos.sql`:
+`free_board` y `daily_board` devuelven la tabla del mundo; `free_me` y
+`daily_me` te sitúan dentro de ella; `board_size` cuenta cuántos sois.
+El puesto se calcula sobre la clasificación **entera** y sólo después
+se recorta, para que el primero de una página no parezca el primero
+del mundo. Las de la temporada —`season_board` y `season_me`— se
+borraron al dejar de acumularse los puntos.
 
 ### Permisos
 

@@ -12,7 +12,7 @@ import { $, S } from "./state.js";
 import { T } from "./i18n.js";
 import { ME } from "./player.js";
 import { meDaily, meFree, runSubmit } from "./net.js";
-import { freeBoard, seasonOf } from "./scoring.js";
+import { freeBoard } from "./scoring.js";
 import { dayKey } from "./util.js";
 
 /* cómo va el envío de la partida que se acaba de terminar */

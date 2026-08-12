@@ -10,7 +10,7 @@
 import { replay, levelShape } from "../supabase/functions/_shared/core/replay.js";
 import { setRNG, mulberry32 } from "../supabase/functions/_shared/core/rng.js";
 import { hashStr, dayTimer } from "../supabase/functions/_shared/core/util.js";
-import { points, isBoard, boardTime } from "../supabase/functions/_shared/core/scoring.js";
+import { CUT, cutPoints, timeFactor, isBoard, boardTime } from "../supabase/functions/_shared/core/scoring.js";
 import { bisector } from "../supabase/functions/_shared/core/geometry.js";
 
 let fallos = 0;
@@ -74,8 +74,27 @@ prueba("no se aceptan cortes después del final", () => {
 });
 
 prueba("la fórmula de puntos", () => {
-  if (points(12, 97.4) !== 12974) throw new Error("da " + points(12, 97.4));
-  if (points(1, 0) !== 1000)      throw new Error("da " + points(1, 0));
+  /* el corte perfecto y rápido vale el doble que el perfecto y lento */
+  if (cutPoints(0, 1200) !== 200) throw new Error("corte perfecto y rápido: " + cutPoints(0, 1200));
+  if (cutPoints(0, 4500) !== 100) throw new Error("corte perfecto a ritmo normal: " + cutPoints(0, 4500));
+  if (cutPoints(0, 30000) !== 50) throw new Error("el suelo del tiempo no aguanta: " + cutPoints(0, 30000));
+  /* fallar no puntúa, y rozar el límite tampoco da casi nada */
+  if (cutPoints(7, 1000) !== 0)   throw new Error("un fallo puntúa: " + cutPoints(7, 1000));
+  if (cutPoints(99, 1000) !== 0)  throw new Error("un desastre puntúa: " + cutPoints(99, 1000));
+  if (cutPoints(6.9, 1500) > 6)   throw new Error("colar un corte paga demasiado: " + cutPoints(6.9, 1500));
+  /* y la precisión manda: a igual tiempo, mejor corte, más puntos */
+  if (!(cutPoints(1, 3000) > cutPoints(3, 3000))) throw new Error("la precisión no ordena");
+  if (!(cutPoints(1, 2000) > cutPoints(1, 4000))) throw new Error("la rapidez no ordena");
+  if (timeFactor(0) !== CUT.top || timeFactor(1e9) !== CUT.floor)
+    throw new Error("el factor de tiempo se sale de sus topes");
+});
+
+prueba("los puntos de una partida son la suma de sus cortes", () => {
+  const r = replay(12345, partida);
+  const suma = r.detail.reduce((a, d) => a + (d.pts || 0), 0);
+  if (r.points !== suma) throw new Error(r.points + " frente a " + suma);
+  /* catorce cortes exactos a 900 ms: el tope de cada uno */
+  if (r.points !== 14 * CUT.base * CUT.top) throw new Error("una partida impecable da " + r.points);
 });
 
 prueba("el reto del día sale de la fecha", () => {

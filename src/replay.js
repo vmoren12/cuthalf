@@ -16,7 +16,7 @@ import { CONFIG, levelConfig } from "./config.js";
 import { RNG, TAU, mulberry32, pick, setRNG } from "./rng.js";
 import { SHAPES } from "./shapes.js";
 import { evaluate, normalize } from "./geometry.js";
-import { points } from "./scoring.js";
+import { cutPoints } from "./scoring.js";
 
 /* La figura de un nivel. Consume el azar exactamente en el mismo
    orden que newLevel(), que es lo que mantiene las dos partidas —la
@@ -39,7 +39,7 @@ export function levelShape(level, lastShape){
 export function replay(seed, events, timeLimit = 0){
   setRNG(mulberry32(seed >>> 0));
 
-  let level = 1, lives = CONFIG.lives, streak = 0, last = null;
+  let level = 1, lives = CONFIG.lives, streak = 0, last = null, pts = 0;
   const cuts = [], detail = [];
   let over = false, reason = "";
 
@@ -62,8 +62,14 @@ export function replay(seed, events, timeLimit = 0){
     } else {
       const r  = evaluate(shape, ev.P, ev.N);
       const ok = r.err < CONFIG.tolerance;
+      /* aquí es donde se ganan los puntos: en el corte, por lo fino y
+         por lo rápido. El navegador ha sumado esto mismo en directo
+         con el mismo error y el mismo reloj, así que las dos cuentas
+         tienen que salir clavadas.                                   */
+      const p = cutPoints(r.err, ev.ms);
+      pts += p;
       cuts.push(100 - r.err);
-      detail.push({ level, err: r.err, ok });
+      detail.push({ level, err: r.err, ok, pts: p });
       if (ok){
         streak++;
         if (streak >= CONFIG.streak){
@@ -87,7 +93,7 @@ export function replay(seed, events, timeLimit = 0){
     lives,
     cuts: cuts.length,
     av: +avg.toFixed(1),
-    points: points(level, +avg.toFixed(1)),
+    points: pts,
     detail
   };
 }

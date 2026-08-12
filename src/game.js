@@ -11,7 +11,7 @@ import { armBack, disarmBack } from "./menu.js";
 import { clamp, dayKey, dayTimer, hashStr } from "./util.js";
 import { drawBest, drawTable, puestoProyectado, textoPuesto } from "./scores.js";
 import { evaluate, normalize, partsCentroid } from "./geometry.js";
-import { cmp, freeBoard, points } from "./scoring.js";
+import { cmp, cutPoints, freeBoard } from "./scoring.js";
 import { toShapeSpace, trim } from "./replay.js";
 import { runStart } from "./net.js";
 import { ME } from "./player.js";
@@ -69,7 +69,7 @@ export function startTutor(pending){
   S.step = 0; S.tutorHelp = false;
   setRNG(Math.random);
   S.runTimer = 0; S.recordShown = false; S.refBest = 0;
-  S.level = 1; S.streak = 0; S.cuts = []; S.score = null; S.pause = null;
+  S.level = 1; S.streak = 0; S.cuts = []; S.score = null; S.pause = null; S.points = 0;
   $("scr-intro").hidden = true; $("scr-over").hidden = true;
   $("hype").classList.remove("on");
   armBack();
@@ -94,6 +94,7 @@ export function tutorChrome(on){
   $("close-run").hidden = on;      // en la práctica manda «Saltar»
   $("tutor-skip").hidden = !on;
   $("lives").hidden = on;
+  $("pts-box").hidden = on;        // en la práctica no se puntúa
   if (!on) UI.tip("");
 }
 
@@ -104,6 +105,10 @@ export function doCut(a, b){
   const r = evaluate(S.world, a, N);
   const ok = r.err < CONFIG.tolerance;
   const now = performance.now();
+  /* lo que ha costado esta figura, redondeado una sola vez: con este
+     mismo número se apunta el corte y se pagan sus puntos, así que el
+     servidor repite las dos cuentas y le salen iguales              */
+  const ms = Math.round(now - S.t0);
   S.res = Object.assign(r, { P:a, N, ok, t0: now });
   S.phase = "result";
   S.cuts.push(100 - r.err);
@@ -118,27 +123,34 @@ export function doCut(a, b){
     S.trace.push({
       P : { x: trim(m.P.x), y: trim(m.P.y) },
       N : { x: trim(m.N.x), y: trim(m.N.y) },
-      ms: Math.round(now - S.t0)
+      ms
     });
   }
 
+  /* los puntos del corte. Es donde se ganan todos: lo fino que ha
+     salido, por lo deprisa que ha salido. En la práctica no se lleva
+     cuenta — allí no se compite con nadie.                          */
+  const gana = tut ? 0 : cutPoints(r.err, ms);
+  if (gana){ S.points += gana; UI.points(); }
+
   if (ok){
     S.streak++;
-    UI.cap({ k: "cutOk", hit: true });
+    UI.cap({ k: "cutOk", hit: true, gain: gana });
     /* en la práctica no hay rachas ni récords que celebrar: sólo el
        elogio, para que el gesto de acertar se reconozca igual       */
     if (tut){
       UI.hype(T("praise")[Math.min(S.step, T("praise").length - 1)], 1);
       if (navigator.vibrate) navigator.vibrate(10);
     }
-    /* El récord se bate al subir por encima de él, y manda sobre el
-       aviso de racha: no caben dos rótulos a la vez. Pero sólo manda
-       en lo que se dice, nunca en lo que pasa — las vidas y la racha
-       siguen la misma regla para todos. Batir un récord es cosa de tu
-       aparato, y el servidor, que no sabe de tus marcas, tiene que
-       poder repetir la partida y llegar al mismo sitio.             */
+    /* El récord se bate al pasar por encima de él —ahora en puntos,
+       que es lo que se compara— y manda sobre el aviso de racha: no
+       caben dos rótulos a la vez. Pero sólo manda en lo que se dice,
+       nunca en lo que pasa: las vidas y la racha siguen la misma
+       regla para todos. Batir un récord es cosa de tu aparato, y el
+       servidor, que no sabe de tus marcas, tiene que poder repetir la
+       partida y llegar al mismo sitio.                              */
     else {
-      const record = !S.recordShown && S.refBest > 0 && S.level + 1 > S.refBest;
+      const record = !S.recordShown && S.refBest > 0 && S.points > S.refBest;
       if (record) S.recordShown = true;
 
       if (S.streak >= CONFIG.streak){
@@ -216,14 +228,15 @@ export function gameOver(){
   const best = S.cuts.length ? Math.max(...S.cuts) : 0;
   /* el reloj con el que se ha jugado va en la marca: una partida sin
      límite y otra de tres segundos por figura no son comparables   */
-  S.score = { lv: S.level, av: +avg.toFixed(1), best: +best.toFixed(1), tl: S.runTimer, saved: false };
+  S.score = { lv: S.level, av: +avg.toFixed(1), best: +best.toFixed(1),
+              pts: S.points, tl: S.runTimer, saved: false };
   if (S.mode === "daily"){
     const prev = DAILY.today(), r = DAILY.close(S.score);
     S.score.daily  = r.cur;
     S.score.record = r.better && prev.tries > 0;
   } else {
     const prev = DB.list(freeBoard(S.runTimer))[0];
-    S.score.record = !!prev && cmp({ lv:S.score.lv, av:S.score.av, ts:0 }, prev) < 0;
+    S.score.record = !!prev && cmp({ pts:S.score.pts, ts:0 }, prev) < 0;
   }
   /* el nombre viene puesto: casi siempre es el de siempre, y quien
      quiera cambiarlo lo tiene delante sin buscarlo                 */
@@ -238,6 +251,9 @@ export function paintOver(){
   $("over-mark").textContent = S.score.lv > 1
     ? T("levelWord") + " " + String(S.score.lv).padStart(2,"0")
     : T("end");
+  /* los puntos de la partida, arriba del todo y en las dos formas de
+     juego: son el resultado, y son sólo de esta partida             */
+  $("s-pts").textContent  = S.score.pts.toLocaleString();
   $("s-lvl").textContent  = String(S.score.lv).padStart(2,"0");
   $("s-avg").textContent  = S.score.av.toFixed(1) + "%";
   $("s-best").textContent = S.cuts.length ? S.score.best.toFixed(1) + "%" : "—";
@@ -255,21 +271,18 @@ export function paintOver(){
     const d = S.score.daily, st = DAILY.streak();
     $("daily-over").hidden = false;
     $("tbl-over").hidden = true;
-    $("pts-row").hidden = false;
     $("d-try").textContent    = "#" + d.tries;
-    $("d-best").textContent   = "N." + String(d.lv).padStart(2,"0") + " · " + d.av.toFixed(1) + "%";
+    /* el mejor intento de hoy, que es el que va a la clasificación
+       del día: la partida que acaba de terminar puede no serlo     */
+    $("d-best").textContent   = d.pts.toLocaleString() + " · N." + String(d.lv).padStart(2,"0");
     $("d-streak").textContent = st.n + " " + T("days");
-    /* de dónde salen los puntos de la temporada: de aquí, del mejor
-       intento del día. Sin verlos al terminar, en la clasificación
-       parecen un número caído del cielo.                           */
-    $("d-pts").textContent    = points(d.lv, d.av).toLocaleString();
   } else {
-    $("daily-over").hidden = true; $("tbl-over").hidden = false; $("pts-row").hidden = true;
+    $("daily-over").hidden = true; $("tbl-over").hidden = false;
 
     /* La marca es de casa: entra en su tabla sin preguntar, como
        siempre. Guardar en el propio aparato no le cuesta nada a nadie
        ni se ve desde fuera — lo que pide permiso es publicarla.     */
-    if (!primeraVez && !S.score.saved && qualifies(S.score.lv, S.score.av, S.score.tl)) guardarMarca();
+    if (!primeraVez && !S.score.saved && qualifies(S.score.pts, S.score.tl)) guardarMarca();
     drawTable($("tbl-over"), S.score.saved ? 6 : 5, S.score.ts || null, S.score.tl);
   }
 
@@ -342,7 +355,7 @@ export async function subirPartida(){
 function guardarMarca(){
   if (!S.score || S.score.saved) return;   // una marca por partida
   const ts = Date.now();
-  DB.add({ n: DB.name() || "—", lv: S.score.lv, av: S.score.av, tl: S.score.tl, ts });
+  DB.add({ n: DB.name() || "—", lv: S.score.lv, av: S.score.av, pts: S.score.pts, tl: S.score.tl, ts });
   S.score.saved = true; S.score.ts = ts;
   drawBest();
 }
@@ -382,11 +395,11 @@ export async function start(mode, seed){
     seed = hashStr(key);                // misma secuencia para todos
     S.runTimer = dayTimer(key);
     DAILY.open();
-    S.refBest = DAILY.today().lv;
+    S.refBest = DAILY.today().pts;
   } else {
     seed = (seed >>> 0) || (Math.random() * 2**32) >>> 0;
     S.runTimer = S.timer;
-    S.refBest = (DB.list(freeBoard(S.runTimer))[0] || {}).lv || 0;
+    S.refBest = (DB.list(freeBoard(S.runTimer))[0] || {}).pts || 0;
   }
 
   /* El vale de la partida. Si el servidor contesta, la semilla es la
@@ -403,12 +416,12 @@ export async function start(mode, seed){
   setRNG(mulberry32(seed));
   S.recordShown = false;
   S.level = 1; S.lives = CONFIG.lives; S.slots = CONFIG.lives; S.streak = 0;
-  S.cuts = []; S.score = null; S.pause = null; S.lastShape = null;
+  S.cuts = []; S.score = null; S.pause = null; S.lastShape = null; S.points = 0;
   S.trace = []; S.seed = seed; S.startedAt = Date.now();
   $("lives").innerHTML = "";
   $("name").value = "";
   $("scr-intro").hidden = true; $("scr-over").hidden = true;
   $("hype").classList.remove("on");
   armBack();
-  UI.lives(); newLevel();
+  UI.lives(); UI.points(); newLevel();
 }

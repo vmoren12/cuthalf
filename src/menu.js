@@ -4,7 +4,7 @@ import { CONFIG } from "./config.js";
 import { DAILY, DB } from "./storage.js";
 import { $, S, UI, refreshColors } from "./state.js";
 import { T, lang, setLang } from "./i18n.js";
-import { drawBest, drawRows, localRuns, localSeason, worldRows } from "./scores.js";
+import { cabecera, drawBest, drawRows, localDays, localRuns, worldRows } from "./scores.js";
 import { finishTutor, goHome, paintOver, saveMark, start, startTutor, subirPartida } from "./game.js";
 import { shareCard, toast } from "./share.js";
 import { BOARDS, boardTime } from "./scoring.js";
@@ -103,25 +103,34 @@ export function drawScope(){
   $("me-name").textContent = DB.name();
 }
 
-/* la temporada en curso o el día de hoy, según la tabla */
-const cabeceraLocal = () => {
-  const s = DAILY.season();
-  $("sea-pts").textContent    = s.pts.toLocaleString();
-  $("sea-days").textContent   = String(s.played);
-  $("sea-streak").textContent = DAILY.streak().n + " " + T("days");
+/* Cómo llevas el reto de hoy. Antes aquí iba la temporada; ya no hay
+   nada que acumular, así que se enseña el día: los puntos de tu mejor
+   intento, cuántos llevas y la racha, que sigue contando días
+   seguidos porque eso no es puntuación, es constancia.              */
+const cabeceraHoy = () => {
+  const d = DAILY.today();
+  $("day-pts").textContent    = d.pts.toLocaleString();
+  $("day-tries").textContent  = String(d.tries);
+  $("day-streak").textContent = DAILY.streak().n + " " + T("days");
 };
 
 export async function paintScores(){
   const daily = S.board === "daily";
-  $("season-box").hidden = !daily;
-  if (daily) cabeceraLocal();
+  $("today-box").hidden = !daily;
+  if (daily) cabeceraHoy();
 
   if (S.scope === "mine"){
-    if (daily){ drawRows($("tbl-all"), localSeason()); return; }
+    if (daily){ drawRows($("tbl-all"), localDays(), "", cabecera("colDay")); return; }
     /* las marcas de antes no sabían con qué reloj se hicieron y están
-       todas aquí: mejor decirlo que dejar que cuadre mal            */
-    const old = S.board === "free-0" && DB.list("free-0").some(r => r.old);
-    drawRows($("tbl-all"), localRuns(S.board, CONFIG.keep), old ? T("oldNote") : "");
+       todas aquí; y ninguna guardó los tiempos de sus cortes, así que
+       sus puntos son una estimación. Mejor decirlo las dos veces que
+       dejar que cuadre mal.                                         */
+    const viejas = DB.list(S.board);
+    const nota = [
+      S.board === "free-0" && viejas.some(r => r.old) ? T("oldNote") : "",
+      viejas.some(r => r.est) ? T("estNote") : ""
+    ].filter(Boolean).join(" ");
+    drawRows($("tbl-all"), localRuns(S.board, CONFIG.keep), nota, cabecera("colName"));
     return;
   }
 
@@ -131,7 +140,7 @@ export async function paintScores(){
   const marca = ++peticion;
   const filas = await worldRows(S.board);
   if (marca !== peticion) return;          // llegó tarde: manda la última
-  drawRows($("tbl-all"), filas.rows, filas.nota);
+  drawRows($("tbl-all"), filas.rows, filas.nota, cabecera("colName"));
 }
 
 /* para no pisarse cuando se cambia de pestaña más rápido de lo que

@@ -53,14 +53,14 @@ document.body.innerHTML = html.split("<body>")[1].split("</body>")[0];
    identidad, para no sembrar un jugador nuevo en la clasificación
    mundial cada vez que se pasa la prueba.                          */
 const antes = JSON.parse(localStorage.getItem("half.v1") || "{}");
-const identidad = { v: 2, records: [], days: {}, pid: antes.pid, psecret: antes.psecret };
+const identidad = { v: 3, records: [], days: {}, pid: antes.pid, psecret: antes.psecret };
 localStorage.clear();
 localStorage.setItem("half.v1", JSON.stringify(identidad));
 
 const { S, $ }                            = await import("../src/state.js");
 const { start, doCut, gameOver, saveMark, goHome } = await import("../src/game.js");
 const { DB, DAILY, qualifies }            = await import("../src/storage.js");
-const { points, freeBoard }               = await import("../src/scoring.js");
+const { CUT, cutPoints, freeBoard }       = await import("../src/scoring.js");
 const { drawBest, porDelante }            = await import("../src/scores.js");
 const { normalize, evaluate, bisector }   = await import("../src/geometry.js");
 const { SHAPES }                          = await import("../src/shapes.js");
@@ -128,6 +128,7 @@ await step("juego libre: cortar", () => {
 await step("la marca guarda su reloj y no se mezcla", () => {
   S.cuts = [98.2, 97.1];
   gameOver();
+  if (S.score.pts !== S.points) throw new Error("la marca no se lleva los puntos de la partida");
   if (S.score.tl !== 3) throw new Error("la marca no recuerda el reloj");
   if (!shareText()) throw new Error("el texto para compartir sale vacío");
   $("name").value = "SONDA";
@@ -168,6 +169,32 @@ await step("reto diario: se juega y cuenta el intento", async () => {
   goHome();
 });
 
+/* Los puntos son el resultado de cada corte y se ven mientras se
+   juega: es lo único que explica por qué cortar deprisa y fino paga
+   más que cortar despacio y regular.                               */
+await step("los puntos se ganan en el corte y se ven en directo", async () => {
+  S.timer = 0;
+  await start("free");
+  if (S.points !== 0) throw new Error("la partida no empieza a cero: " + S.points);
+  frame();
+  cortePerfecto(0.4);
+  if (!S.res.ok) throw new Error("el corte exacto ha fallado: " + S.res.err.toFixed(2) + "%");
+  const ganado = S.points;
+  if (ganado <= 0) throw new Error("un corte bueno no ha puntuado");
+  if (ganado > CUT.base * CUT.top) throw new Error("un corte pasa de su tope: " + ganado);
+  if ($("pts").textContent !== ganado.toLocaleString())
+    throw new Error("el marcador no los enseña: " + $("pts").textContent);
+  if (!$("cap").textContent.includes("+" + ganado))
+    throw new Error("el pie no dice de dónde salen: " + $("cap").textContent);
+  /* un corte por el borde no vale, y lo que no vale no paga */
+  terminarNivel(); frame();
+  const r = $("stage").getBoundingClientRect();
+  doCut({ x: r.width - 2, y: 0 }, { x: r.width - 2, y: r.height });
+  if (S.res.ok) throw new Error("un corte por el borde no debería valer");
+  if (S.points !== ganado) throw new Error("un fallo ha movido los puntos");
+  goHome();
+});
+
 /* ── repetición: lo que hace el servidor ───────────────────────── */
 await step("un corte mide igual en la pantalla que en la figura", async () => {
   S.timer = 0; await start("free"); frame();
@@ -187,11 +214,14 @@ await step("repetir la partida da lo mismo que jugarla", async () => {
     if (S.phase === "over") break;
     frame(); cut(dx, dy); terminarNivel();
   }
-  const nivel = S.level, cortes = S.cuts.slice();
+  const nivel = S.level, cortes = S.cuts.slice(), puntos = S.points;
   const r = replay(semilla, S.trace);
   if (!r.ok) throw new Error("rechaza la partida: " + r.reason);
   if (r.level !== nivel) throw new Error("nivel " + nivel + " jugado, " + r.level + " repetido");
   if (r.cuts !== cortes.length) throw new Error("cortes: " + cortes.length + " y " + r.cuts);
+  /* y los puntos, clavados: el navegador los suma en directo y el
+     servidor los recalcula, y de eso depende que suban las marcas */
+  if (r.points !== puntos) throw new Error("puntos " + puntos + " jugados, " + r.points + " repetidos");
   const av = +(cortes.reduce((a,b)=>a+b,0) / (cortes.length||1)).toFixed(1);
   if (Math.abs(r.av - av) > 0.15) throw new Error("precisión " + av + " frente a " + r.av);
   goHome();
@@ -206,40 +236,46 @@ await step("una partida inventada no cuela", () => {
 
 /* ── clasificaciones locales ───────────────────────────────────── */
 await step("cada reloj, su tabla", () => {
-  DB.add({ n:"LENTO",  lv: 9, av: 91, tl: 0, ts: 1 });
-  DB.add({ n:"RAPIDO", lv: 4, av: 88, tl: 3, ts: 2 });
+  DB.add({ n:"LENTO",  lv: 9, av: 91, pts: 640, tl: 0, ts: 1 });
+  DB.add({ n:"RAPIDO", lv: 4, av: 88, pts: 210, tl: 3, ts: 2 });
   if (DB.list("free-0").some(r => r.tl === 3)) throw new Error("las tablas se mezclan");
-  if (!qualifies(2, 50, 3)) throw new Error("la tabla de 3 s rechaza lo que le cabe");
+  if (!qualifies(50, 3)) throw new Error("la tabla de 3 s rechaza lo que le cabe");
   if (freeBoard(10) !== "free-10") throw new Error("mal nombre de tabla");
   if (DB.name() !== "SONDA") throw new Error("guardar una marca ha cambiado el nombre a " + DB.name());
+  /* y ordenan por puntos, que es lo que se compite */
+  DB.add({ n:"MEJOR", lv: 2, av: 99, pts: 900, tl: 0, ts: 3 });
+  if (DB.list("free-0")[0].n !== "MEJOR") throw new Error("la tabla no ordena por puntos");
 });
-await step("puntos y temporada", () => {
-  if (points(12, 97.4) !== 12974) throw new Error("la fórmula no cuadra: " + points(12, 97.4));
-  const s = DAILY.season();
-  if (s.pts !== s.days.reduce((a, d) => a + points(d.lv, d.av), 0)) throw new Error("el acumulado no suma");
-  if (!s.played) throw new Error("el día jugado no consta en la temporada");
+await step("tus días del reto van de mayor a menor y no se suman", () => {
+  DB.setDay("2026-01-02", { lv: 4, av: 95, pts: 300, tries: 1 });
+  DB.setDay("2026-01-03", { lv: 9, av: 97, pts: 900, tries: 2 });
+  DB.setDay("2026-01-04", { lv: 6, av: 96, pts: 600, tries: 1 });
+  const lista = DAILY.list();
+  const enero = lista.filter(d => d.d.startsWith("2026-01")).map(d => d.pts);
+  if (enero.join() !== "900,600,300") throw new Error("no van de mayor a menor: " + enero.join());
+  /* jugar tres días no da 1.800 puntos: cada día vale su partida */
+  if (lista.some(d => d.pts > 900)) throw new Error("hay días que acumulan");
+  if (!lista.some(d => d.d === DAILY.today().d)) throw new Error("el día jugado no consta");
 });
 /* El puesto que se enseña antes de subir sale de contar cuántos van
    por delante en la tabla del mundo. Sin red no se puede pedir esa
    tabla, pero sí ponerle una delante y comprobar la cuenta.         */
 await step("qué puesto ocuparía una partida", () => {
   const tabla = [
-    { player_id:"a",  level:15, accuracy:99.0, points:15990 },
-    { player_id:"yo", level:14, accuracy:98.0, points:14980 },
-    { player_id:"b",  level: 9, accuracy:96.2, points: 9962 },
-    { player_id:"c",  level: 4, accuracy:91.0, points: 4910 }
+    { player_id:"a",  level:15, accuracy:99.0, points:2400 },
+    { player_id:"yo", level:14, accuracy:98.0, points:2100 },
+    { player_id:"b",  level: 9, accuracy:96.2, points:1200 },
+    { player_id:"c",  level: 4, accuracy:91.0, points: 400 }
   ];
-  const pos = (sc, board = "free-0") => porDelante(tabla, "yo", board, sc) + 1;
-  if (pos({ lv:20, av:99 }) !== 1) throw new Error("la mejor de todas no queda primera");
-  if (pos({ lv:1, av:10 }) !== 4) throw new Error("la peor de todas no queda última");
-  if (pos({ lv:9, av:96.3 }) !== 2) throw new Error("una décima más no adelanta");
-  /* empate a nivel y precisión: manda quien llegó antes, y una partida
-     recién jugada nunca llegó antes                                  */
-  if (pos({ lv:9, av:96.2 }) !== 3) throw new Error("un empate se cuela por delante");
+  const pos = sc => porDelante(tabla, "yo", sc) + 1;
+  if (pos({ pts:9000 }) !== 1) throw new Error("la mejor de todas no queda primera");
+  if (pos({ pts:10 })   !== 4) throw new Error("la peor de todas no queda última");
+  if (pos({ pts:1201 }) !== 2) throw new Error("un punto más no adelanta");
+  /* empate: manda quien llegó antes, y una partida recién terminada
+     nunca llegó antes                                               */
+  if (pos({ pts:1200 }) !== 3) throw new Error("un empate se cuela por delante");
   /* tu propia fila no cuenta: la sustituyes, no te sumas */
-  if (pos({ lv:10, av:50 }) !== 2) throw new Error("te cuentas a ti mismo");
-  /* y en el reto del día ordenan los puntos, no el nivel */
-  if (pos({ lv:9, av:96.2 }, "daily") !== 3) throw new Error("el reto no ordena por puntos");
+  if (pos({ pts:1500 }) !== 2) throw new Error("te cuentas a ti mismo");
 });
 
 await step("la pantalla de clasificaciones", async () => {
@@ -247,9 +283,16 @@ await step("la pantalla de clasificaciones", async () => {
   openScores();
   if ($("seg-board").children.length !== 5) throw new Error("faltan pestañas");
   if ($("seg-scope").children.length !== 2) throw new Error("falta el conmutador mundo/tú");
-  if ($("season-box").hidden) throw new Error("el reto no muestra la temporada");
+  if ($("today-box").hidden) throw new Error("el reto no muestra cómo va el día");
+  /* la primera columna se entiende porque la tabla dice qué es cada una */
+  const cab = $("tbl-all").querySelector("li.head");
+  if (!cab) throw new Error("la tabla no lleva cabecera");
+  if (!/Día/.test(cab.textContent) || !/Puntos/.test(cab.textContent))
+    throw new Error("la cabecera no nombra las columnas: " + cab.textContent);
   S.board = "free-3"; await paintScores();
-  if (!$("season-box").hidden) throw new Error("el juego libre no lleva temporada");
+  if (!$("today-box").hidden) throw new Error("el juego libre no lleva el resumen del día");
+  if (!/Jugador/.test($("tbl-all").querySelector("li.head").textContent))
+    throw new Error("el juego libre no nombra la columna del nombre");
   if ($("tbl-all").textContent.includes("LENTO")) throw new Error("la de 3 s enseña marcas de ∞");
 });
 
@@ -295,7 +338,7 @@ await step("y aparece en la tabla mundial", async () => {
   if (!$("tbl-all").querySelector(".me")) throw new Error("no destaca tu fila");
 });
 
-await step("la temporada mundial responde", async () => {
+await step("la tabla mundial del reto de hoy responde", async () => {
   S.board = "daily";
   await paintScores();
   const texto = $("tbl-all").textContent;
@@ -322,23 +365,37 @@ await step("la portada enseña tu mejor marca", () => {
   goHome();
   const v = $("best-val").textContent;
   if (v === "—") throw new Error("sigue en blanco con marcas guardadas");
-  if (!/N\.\d\d/.test(v)) throw new Error("no enseña el nivel: " + v);
+  if (!/\d/.test(v)) throw new Error("no enseña los puntos: " + v);
   /* quien sólo juega el reto no tiene marcas de juego libre y antes
-     veía siempre un guion: ahora ve su mejor día, en nivel — no en
-     puntos, que ahí no habría con qué compararlos                  */
-  const soloReto = { v:2, name:"X", records:[], days:{
-    "2026-08-11": { lv:5, av:90, tries:1 },
-    "2026-08-10": { lv:9, av:95, tries:1 }
+     veía siempre un guion: ahora ve los puntos de su mejor día     */
+  const soloReto = { v:3, name:"X", records:[], days:{
+    "2026-08-11": { lv:5, av:90, pts:420, tries:1 },
+    "2026-08-10": { lv:9, av:95, pts:980, tries:1 }
   } };
   localStorage.setItem("half.v1", JSON.stringify(soloReto));
   drawBest();
   const conReto = $("best-val").textContent;
   if (conReto === "—") throw new Error("con días jugados sigue en blanco");
-  if (!/N\.09/.test(conReto)) throw new Error("no enseña el mejor día: " + conReto);
+  if (!/^980/.test(conReto)) throw new Error("no enseña el mejor día: " + conReto);
+});
+
+/* Nadie pierde lo que ya tenía guardado: las marcas de antes de los
+   puntos se convierten al abrirlas, estimadas y marcadas como tales. */
+await step("las marcas viejas se convierten a puntos", () => {
+  localStorage.setItem("half.v1", JSON.stringify({ v:2, name:"X", records:[
+    { n:"X", lv:11, av:98.5, tl:0, ts:5 }
+  ], days:{ "2026-08-09": { lv:7, av:97, tries:2 } } }));
+  const r = DB.list("free-0")[0];
+  if (!r) throw new Error("se ha perdido la marca vieja");
+  if (!(r.pts > 0)) throw new Error("la marca vieja se queda sin puntos");
+  if (!r.est) throw new Error("no queda marcada como estimación");
+  /* diez cortes buenos al 98,5 % y a ritmo normal, ni más ni menos */
+  if (r.pts !== 10 * cutPoints(1.5, CUT.par * 1000)) throw new Error("la estimación no cuadra: " + r.pts);
+  if (!(DB.days()["2026-08-09"].pts > 0)) throw new Error("los días viejos se quedan sin puntos");
 });
 
 await step("el nombre se cambia sin salir del juego", async () => {
-  localStorage.setItem("half.v1", JSON.stringify({ v:2, name:"SONDA", records:[], days:{} }));
+  localStorage.setItem("half.v1", JSON.stringify({ v:3, name:"SONDA", records:[], days:{} }));
   openScores();
   const promesa = renameMe();
   await new Promise(r => setTimeout(r, 50));
@@ -365,7 +422,7 @@ await step("el nombre se cambia sin salir del juego", async () => {
 /* y no deja sus marcas en el navegador donde se ha ejecutado */
 const dentro = JSON.parse(localStorage.getItem("half.v1") || "{}");
 localStorage.clear();
-localStorage.setItem("half.v1", JSON.stringify({ v: 2, records: [], days: {}, pid: dentro.pid, psecret: dentro.psecret }));
+localStorage.setItem("half.v1", JSON.stringify({ v: 3, records: [], days: {}, pid: dentro.pid, psecret: dentro.psecret }));
 
 if (!document.title.startsWith("ERROR")) document.title = log.join(" | ");
 /* y se lo cuenta al servidor de pruebas, que es quien puede esperar */

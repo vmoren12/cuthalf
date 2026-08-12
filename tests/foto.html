@@ -6,16 +6,16 @@
 </head><body>
 <script type="module">
 /* Retrato de una pantalla, para mirarla con ojos en vez de suponer.
-   ?p=scores | libre | intro | ask | fin | fin-libre | cafe | tarjeta
-   ?medir=1 cuenta los anchos                                        */
+   ?p=scores | libre | intro | juego | ask | fin | fin-libre | cafe |
+   tarjeta · ?medir=1 cuenta los anchos                              */
 const html = await (await fetch("../index.html")).text();
 document.body.innerHTML = html.split("<body>")[1].split("</body>")[0];
 localStorage.setItem("half.v1", JSON.stringify({
-  v:2, name:"VICTOR", tutorDone:true,
+  v:3, name:"VICTOR", tutorDone:true,
   /* una marca vieja a propósito: es lo que hace salir el pie de la
      tabla, que es donde peor se ve si algo se apretuja               */
-  records:[{n:"VICTOR",lv:12,av:97.4,tl:0,ts:1},{n:"VICTOR",lv:7,av:94.1,tl:0,ts:2,old:1},{n:"VICTOR",lv:4,av:91,tl:3,ts:3}],
-  days:{"2026-08-11":{lv:9,av:96.2,tries:2},"2026-08-10":{lv:6,av:93,tries:1}}
+  records:[{n:"VICTOR",lv:12,av:97.4,pts:1840,tl:0,ts:1},{n:"VICTOR",lv:7,av:94.1,pts:610,tl:0,ts:2,old:1,est:1},{n:"VICTOR",lv:4,av:91,pts:280,tl:3,ts:3}],
+  days:{"2026-08-11":{lv:9,av:96.2,pts:1120,tries:2},"2026-08-10":{lv:6,av:93,pts:540,tries:1}}
 }));
 const { S, $ } = await import("../src/state.js");
 const { openScores, paintScores, ask } = await import("../src/menu.js");
@@ -25,6 +25,17 @@ const params = new URL(location).searchParams;
 const cual = params.get("p") || "scores";
 if (cual === "scores"){ S.scope = "mine"; S.board = "daily"; openScores(); await paintScores(); }
 if (cual === "libre"){ S.scope = "mine"; S.board = "free-0"; openScores(); await paintScores(); }
+/* La telemetría de arriba ya no lleva sólo el nivel: los puntos suben
+   con cada corte y pueden acabar en cinco cifras, así que hay que
+   poder mirar si la fila aguanta. No se juega —eso pediría vale al
+   servidor—: se pinta el estado y ya.                               */
+if (cual === "juego"){
+  const { UI } = await import("../src/state.js");
+  $("scr-intro").hidden = true;          // la portada tapa la partida
+  S.mode = "free"; S.level = 17; S.lives = 3; S.points = 12480;
+  UI.level(); UI.points(); UI.lives();
+  UI.num(1.3, true); UI.cap({ k:"cutOk", hit:true, gain:187 });
+}
 if (cual === "ask"){ ask("Elige un nombre para la clasificación mundial", "Guardar", "VICTOR"); }
 if (cual === "cafe"){ $("go-donate").click(); }
 
@@ -34,7 +45,7 @@ if (cual === "cafe"){ $("go-donate").click(); }
 if (cual === "tarjeta"){
   const { buildCard } = await import("../src/share.js");
   S.mode = "daily"; S.runTimer = 0;
-  S.score = { lv:9, av:96.2, best:98.9, tl:0 };
+  S.score = { lv:9, av:96.2, best:98.9, pts:1120, tl:0 };
   const c = await buildCard();
   c.style.cssText = "width:540px;max-width:100%;display:block;margin:0 auto";
   document.body.innerHTML = ""; document.body.appendChild(c);
@@ -53,9 +64,9 @@ if (cual === "fin" || cual === "fin-libre"){
   S.ticket = "de-mentira"; S.trace = [{}];
   /* el puesto proyectado va puesto a mano: sin él la línea no saldría
      —aquí no hay servidor— y es media razón para mirar la pantalla  */
-  S.score = { lv:9, av:96.2, best:98.9, tl:0, saved:false, record:false,
+  S.score = { lv:9, av:96.2, best:98.9, pts:1120, tl:0, saved:false, record:false,
               proy: { pos:12, total:340, mejora:true } };
-  if (S.mode === "daily") S.score.daily = { d:"2026-08-11", lv:9, av:96.2, tries:2 };
+  if (S.mode === "daily") S.score.daily = { d:"2026-08-11", lv:9, av:96.2, pts:1120, tries:2 };
   $("name").value = "VICTOR";        // lo que deja puesto gameOver()
   paintOver();
   $("scr-intro").hidden = true; $("scr-over").hidden = false;

@@ -8,6 +8,9 @@
   padding-bottom:12px;border-bottom:1px solid var(--hair);
 }
 .hud b{font-weight:500}
+/* el marcador en directo: en azul, que es el color del acierto, y con
+   la cifra tabular para que no baile al pasar de 999 a 1.000        */
+#pts-box b{color:var(--signal);font-variant-numeric:tabular-nums}
 .lives{display:flex;gap:6px;align-items:center}
 .lives i{display:block;position:relative;width:3px;height:14px}
 .lives i::before{content:"";position:absolute;inset:0;background:var(--ink);

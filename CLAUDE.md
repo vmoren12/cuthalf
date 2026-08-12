@@ -148,10 +148,22 @@ las dos, así que subir no te movería.
 **Cinco tablas, no una.** Sin límite y con 3 s por figura no son el
 mismo juego. Cada marca guarda con qué reloj se hizo.
 
-**Los puntos son el resultado de una partida**, no un marcador que
-sube mientras juegas: `nivel × 1000 + precisión × 10`. Por eso no
-están en el HUD —cambiarían con cada corte— sino al terminar el reto
-del día, que es de donde sale el acumulado de la temporada.
+**Los puntos se ganan en el corte.** Cada acierto paga por dos cosas:
+lo cerca que ha quedado del reparto exacto —medido contra el margen
+del 7 %, no contra el 100 %, que es donde está todo el juego— y lo
+deprisa que ha salido (×2 hasta segundo y medio, ×1 a los cuatro y
+medio, suelo de ×0,5). Fallar no resta: no paga. La partida vale la
+suma de sus cortes, y por eso el marcador va en el HUD, en directo:
+sube con cada corte y es la única forma de ver qué lo sube.
+
+**Y no se acumulan.** Ni por días ni por meses. No hay temporada: cada
+día del reto tiene su clasificación y vale su mejor intento. Jugar más
+días no da más puntos, y ésa es la decisión, no un descuido.
+
+El reloj de cada corte es lo único de la partida que el servidor no
+puede recalcular —lo apunta el navegador y viaja en el envío—, así que
+el factor de tiempo **se satura** a partir de segundo y medio: por
+debajo de ahí no hay nada que ganar declarando prisas imposibles.
 
 **Nada del juego depende de que el servidor responda.** Sin red se
 juega igual, con semilla local y sin subir nada.

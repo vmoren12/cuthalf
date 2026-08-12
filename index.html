@@ -25,6 +25,9 @@
 <main id="app">
   <header class="hud">
     <span><span id="lvl-label" data-t="level">Nivel</span> <b id="lvl">01</b></span>
+    <!-- los puntos se ganan corte a corte, así que se ven mientras se
+         juega: aquí, junto al nivel, sin robarle sitio a la figura -->
+    <span id="pts-box"><span data-t="pointsWord">Puntos</span> <b id="pts">0</b></span>
     <button class="lnk" id="close-run" data-t="close">Cerrar</button>
     <button class="lnk" id="tutor-skip" data-t="skip" hidden>Saltar</button>
   </header>
@@ -72,7 +75,7 @@
 <!-- ── fin de partida ──────────────────────────────────────────── -->
 <section class="screen" id="scr-over" hidden>
   <h1 class="headline" id="over-mark">FIN</h1>
-  <div class="pts" id="pts-row" hidden><span class="lbl" data-t="dayPoints">Puntos para la temporada</span><b class="val" id="d-pts">—</b></div>
+  <div class="pts" id="pts-row"><span class="lbl" data-t="runPoints">Puntos de la partida</span><b class="val" id="s-pts">—</b></div>
   <div class="stats">
     <div class="stat"><span class="lbl" data-t="reached">Nivel alcanzado</span><b class="val" id="s-lvl">01</b></div>
     <div class="stat"><span class="lbl" data-t="avg">Precisión media</span><b class="val" id="s-avg">—</b></div>
@@ -118,10 +121,10 @@
     <span class="seg" id="seg-scope"></span>
     <p class="who" id="me-row" hidden><b id="me-name"></b><button class="lnk" id="rename" data-t="rename">Cambiar nombre</button></p>
   </div>
-  <div class="stats" id="season-box" hidden>
-    <div class="stat"><span class="lbl" data-t="seasonPts">Puntos de la temporada</span><b class="val" id="sea-pts">—</b></div>
-    <div class="stat"><span class="lbl" data-t="playedDays">Días jugados</span><b class="val" id="sea-days">—</b></div>
-    <div class="stat"><span class="lbl" data-t="streak">Racha</span><b class="val" id="sea-streak">—</b></div>
+  <div class="stats" id="today-box" hidden>
+    <div class="stat"><span class="lbl" data-t="todayPts">Puntos de hoy</span><b class="val" id="day-pts">—</b></div>
+    <div class="stat"><span class="lbl" data-t="attempts">Intentos</span><b class="val" id="day-tries">—</b></div>
+    <div class="stat"><span class="lbl" data-t="streak">Racha</span><b class="val" id="day-streak">—</b></div>
   </div>
   <ol class="tbl" id="tbl-all"></ol>
 </section>

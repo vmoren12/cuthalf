@@ -19,7 +19,9 @@ export const modeLine = () => (S.mode === "daily" ? T("cardDaily") + " " + stamp
 
 export function shareText(){
   return "SPLITINHAL7 \u00B7 " + modeLine() + "\n"
-       + T("levelWord") + " " + String(S.score.lv).padStart(2,"0") + " \u00B7 " + S.score.av.toFixed(1) + "%"
+       + S.score.pts.toLocaleString() + " " + T("pointsWord").toLowerCase()
+       + " \u00B7 " + T("levelWord") + " " + String(S.score.lv).padStart(2,"0")
+       + " \u00B7 " + S.score.av.toFixed(1) + "%"
        + (/^https?:/.test(location.protocol) ? "\n" + location.href.split("?")[0] : "");
 }
 
@@ -53,13 +55,15 @@ export async function buildCard(){
   track("0px"); g.globalAlpha = 1; g.font = sans(300);
   g.fillText("N." + String(S.score.lv).padStart(2,"0"), PAD - 10, 660);
 
+  /* la cifra en azul es la que se compite: los puntos de la partida */
   g.font = sans(64); g.fillStyle = SIG;
-  g.fillText(S.score.av.toFixed(1) + "%", PAD, 772);
+  g.fillText(S.score.pts.toLocaleString(), PAD, 772);
   track("5px"); g.font = mono(26); g.fillStyle = INK; g.globalAlpha = .55;
-  g.fillText(T("accuracy").toUpperCase(), PAD, 822);
+  g.fillText(T("pointsWord").toUpperCase(), PAD, 822);
 
-  /* pie: dato secundario y, en el reto, la racha */
-  const foot = [ T("bestCut").toUpperCase() + " " + S.score.best.toFixed(1) + "%" ];
+  /* pie: datos secundarios y, en el reto, la racha */
+  const foot = [ T("accuracy").toUpperCase() + " " + S.score.av.toFixed(1) + "%",
+                 T("bestCut").toUpperCase() + " " + S.score.best.toFixed(1) + "%" ];
   if (S.mode === "daily") foot.push(T("streak").toUpperCase() + " " + DAILY.streak().n);
   g.font = mono(24); g.globalAlpha = .5;
   g.fillText(foot.join("   \u00B7   "), PAD, 930);

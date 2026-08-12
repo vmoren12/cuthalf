@@ -1,15 +1,19 @@
 /* Tablas de marcas.
 
-   Una tabla es una lista de filas ya formateadas: puesto, nombre,
-   cifra grande y cifra pequeña. Da igual si las filas salen de este
-   aparato o de la clasificación mundial, y por eso pintar y obtener
-   están separados.                                                  */
+   Una tabla es una lista de filas ya formateadas: puesto, quién o
+   cuándo, puntos y nivel. Da igual si las filas salen de este aparato
+   o de la clasificación mundial, y por eso pintar y obtener están
+   separados.
+
+   Todas llevan cabecera. Cuatro columnas de cifras sin nombre no se
+   entienden —la primera, un puesto de dos dígitos, se leía como si
+   fuera parte de la marca— y ponerles nombre cuesta una fila.       */
 
 import { $ } from "./state.js";
 import { DAILY, DB } from "./storage.js";
-import { freeBoard, points, seasonOf } from "./scoring.js";
-import { T } from "./i18n.js";
-import { NET, meDaily, meFree, meSeason, worldDaily, worldFree, worldSeason } from "./net.js";
+import { freeBoard } from "./scoring.js";
+import { T, lang } from "./i18n.js";
+import { NET, meDaily, meFree, worldDaily, worldFree } from "./net.js";
 import { ME } from "./player.js";
 import { dayKey } from "./util.js";
 
@@ -19,13 +23,23 @@ const TOPE = 100;
 
 const cell = (c, txt) => { const s = document.createElement("span"); s.className = c; s.textContent = txt; return s; };
 
-/* rows: [{ r, n, l, a, me }] · r puesto · n nombre · l nivel · a precisión */
-export function drawRows(el, rows, note){
+/* la cabecera de una tabla: la segunda columna es lo único que cambia
+   —quién, o qué día— porque las otras tres son siempre las mismas   */
+export const cabecera = quien => ({ r:"#", n:T(quien), l:T("colPts"), a:T("colLvl") });
+
+/* rows: [{ r, n, l, a, me }] · r puesto · n quién o cuándo · l puntos · a nivel */
+export function drawRows(el, rows, note, head){
   el.innerHTML = "";
   if (!rows.length){
     const li = document.createElement("li");
     li.className = "empty"; li.textContent = note || T("empty");
     el.appendChild(li); return;
+  }
+  if (head){
+    const li = document.createElement("li");
+    li.className = "head";
+    li.append(cell("r", head.r), cell("n", head.n), cell("l", head.l), cell("a", head.a));
+    el.appendChild(li);
   }
   for (const row of rows){
     const li = document.createElement("li");
@@ -41,49 +55,64 @@ export function drawRows(el, rows, note){
 }
 
 export const levelText = lv => "N." + String(lv).padStart(2, "0");
+export const ptsText = p => Number(p || 0).toLocaleString();
+
+/* «2026-08-12» → «12 ago», que es como se lee un día del calendario.
+   Lo traduce el navegador y así no hay doce nombres de mes por idioma
+   en el diccionario.                                                */
+export const dayText = iso => {
+  const [y, m, d] = String(iso).split("-").map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString(lang, { day:"2-digit", month:"short" });
+};
 
 /* las marcas de este aparato en una de las tablas de juego libre */
 export function localRuns(board, max, mark){
   return DB.list(board).slice(0, max).map((r, i) => ({
     r: String(i+1).padStart(2,"0"),
     n: r.n,
-    l: levelText(r.lv),
-    a: r.av.toFixed(1) + "%",
+    l: ptsText(r.pts),
+    a: levelText(r.lv),
     me: !!mark && r.ts === mark
   }));
 }
 
-/* tus días del reto en la temporada en curso, del más reciente al
-   más antiguo: es tu propio historial, no una comparación          */
-export function localSeason(){
-  return DAILY.season().days.slice().reverse().map(d => ({
-    r: d.d.slice(8),
-    n: d.pts.toLocaleString() + " pts",     // si no, es un número suelto
-    l: levelText(d.lv),
-    a: d.av.toFixed(1) + "%"
+/* Tus días del reto, el mejor primero.
+
+   Antes iban por fecha, del más reciente al más antiguo, y el día del
+   mes hacía de primera columna sin decir que lo era. Ahora es una
+   clasificación como las demás —tus partidas ordenadas por puntos— y
+   la fecha ocupa la columna de quién, que es lo que distingue una
+   fila de otra.                                                     */
+export function localDays(){
+  return DAILY.list().map((d, i) => ({
+    r: String(i+1).padStart(2,"0"),
+    n: dayText(d.d),
+    l: ptsText(d.pts),
+    a: levelText(d.lv)
   }));
 }
 
 /* ── el mundo ─────────────────────────────────────────────────────
-   En el reto diario la tabla mundial es la de la temporada: los
-   puntos acumulados del mes, que es lo que se compite. El día suelto
-   se ve al terminar de jugarlo.
+   En el reto diario la tabla mundial es la del día de hoy: la mejor
+   partida de cada uno con las mismas figuras para todos. No hay
+   temporada que sumar — los puntos son de la partida, y jugar más
+   días no los aumenta.
 
    Si tu marca queda fuera de los cien primeros, se añade tu fila al
    final: una clasificación en la que no te encuentras no dice nada. */
 export async function worldRows(board){
-  const yo = ME.id();
-  const mes = seasonOf(dayKey());
+  const yo = ME.id(), dia = dayKey();
 
   const [lista, mio] = board === "daily"
-    ? await Promise.all([worldSeason(mes), meSeason(yo, mes)])
+    ? await Promise.all([worldDaily(dia), meDaily(yo, dia)])
     : await Promise.all([worldFree(board), meFree(yo, board)]);
 
   if (!Array.isArray(lista)) return { rows: [], nota: NET.vivo ? T("notSent") : T("noNet") };
 
-  const fila = r => board === "daily"
-    ? { r: String(r.pos), n: r.name, l: Number(r.points).toLocaleString(), a: r.days + " " + T("days"), me: r.player_id === yo }
-    : { r: String(r.pos), n: r.name, l: levelText(r.level), a: Number(r.accuracy).toFixed(1) + "%", me: r.player_id === yo };
+  /* las dos tablas devuelven lo mismo —puntos y nivel— así que se
+     pintan igual: una sola forma de fila y ninguna excepción       */
+  const fila = r => ({ r: String(r.pos), n: r.name, l: ptsText(r.points),
+                       a: levelText(r.level), me: r.player_id === yo });
 
   const rows = lista.map(fila);
   if (!rows.length) return { rows: [], nota: T("worldEmpty") };
@@ -91,11 +120,10 @@ export async function worldRows(board){
   /* ¿estás en la lista? Si no, tu puesto va al final */
   const yoDentro = rows.some(r => r.me);
   const m = Array.isArray(mio) ? mio[0] : null;
-  if (!yoDentro && m){
-    rows.push(board === "daily"
-      ? { r: String(m.pos), n: DB.name() || "—", l: Number(m.points).toLocaleString(), a: m.days + " " + T("days"), me: true }
-      : { r: String(m.pos), n: DB.name() || "—", l: levelText(m.level), a: Number(m.accuracy).toFixed(1) + "%", me: true });
-  }
+  if (!yoDentro && m)
+    rows.push({ r: String(m.pos), n: DB.name() || "—", l: ptsText(m.points),
+                a: levelText(m.level), me: true });
+
   return { rows, nota: m ? T("rankOf")(m.pos, m.total) : "" };
 }
 
@@ -104,25 +132,21 @@ export async function worldRows(board){
 
    Se cuenta aquí, con la tabla del mundo en la mano, y no se le
    pregunta al servidor: haría falta una función nueva para algo que
-   sólo es contar cuántos van por delante de una cifra. La comparación
-   es la que ordena cada tabla —nivel y precisión en juego libre,
-   puntos en el reto del día— y los empates los gana quien llegó
-   antes, que nunca es una partida que se acaba de terminar.
+   sólo es contar cuántos van por delante de una cifra. Ahora todas
+   las tablas ordenan igual —por puntos— así que la cuenta es una, y
+   los empates los gana quien llegó antes, que nunca es una partida
+   que se acaba de terminar.
 
    Si tu marca de esa tabla ya era mejor, subir ésta no te mueve: el
    servidor se queda con la mejor de las dos. Entonces se dice que
    seguirías donde estás, que es la verdad y evita la sorpresa.      */
-export function porDelante(lista, yo, board, sc){
-  const pts = points(sc.lv, sc.av);
+export function porDelante(lista, yo, sc){
   /* tu propia fila no cuenta: la partida la sustituye, no se suma */
-  return lista.filter(r => r.player_id !== yo && (board === "daily"
-    ? Number(r.points) >= pts
-    : r.level > sc.lv || (r.level === sc.lv && Number(r.accuracy) >= sc.av)
-  )).length;
+  return lista.filter(r => r.player_id !== yo && Number(r.points) >= sc.pts).length;
 }
 
 export async function puestoProyectado(board, sc){
-  const yo = ME.id(), pts = points(sc.lv, sc.av), dia = dayKey();
+  const yo = ME.id(), dia = dayKey();
 
   const [lista, mio] = board === "daily"
     ? await Promise.all([worldDaily(dia, TOPE), meDaily(yo, dia)])
@@ -130,10 +154,10 @@ export async function puestoProyectado(board, sc){
   if (!Array.isArray(lista)) return null;
 
   const m = Array.isArray(mio) ? mio[0] : null;
-  if (m && pts <= Number(m.points))
+  if (m && sc.pts <= Number(m.points))
     return { pos: Number(m.pos), total: Number(m.total), mejora: false };
 
-  const delante = porDelante(lista, yo, board, sc);
+  const delante = porDelante(lista, yo, sc);
 
   /* si cae más allá de lo que se ha traído, no hay con qué contar */
   if (delante >= lista.length && lista.length >= TOPE) return { fuera: TOPE };
@@ -157,28 +181,24 @@ export function textoPuesto(p){
 
 /* la tabla que se pinta al terminar una partida libre */
 export function drawTable(el, max, mark, tl){
-  drawRows(el, localRuns(freeBoard(tl), max, mark));
+  drawRows(el, localRuns(freeBoard(tl), max, mark), "", cabecera("colName"));
 }
 
 /* Lo mejor que tengas, en la portada.
 
-   El nombre sobra —eres tú— y en su sitio va el reloj con el que se
-   hizo, que es lo que distingue una marca de otra. Si sólo juegas el
-   reto diario no tienes marcas de juego libre, así que ahí se enseñan
-   los puntos de la temporada: antes esa gente veía siempre un guion.  */
+   Los puntos de tu mejor partida y, al lado, el reloj con el que se
+   hizo: sin él dos marcas no se distinguen. Si sólo juegas el reto
+   diario no tienes marcas de juego libre, así que ahí van los puntos
+   de tu mejor día — antes esa gente veía siempre un guion.          */
 export function drawBest(){
   const b = DB.list()[0];
   if (b){
-    $("best-val").textContent = levelText(b.lv) + " · " + (b.tl ? b.tl + " s" : "∞");
+    $("best-val").textContent = ptsText(b.pts) + " · " + (b.tl ? b.tl + " s" : "∞");
     return;
   }
-  /* Quien sólo juega el reto no tiene marcas de juego libre. Se le
-     enseña su mejor día en el mismo idioma que ve al jugar —nivel y
-     precisión—, no en puntos: los puntos son cosa de la temporada, y
-     aquí no habría con qué compararlos.                             */
   const dias = Object.values(DB.days());
-  const mejor = dias.sort((x, y) => y.lv - x.lv || y.av - x.av)[0];
+  const mejor = dias.sort((x, y) => y.pts - x.pts)[0];
   $("best-val").textContent = mejor
-    ? levelText(mejor.lv) + " · " + T("dailyShort")
+    ? ptsText(mejor.pts) + " · " + T("dailyShort")
     : "—";
 }

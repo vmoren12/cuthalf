@@ -11,6 +11,7 @@ export let W = 0, H = 0;
 export const S = {
   phase: "intro",            // intro · play · result · paused · over
   level: 1, lives: CONFIG.lives, slots: CONFIG.lives, streak: 0, cuts: [], score: null,
+  points: 0,                 // los de la partida en curso, corte a corte
   shape: null, cfg: null, rot: 0, rotSpd: 0, maxR: 1,
   tf: null,                  // proyección del último fotograma
   seed: 0, startedAt: 0,     // con qué semilla y cuándo empezó la partida
@@ -55,6 +56,12 @@ export const UI = {
     $("lvl").textContent = String(S.level).padStart(2,"0");
     $("lvl-label").textContent = T(S.mode === "daily" ? "daily" : "level");
   },
+  /* Los puntos, en directo. Se ganan en cada corte, así que se ven
+     mientras se juega y no sólo al final: es la única forma de que se
+     entienda qué los sube. En la práctica no hay marcador.          */
+  points(){
+    $("pts").textContent = S.points.toLocaleString();
+  },
   tip(text){
     const el = $("tip");
     el.textContent = text || "";
@@ -75,10 +82,12 @@ export const UI = {
     while (box.children.length > S.slots) box.lastChild.remove();
     [...box.children].forEach((el, i) => el.classList.toggle("off", i >= S.lives));
   },
+  /* el pie dice qué ha pasado con el corte y, si ha puntuado, cuánto:
+     el total de arriba sube solo, pero de dónde sale se ve aquí     */
   cap(desc){
     S.capDesc = desc;
     const el = $("cap");
-    el.textContent = T(desc.k);
+    el.textContent = T(desc.k) + (desc.gain ? " · +" + desc.gain : "");
     el.classList.toggle("hit", !!desc.hit);
   },
   /* el elogio crece un punto por cada eslabón de la racha */

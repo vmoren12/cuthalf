@@ -54,12 +54,12 @@ async function pedir(ruta, cuerpo, espera = 9000){
 /* ── clasificaciones (sólo lectura) ─────────────────────────────── */
 export const rpc = (nombre, args) => pedir("/rest/v1/rpc/" + nombre, args);
 
+/* Cuatro, no seis: la temporada ya no existe. Los puntos son de una
+   partida, así que sumarlos por meses no medía nada.                */
 export const worldFree   = (board, limite = 100) => rpc("free_board",   { p_board: board, p_limit: limite });
 export const worldDaily  = (dia, limite = 100)   => rpc("daily_board",  { p_day: dia, p_limit: limite });
-export const worldSeason = (mes, limite = 100)   => rpc("season_board", { p_season: mes, p_limit: limite });
 export const meFree      = (id, board) => rpc("free_me",   { p_player: id, p_board: board });
 export const meDaily     = (id, dia)   => rpc("daily_me",  { p_player: id, p_day: dia });
-export const meSeason    = (id, mes)   => rpc("season_me", { p_player: id, p_season: mes });
 
 /* ── partidas ───────────────────────────────────────────────────── */
 /* El vale y la semilla, antes de empezar a jugar. */
