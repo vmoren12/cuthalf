@@ -1,10 +1,10 @@
 /* Menú · idioma, tema e instalación. */
 
 import { CONFIG } from "./config.js";
-import { DAILY, DB } from "./storage.js";
+import { DB } from "./storage.js";
 import { $, S, UI, refreshColors } from "./state.js";
 import { T, lang, setLang } from "./i18n.js";
-import { cabecera, drawBest, drawRows, localDays, localRuns, worldRows } from "./scores.js";
+import { cabecera, drawRows, localDays, localRuns, worldRows } from "./scores.js";
 import { finishTutor, goHome, paintOver, saveMark, start, startTutor, subirPartida } from "./game.js";
 import { shareCard, toast } from "./share.js";
 import { BOARDS, boardTime } from "./scoring.js";
@@ -103,21 +103,12 @@ export function drawScope(){
   $("me-name").textContent = DB.name();
 }
 
-/* Cómo llevas el reto de hoy. Antes aquí iba la temporada; ya no hay
-   nada que acumular, así que se enseña el día: los puntos de tu mejor
-   intento, cuántos llevas y la racha, que sigue contando días
-   seguidos porque eso no es puntuación, es constancia.              */
-const cabeceraHoy = () => {
-  const d = DAILY.today();
-  $("day-pts").textContent    = d.pts.toLocaleString();
-  $("day-tries").textContent  = String(d.tries);
-  $("day-streak").textContent = DAILY.streak().n + " " + T("days");
-};
-
+/* Esta pantalla es la de comparar, así que enseña tablas y nada más.
+   El resumen de tu día —puntos, intentos, racha— salía aquí arriba y
+   se ha quitado: son cifras tuyas, y se ven al terminar de jugar el
+   reto, que es cuando dicen algo.                                   */
 export async function paintScores(){
   const daily = S.board === "daily";
-  $("today-box").hidden = !daily;
-  if (daily) cabeceraHoy();
 
   if (S.scope === "mine"){
     if (daily){ drawRows($("tbl-all"), localDays(), "", cabecera("colDay")); return; }
@@ -162,7 +153,7 @@ export async function renameMe(){
   const limpio = nuevo.replace(/\s+/g, " ").trim().slice(0, CONFIG.nameMax);
   if (!limpio || limpio === actual) return;
   DB.set("name", limpio);
-  drawBest(); drawScope(); paintScores();
+  drawScope(); paintScores();
   toast(T("saved"));
 }
 
@@ -206,7 +197,7 @@ export function applyLang(next){
   drawLangs();
   UI.cap(S.capDesc); UI.level();
   if (S.numErr !== null) UI.num(S.numErr, S.numOk);
-  drawBest(); drawTimers(); paintOver();
+  drawTimers(); paintOver();
   if (!$("scr-scores").hidden){ drawBoards(); paintScores(); }
   syncTheme(); syncInstall();
 }

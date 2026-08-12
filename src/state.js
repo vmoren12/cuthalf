@@ -46,6 +46,10 @@ export function flash(){
   }, 80);
 }
 
+/* la cifra que se está enseñando y el fotograma que la mueve: el
+   marcador rueda, así que lo pintado y lo real no siempre coinciden */
+let ptsVisible = 0, ptsRodando = 0;
+
 export const UI = {
   level(){
     if (S.mode === "tutor"){
@@ -58,9 +62,30 @@ export const UI = {
   },
   /* Los puntos, en directo. Se ganan en cada corte, así que se ven
      mientras se juega y no sólo al final: es la única forma de que se
-     entienda qué los sube. En la práctica no hay marcador.          */
-  points(){
-    $("pts").textContent = S.points.toLocaleString();
+     entienda qué los sube. En la práctica no hay marcador.
+
+     Y no saltan: ruedan desde la cifra anterior hasta la nueva en un
+     tercio de segundo. Sin rótulo que diga «puntos», el movimiento es
+     lo que distingue este número del nivel, que está quieto al lado —
+     y de paso se ve pagar el corte. `ya` los pone de golpe: al
+     empezar una partida no hay nada que contar desde donde se quedó
+     la anterior.                                                     */
+  points(ya){
+    const el = $("pts");
+    cancelAnimationFrame(ptsRodando);
+    if (ya || reduceMotion || ptsVisible === S.points){
+      ptsVisible = S.points;
+      el.textContent = ptsVisible.toLocaleString();
+      return;
+    }
+    const desde = ptsVisible, hasta = S.points, t0 = performance.now(), dura = 340;
+    const paso = t => {
+      const k = Math.min(1, (t - t0) / dura);
+      ptsVisible = Math.round(desde + (hasta - desde) * (1 - (1-k)**3));
+      el.textContent = ptsVisible.toLocaleString();
+      if (k < 1) ptsRodando = requestAnimationFrame(paso);
+    };
+    ptsRodando = requestAnimationFrame(paso);
   },
   tip(text){
     const el = $("tip");

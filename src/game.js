@@ -9,7 +9,7 @@ import { T } from "./i18n.js";
 import { applyUpdate, pendingReload, swReg } from "./pwa.js";
 import { armBack, disarmBack } from "./menu.js";
 import { clamp, dayKey, dayTimer, hashStr } from "./util.js";
-import { drawBest, drawTable, puestoProyectado, textoPuesto } from "./scores.js";
+import { drawTable, puestoProyectado, textoPuesto } from "./scores.js";
 import { evaluate, normalize, partsCentroid } from "./geometry.js";
 import { cmp, cutPoints, freeBoard } from "./scoring.js";
 import { toShapeSpace, trim } from "./replay.js";
@@ -357,7 +357,6 @@ function guardarMarca(){
   const ts = Date.now();
   DB.add({ n: DB.name() || "—", lv: S.score.lv, av: S.score.av, pts: S.score.pts, tl: S.score.tl, ts });
   S.score.saved = true; S.score.ts = ts;
-  drawBest();
 }
 
 /* El botón de la entrada de nombre. Sólo aparece la primera vez:
@@ -376,7 +375,6 @@ export function goHome(){
   S.phase = "intro"; S.score = null; S.pause = null;
   disarmBack();                       // en la portada, atrás vuelve a salir
   $("hype").classList.remove("on");
-  drawBest();
   if (pendingReload) applyUpdate();
 }
 
@@ -423,5 +421,5 @@ export async function start(mode, seed){
   $("scr-intro").hidden = true; $("scr-over").hidden = true;
   $("hype").classList.remove("on");
   armBack();
-  UI.lives(); UI.points(); newLevel();
+  UI.lives(); UI.points(true); newLevel();      // a cero de golpe, sin contar hacia atrás
 }

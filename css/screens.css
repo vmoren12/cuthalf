@@ -62,8 +62,6 @@
 .lbl{font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.55}
 .val{font-family:var(--sans);font-weight:500;font-size:26px;letter-spacing:-.02em;text-align:right;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-/* la mejor marca lleva nombre: más discreta que las cifras sueltas */
-#best-val{font-size:18px}
 
 /* ── tabla de marcas ─────────────────────────────────────────── */
 .tbl{list-style:none;display:flex;flex-direction:column}
@@ -150,8 +148,12 @@
   transition:opacity .24s,transform .24s cubic-bezier(.2,.8,.2,1);
 }
 .toast.on{opacity:1;transform:translate(-50%,0)}
+/* Ya no lleva cifra al lado, así que el rótulo se va solo a la
+   derecha: es donde estaba el dato, donde el ojo lo busca y donde cae
+   el pulgar. La fila entera sigue siendo el botón.                  */
 .statlink{width:100%;font:inherit;color:inherit;background:none;border:0;
-  border-top:1px solid var(--hair);cursor:pointer;text-align:left}
+  border-top:1px solid var(--hair);cursor:pointer;
+  justify-content:flex-end;text-align:right}
 .statlink .u{border-bottom:1px solid var(--ink);padding-bottom:2px}
 .btn--ghost{border-color:var(--hair)}
 .btn--solid{background:var(--ink);color:var(--ground)}

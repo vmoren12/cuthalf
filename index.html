@@ -26,8 +26,10 @@
   <header class="hud">
     <span><span id="lvl-label" data-t="level">Nivel</span> <b id="lvl">01</b></span>
     <!-- los puntos se ganan corte a corte, así que se ven mientras se
-         juega: aquí, junto al nivel, sin robarle sitio a la figura -->
-    <span id="pts-box"><span data-t="pointsWord">Puntos</span> <b id="pts">0</b></span>
+         juega: aquí, junto al nivel, sin robarle sitio a la figura. Sin
+         rótulo: es la única cifra que se mueve sola, y rodando hasta
+         la nueva se explica ella misma -->
+    <span id="pts-box"><b id="pts">0</b></span>
     <button class="lnk" id="close-run" data-t="close">Cerrar</button>
     <button class="lnk" id="tutor-skip" data-t="skip" hidden>Saltar</button>
   </header>
@@ -62,7 +64,10 @@
     <div class="row"><span class="lbl" data-t="timeLimit">Tiempo por figura</span><span class="seg" id="seg-intro"></span></div>
     <button class="btn btn--sm" id="go" data-t="play">Jugar</button>
   </div>
-  <button class="stat statlink" id="open-scores"><span class="lbl u" data-t="scores">Mejores marcas</span><b class="val" id="best-val">—</b></button>
+  <!-- sin cifra: la portada es para empezar a jugar, y la marca ya
+       está a un toque, dentro. El rótulo se va a la derecha, que es
+       donde estaba el dato y donde cae el pulgar. -->
+  <button class="stat statlink" id="open-scores"><span class="lbl u" data-t="scores">Mejores marcas</span></button>
   <div class="row row--left">
     <button class="lnk" id="install-intro" data-t="install" hidden>Instalar</button>
     <span class="seg" id="lang-intro"></span>
@@ -121,11 +126,9 @@
     <span class="seg" id="seg-scope"></span>
     <p class="who" id="me-row" hidden><b id="me-name"></b><button class="lnk" id="rename" data-t="rename">Cambiar nombre</button></p>
   </div>
-  <div class="stats" id="today-box" hidden>
-    <div class="stat"><span class="lbl" data-t="todayPts">Puntos de hoy</span><b class="val" id="day-pts">—</b></div>
-    <div class="stat"><span class="lbl" data-t="attempts">Intentos</span><b class="val" id="day-tries">—</b></div>
-    <div class="stat"><span class="lbl" data-t="streak">Racha</span><b class="val" id="day-streak">—</b></div>
-  </div>
+  <!-- El resumen del día (puntos, intentos, racha) vivía aquí. Se
+       quita: son cifras tuyas, y esta pantalla es la de comparar. Lo
+       de hoy se ve al terminar de jugarlo, que es cuando importa. -->
   <ol class="tbl" id="tbl-all"></ol>
 </section>
 

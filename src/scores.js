@@ -9,7 +9,6 @@
    entienden —la primera, un puesto de dos dígitos, se leía como si
    fuera parte de la marca— y ponerles nombre cuesta una fila.       */
 
-import { $ } from "./state.js";
 import { DAILY, DB } from "./storage.js";
 import { freeBoard } from "./scoring.js";
 import { T, lang } from "./i18n.js";
@@ -184,21 +183,8 @@ export function drawTable(el, max, mark, tl){
   drawRows(el, localRuns(freeBoard(tl), max, mark), "", cabecera("colName"));
 }
 
-/* Lo mejor que tengas, en la portada.
-
-   Los puntos de tu mejor partida y, al lado, el reloj con el que se
-   hizo: sin él dos marcas no se distinguen. Si sólo juegas el reto
-   diario no tienes marcas de juego libre, así que ahí van los puntos
-   de tu mejor día — antes esa gente veía siempre un guion.          */
-export function drawBest(){
-  const b = DB.list()[0];
-  if (b){
-    $("best-val").textContent = ptsText(b.pts) + " · " + (b.tl ? b.tl + " s" : "∞");
-    return;
-  }
-  const dias = Object.values(DB.days());
-  const mejor = dias.sort((x, y) => y.pts - x.pts)[0];
-  $("best-val").textContent = mejor
-    ? ptsText(mejor.pts) + " · " + T("dailyShort")
-    : "—";
-}
+/* La portada llevaba aquí tu mejor marca, junto al botón que abre las
+   clasificaciones. Se ha quitado: la portada es para empezar a jugar,
+   y la cifra ya está a un toque, dentro, donde además se puede
+   comparar. Un dato que sólo se mira de pasada no vale una línea en
+   la primera pantalla.                                              */

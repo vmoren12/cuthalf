@@ -61,7 +61,7 @@ const { S, $ }                            = await import("../src/state.js");
 const { start, doCut, gameOver, saveMark, goHome } = await import("../src/game.js");
 const { DB, DAILY, qualifies }            = await import("../src/storage.js");
 const { CUT, cutPoints, freeBoard }       = await import("../src/scoring.js");
-const { drawBest, porDelante }            = await import("../src/scores.js");
+const { porDelante }                      = await import("../src/scores.js");
 const { normalize, evaluate, bisector }   = await import("../src/geometry.js");
 const { SHAPES }                          = await import("../src/shapes.js");
 const { setRNG, mulberry32 }              = await import("../src/rng.js");
@@ -182,8 +182,12 @@ await step("los puntos se ganan en el corte y se ven en directo", async () => {
   const ganado = S.points;
   if (ganado <= 0) throw new Error("un corte bueno no ha puntuado");
   if (ganado > CUT.base * CUT.top) throw new Error("un corte pasa de su tope: " + ganado);
-  if ($("pts").textContent !== ganado.toLocaleString())
-    throw new Error("el marcador no los enseña: " + $("pts").textContent);
+  /* el marcador no salta: rueda desde la cifra anterior, así que lo
+     que se comprueba es que llega, no que esté ya                   */
+  const cifra = ganado.toLocaleString();
+  for (let i = 0; i < 12 && $("pts").textContent !== cifra; i++) await esperar(150);
+  if ($("pts").textContent !== cifra)
+    throw new Error("el marcador no llega a la cifra: " + $("pts").textContent);
   if (!$("cap").textContent.includes("+" + ganado))
     throw new Error("el pie no dice de dónde salen: " + $("cap").textContent);
   /* un corte por el borde no vale, y lo que no vale no paga */
@@ -283,14 +287,14 @@ await step("la pantalla de clasificaciones", async () => {
   openScores();
   if ($("seg-board").children.length !== 5) throw new Error("faltan pestañas");
   if ($("seg-scope").children.length !== 2) throw new Error("falta el conmutador mundo/tú");
-  if ($("today-box").hidden) throw new Error("el reto no muestra cómo va el día");
+  /* aquí sólo se compara: tablas y nada más, sin el resumen de tu día */
+  if ($("today-box")) throw new Error("sigue el resumen del día en las clasificaciones");
   /* la primera columna se entiende porque la tabla dice qué es cada una */
   const cab = $("tbl-all").querySelector("li.head");
   if (!cab) throw new Error("la tabla no lleva cabecera");
   if (!/Día/.test(cab.textContent) || !/Puntos/.test(cab.textContent))
     throw new Error("la cabecera no nombra las columnas: " + cab.textContent);
   S.board = "free-3"; await paintScores();
-  if (!$("today-box").hidden) throw new Error("el juego libre no lleva el resumen del día");
   if (!/Jugador/.test($("tbl-all").querySelector("li.head").textContent))
     throw new Error("el juego libre no nombra la columna del nombre");
   if ($("tbl-all").textContent.includes("LENTO")) throw new Error("la de 3 s enseña marcas de ∞");
@@ -361,22 +365,14 @@ await step("cambio de idioma", () => {
   applyLang("es");
 });
 
-await step("la portada enseña tu mejor marca", () => {
+/* La portada no lleva cifras: sólo el camino a ellas. */
+await step("la portada sólo ofrece las marcas, no las cuenta", () => {
   goHome();
-  const v = $("best-val").textContent;
-  if (v === "—") throw new Error("sigue en blanco con marcas guardadas");
-  if (!/\d/.test(v)) throw new Error("no enseña los puntos: " + v);
-  /* quien sólo juega el reto no tiene marcas de juego libre y antes
-     veía siempre un guion: ahora ve los puntos de su mejor día     */
-  const soloReto = { v:3, name:"X", records:[], days:{
-    "2026-08-11": { lv:5, av:90, pts:420, tries:1 },
-    "2026-08-10": { lv:9, av:95, pts:980, tries:1 }
-  } };
-  localStorage.setItem("half.v1", JSON.stringify(soloReto));
-  drawBest();
-  const conReto = $("best-val").textContent;
-  if (conReto === "—") throw new Error("con días jugados sigue en blanco");
-  if (!/^980/.test(conReto)) throw new Error("no enseña el mejor día: " + conReto);
+  if ($("best-val")) throw new Error("la portada sigue enseñando una cifra");
+  const b = $("open-scores");
+  if (b.hidden) throw new Error("falta el botón de las marcas");
+  if (!/Mejores marcas/.test(b.textContent)) throw new Error("el botón no se llama: " + b.textContent);
+  if (getComputedStyle(b).justifyContent !== "flex-end") throw new Error("el rótulo no va a la derecha");
 });
 
 /* Nadie pierde lo que ya tenía guardado: las marcas de antes de los
