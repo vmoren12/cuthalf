@@ -25,16 +25,15 @@
 <main id="app">
   <header class="hud">
     <span><span id="lvl-label" data-t="level">Nivel</span> <b id="lvl">01</b></span>
-    <!-- los puntos se ganan corte a corte, así que se ven mientras se
-         juega: aquí, junto al nivel, sin robarle sitio a la figura. Sin
-         rótulo: es la única cifra que se mueve sola, y rodando hasta
-         la nueva se explica ella misma -->
-    <span id="pts-box"><b id="pts">0</b></span>
     <button class="lnk" id="close-run" data-t="close">Cerrar</button>
     <button class="lnk" id="tutor-skip" data-t="skip" hidden>Saltar</button>
   </header>
 
-  <div class="stage" id="stage"><canvas id="cv"></canvas><span class="lives" id="lives" data-ta="livesLeft"></span><p class="tip" id="tip" hidden></p><div class="hype" id="hype" aria-hidden="true"></div></div>
+  <!-- Los puntos van dentro del escenario, en el mismo renglón que las
+       vidas y la cuenta atrás: las tres cosas que hay que poder mirar
+       sin apartar la vista de la figura. Centrados en la pantalla, y
+       sin recoger el dedo — el escenario entero es la zona de corte. -->
+  <div class="stage" id="stage"><canvas id="cv"></canvas><span class="lives" id="lives" data-ta="livesLeft"></span><span class="pts-live" id="pts-box"><b id="pts">0</b></span><p class="tip" id="tip" hidden></p><div class="hype" id="hype" aria-hidden="true"></div></div>
 
   <footer class="readout">
     <div class="num" id="num" aria-hidden="true">0.0<small>%</small></div>

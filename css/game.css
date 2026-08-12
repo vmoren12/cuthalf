@@ -8,9 +8,6 @@
   padding-bottom:12px;border-bottom:1px solid var(--hair);
 }
 .hud b{font-weight:500}
-/* el marcador en directo: en azul, que es el color del acierto, y con
-   la cifra tabular para que no baile al pasar de 999 a 1.000        */
-#pts-box b{color:var(--signal);font-variant-numeric:tabular-nums}
 .lives{display:flex;gap:6px;align-items:center}
 .lives i{display:block;position:relative;width:3px;height:14px}
 .lives i::before{content:"";position:absolute;inset:0;background:var(--ink);
@@ -23,6 +20,23 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 /* vidas: dentro del escenario, arriba a la izquierda, enfrentadas
    a la cuenta atrás que se dibuja en el lienzo arriba a la derecha */
 .stage .lives{position:absolute;left:12px;top:19px;z-index:2}
+/* El marcador en directo, en medio de esas dos.
+
+   Los tres van al mismo renglón: la cuenta atrás se dibuja centrada en
+   la altura 26 del lienzo y las vidas, de 19 a 33, quedan centradas
+   ahí también; de ahí el `top:26px` con el medio tirón hacia arriba,
+   que centra la caja en esa misma línea sea cual sea su tamaño.
+
+   En azul, que es el color del acierto, y con cifra tabular para que
+   no baile al rodar de 999 a 1.000. Y sin recoger el puntero: el
+   escenario entero es zona de corte, y una banda de lado a lado se
+   tragaría los trazos que empiezan arriba.                          */
+.pts-live{
+  position:absolute;left:0;right:0;top:26px;transform:translateY(-50%);
+  z-index:2;pointer-events:none;text-align:center;
+  font-size:16px;letter-spacing:.04em;line-height:1;
+}
+.pts-live b{font-weight:500;color:var(--signal);font-variant-numeric:tabular-nums}
 /* consejo del tutorial: banda superior del escenario, fuera del paso
    de la figura, que ocupa la franja central                        */
 .tip{

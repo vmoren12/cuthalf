@@ -190,6 +190,13 @@ await step("los puntos se ganan en el corte y se ven en directo", async () => {
     throw new Error("el marcador no llega a la cifra: " + $("pts").textContent);
   if (!$("cap").textContent.includes("+" + ganado))
     throw new Error("el pie no dice de dónde salen: " + $("cap").textContent);
+  /* El marcador vive dentro del escenario y ocupa todo el ancho. Si
+     recogiera el puntero se comería los cortes que empiezan arriba,
+     que es justo por donde se corta media figura.                   */
+  const caja = $("pts-box");
+  if (!$("stage").contains(caja)) throw new Error("el marcador se ha salido del escenario");
+  if (getComputedStyle(caja).pointerEvents !== "none")
+    throw new Error("el marcador se traga los trazos que pasen por él");
   /* un corte por el borde no vale, y lo que no vale no paga */
   terminarNivel(); frame();
   const r = $("stage").getBoundingClientRect();
