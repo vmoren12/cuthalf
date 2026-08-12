@@ -38,6 +38,10 @@ if (cual === "juego"){
 }
 if (cual === "ask"){ ask("Elige un nombre para la clasificación mundial", "Guardar", "VICTOR"); }
 if (cual === "cafe"){ $("go-donate").click(); }
+/* El botón de instalar sólo aparece cuando el navegador ofrece la
+   instalación, y eso no pasa en una prueba: aquí se enseña a mano,
+   que si no su icono no hay forma de mirarlo.                       */
+if (cual === "intro"){ $("install-intro").hidden = false; }
 
 /* La tarjeta de compartir es lo único del juego que nadie ve sin
    compartirlo: se dibuja en un lienzo aparte y se va. Aquí se pega en

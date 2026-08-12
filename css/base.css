@@ -51,6 +51,14 @@ body{
   white-space:nowrap;
 }
 .lnk[hidden]{display:none}
+/* El único enlace con dibujo. La raya subraya la palabra y no el
+   icono, que quedaría tachado por debajo. El `:not([hidden])` no es
+   remilgo: un `display` puesto por identificador le ganaría a la
+   regla de arriba y el botón saldría hasta cuando no hay nada que
+   instalar.                                                         */
+#install-intro:not([hidden]){display:inline-flex;align-items:center;gap:7px;border-bottom:0}
+#install-intro svg{width:13px;height:13px;display:block;flex:none}
+#install-intro span{border-bottom:1px solid var(--ink);padding-bottom:2px}
 .lnk:focus-visible,.btn:focus-visible,.tag:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 @media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important}}

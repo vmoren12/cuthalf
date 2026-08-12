@@ -69,7 +69,12 @@
        donde estaba el dato y donde cae el pulgar. -->
   <button class="stat statlink" id="open-scores"><span class="lbl u" data-t="scores">Mejores marcas</span></button>
   <div class="row row--left">
-    <button class="lnk" id="install-intro" data-t="install" hidden>Instalar</button>
+    <!-- El icono va dentro del botón y el rótulo en su propio span: el
+         cambio de idioma reescribe el texto de todo lo que lleve
+         data-t, y con la marca puesta en el botón se llevaría por
+         delante el dibujo. Tres trazos —flecha y suelo— que es el
+         gesto de instalar en cualquier sistema. -->
+    <button class="lnk" id="install-intro" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5v11"/><path d="M7.5 10.5 12 15l4.5-4.5"/><path d="M4.5 19h15"/></svg><span data-t="install">Instalar</span></button>
     <span class="seg" id="lang-intro"></span>
     <button class="tt" id="theme-intro"></button>
   </div>
