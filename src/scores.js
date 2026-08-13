@@ -12,9 +12,10 @@
 import { DAILY, DB } from "./storage.js";
 import { freeBoard } from "./scoring.js";
 import { T, lang } from "./i18n.js";
-import { NET, meDaily, meFree, worldDaily, worldFree } from "./net.js";
+import { NET, meDaily, meDailySpan, meFree, meFreeSpan,
+         worldDaily, worldDailySpan, worldFree, worldFreeSpan } from "./net.js";
 import { ME } from "./player.js";
-import { dayKey } from "./util.js";
+import { dayKey, monthKey, startOfMonth, startOfToday } from "./util.js";
 
 /* cuántas filas se traen de una tabla del mundo. Más allá de aquí no
    se puede contar nada, y decirlo es mejor que inventarlo.          */
@@ -64,15 +65,40 @@ export const dayText = iso => {
   return new Date(y, m - 1, d).toLocaleDateString(lang, { day:"2-digit", month:"short" });
 };
 
+/* ── desde cuándo ─────────────────────────────────────────────────
+   El tramo que se está mirando —hoy, este mes o siempre— traducido a
+   las dos formas en que este juego guarda el tiempo: las partidas
+   llevan el instante en que se jugaron y los días del reto, la fecha
+   suelta del calendario. `all` no tiene corte, y por eso es null.  */
+export const spanInstant = span => span === "today" ? startOfToday() : span === "month" ? startOfMonth() : null;
+export const spanDay     = span => span === "today" ? dayKey()       : span === "month" ? monthKey()     : null;
+
+/* el corte en milisegundos, que es como apunta la hora una marca, y
+   si cae dentro. Sin fecha no se puede afirmar que sea de hoy: las
+   marcas de las versiones viejas sólo salen cuando no hay corte.   */
+export const spanCut = span => { const d = spanInstant(span); return d ? Date.parse(d) : 0; };
+export const inSpan  = (r, corte) => !corte || (!!r.ts && r.ts >= corte);
+
+/* qué decir cuando el tramo se queda sin nada: que no haya marcas de
+   hoy no es lo mismo que no haber jugado nunca, y la tabla vacía sin
+   más lo diría mal                                                  */
+export const notaVacia = (span, quien) =>
+  span === "today" ? T(quien + "EmptyToday") :
+  span === "month" ? T(quien + "EmptyMonth") : "";
+
 /* las marcas de este aparato en una de las tablas de juego libre */
-export function localRuns(board, max, mark){
-  return DB.list(board).slice(0, max).map((r, i) => ({
-    r: String(i+1).padStart(2,"0"),
-    n: r.n,
-    l: ptsText(r.pts),
-    a: levelText(r.lv),
-    me: !!mark && r.ts === mark
-  }));
+export function localRuns(board, max, mark, span){
+  const corte = spanCut(span);
+  return DB.list(board)
+    .filter(r => inSpan(r, corte))
+    .slice(0, max)
+    .map((r, i) => ({
+      r: String(i+1).padStart(2,"0"),
+      n: r.n,
+      l: ptsText(r.pts),
+      a: levelText(r.lv),
+      me: !!mark && r.ts === mark
+    }));
 }
 
 /* Tus días del reto, el mejor primero.
@@ -82,13 +108,16 @@ export function localRuns(board, max, mark){
    clasificación como las demás —tus partidas ordenadas por puntos— y
    la fecha ocupa la columna de quién, que es lo que distingue una
    fila de otra.                                                     */
-export function localDays(){
-  return DAILY.list().map((d, i) => ({
-    r: String(i+1).padStart(2,"0"),
-    n: dayText(d.d),
-    l: ptsText(d.pts),
-    a: levelText(d.lv)
-  }));
+export function localDays(span){
+  const desde = spanDay(span);
+  return DAILY.list()
+    .filter(d => !desde || d.d >= desde)     // fechas ISO: comparar textos basta
+    .map((d, i) => ({
+      r: String(i+1).padStart(2,"0"),
+      n: dayText(d.d),
+      l: ptsText(d.pts),
+      a: levelText(d.lv)
+    }));
 }
 
 /* ── el mundo ─────────────────────────────────────────────────────
@@ -99,12 +128,28 @@ export function localDays(){
 
    Si tu marca queda fuera de los cien primeros, se añade tu fila al
    final: una clasificación en la que no te encuentras no dice nada. */
-export async function worldRows(board){
-  const yo = ME.id(), dia = dayKey();
+/* Cada familia tiene un tramo que ya sabía servir y dos que no.
 
-  const [lista, mio] = board === "daily"
-    ? await Promise.all([worldDaily(dia), meDaily(yo, dia)])
-    : await Promise.all([worldFree(board), meFree(yo, board)]);
+   El reto de hoy sale de `daily_board` y la tabla de siempre del
+   juego libre, de `free_board`: son el periodo natural de cada una y
+   no hay motivo para consultarlas de otra forma. Los otros dos van a
+   las funciones nuevas, que se quedan con la mejor partida de cada
+   jugador dentro del tramo. Ninguna suma nada: los puntos siguen
+   siendo de una partida.                                            */
+function pedirMundo(board, span, yo, tope){
+  if (board === "daily"){
+    if (span === "today"){ const d = dayKey(); return [worldDaily(d, tope), meDaily(yo, d)]; }
+    const d = spanDay(span);
+    return [worldDailySpan(d, tope), meDailySpan(yo, d)];
+  }
+  if (span === "all") return [worldFree(board, tope), meFree(yo, board)];
+  const t = spanInstant(span);
+  return [worldFreeSpan(board, t, tope), meFreeSpan(yo, board, t)];
+}
+
+export async function worldRows(board, span){
+  const yo = ME.id();
+  const [lista, mio] = await Promise.all(pedirMundo(board, span, yo, TOPE));
 
   if (!Array.isArray(lista)) return { rows: [], nota: NET.vivo ? T("notSent") : T("noNet") };
 
@@ -114,7 +159,7 @@ export async function worldRows(board){
                        a: levelText(r.level), me: r.player_id === yo });
 
   const rows = lista.map(fila);
-  if (!rows.length) return { rows: [], nota: T("worldEmpty") };
+  if (!rows.length) return { rows: [], nota: notaVacia(span, "span") || T("worldEmpty") };
 
   /* ¿estás en la lista? Si no, tu puesto va al final */
   const yoDentro = rows.some(r => r.me);
@@ -135,6 +180,11 @@ export async function worldRows(board){
    las tablas ordenan igual —por puntos— así que la cuenta es una, y
    los empates los gana quien llegó antes, que nunca es una partida
    que se acaba de terminar.
+
+   Esto no sigue al selector de tramo de la pantalla de marcas, y es
+   a propósito: aquel filtra lo que se está mirando, pero una partida
+   se sube a la clasificación de siempre, que es donde se compite.
+   Decir «quedarías 3.º» contando sólo hoy sería mentir.
 
    Si tu marca de esa tabla ya era mejor, subir ésta no te mueve: el
    servidor se queda con la mejor de las dos. Entonces se dice que

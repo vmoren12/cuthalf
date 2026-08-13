@@ -162,6 +162,12 @@ sube con cada corte y es la única forma de ver qué lo sube.
 día del reto tiene su clasificación y vale su mejor intento. Jugar más
 días no da más puntos, y ésa es la decisión, no un descuido.
 
+La pantalla de marcas sí se puede mirar por tramos —hoy, mes,
+siempre—, pero eso no es acumular: cada tramo enseña **la mejor
+partida** de cada uno dentro de él. Cada familia recuerda su tramo por
+separado (`S.periods`), porque el reto se abre en el día de hoy y el
+juego libre en la tabla de siempre. Lo cuenta [DATOS.md](DATOS.md).
+
 El reloj de cada corte es lo único de la partida que el servidor no
 puede recalcular —lo apunta el navegador y viaja en el envío—, así que
 el factor de tiempo **se satura** a partir de segundo y medio: por

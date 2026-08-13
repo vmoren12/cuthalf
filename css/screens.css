@@ -125,6 +125,10 @@
    ninguna es más importante que las otras */
 .seg--full{width:100%}
 .seg--full button{flex:1;min-width:0}
+/* qué tabla y desde cuándo van juntos, más apretados que el ritmo de
+   la pantalla: son dos mitades de la misma pregunta, y con el aire de
+   los demás bloques el segundo parecería un mando suelto sin rótulo */
+.picker{display:flex;flex-direction:column;gap:6px;width:100%}
 /* el conmutador y, debajo, con quién estás compitiendo: el nombre con
    el que suben tus marcas, que si no sólo se ve cuando sales en la
    tabla — y quien empieza no sale                                   */

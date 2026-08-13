@@ -88,7 +88,7 @@ subir a la clasificación mundial (ver el punto 4).
 ## 3 · En el servidor · Supabase
 
 En marcha desde el 11 de agosto de 2026, en el proyecto
-`gfrmnlxadxtnsimansvt`. Las cuatro migraciones están en
+`gfrmnlxadxtnsimansvt`. Las migraciones están en
 [supabase/migrations/](supabase/migrations/) y la función que acepta
 las partidas, en [supabase/functions/run/](supabase/functions/run/).
 
@@ -153,6 +153,42 @@ El puesto se calcula sobre la clasificación **entera** y sólo después
 se recorta, para que el primero de una página no parezca el primero
 del mundo. Las de la temporada —`season_board` y `season_me`— se
 borraron al dejar de acumularse los puntos.
+
+### Y por tramos de tiempo · `0006_periodos.sql`
+
+La pantalla de marcas se puede mirar **hoy, este mes o siempre**. Cada
+familia tenía ya un tramo y le faltaban dos:
+
+| | hoy | mes | siempre |
+|---|---|---|---|
+| `daily` | `daily_board` | `daily_span` | `daily_span` (sin corte) |
+| `free-*` | `free_span` | `free_span` | `free_board` |
+
+Las nuevas se quedan con **la mejor partida de cada jugador dentro del
+tramo**: siguen midiendo una partida, no suman nada. Esto no es la
+temporada que se borró.
+
+El reto lo tiene fácil —`daily_best` ya guarda una fila por jugador y
+día, así que el tramo es un `where` sobre `day`—. El juego libre no:
+`free_best` sólo conserva la mejor de siempre, y tu mejor de agosto no
+está en ninguna parte si tu récord es de julio. La única fuente es
+`runs`, que tiene RLS **sin políticas**. Por eso `free_span` y
+`free_span_me` son las **únicas `security definer` del proyecto**, y
+por eso van atadas: devuelven lo mismo que ya enseña la clasificación
+—quién y su mejor puntuación del tramo—, nunca una fila cruda; la
+tabla pedida se comprueba contra una lista blanca; y el `execute` se
+retira de `public` antes de concederlo a `anon`.
+
+El corte de «hoy» viaja como **instante exacto calculado en el
+navegador**, no como fecha: `created_at` es UTC y el día es el del
+reloj de quien juega. A la una de la madrugada en Madrid, para UTC
+todavía es ayer.
+
+El puesto que se ofrece antes de subir una partida **no** sigue este
+filtro: se sube a la clasificación de siempre, que es donde se compite.
+
+`daily_best.season` sigue sin leerla nadie — el tramo del mes se
+resuelve comparando `day`, que va indexado.
 
 ### Permisos
 

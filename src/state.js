@@ -21,6 +21,12 @@ export const S = {
   timer: 0, runTimer: 0, limit: 0, lastShape: null, mode: "free",
   board: "daily",            // clasificación que se está mirando
   scope: "world",            // el mundo o sólo este aparato
+  /* Desde cuándo se mira, y una por familia porque su periodo
+     natural no es el mismo: el reto se abre en el día de hoy, que es
+     de lo que va, y el juego libre en la tabla de siempre, que es
+     donde se compite. Un solo ajuste compartido tendría que estropear
+     una de las dos al abrir.                                        */
+  periods: { daily: "today", free: "all" },
   step: 0, tutorGuide: false, tutorHelp: false, tutorPending: null,
   refBest: 0, recordShown: false,
   capDesc: { k:"swipe" }, numErr: null, numOk: false

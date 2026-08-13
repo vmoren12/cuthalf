@@ -4,7 +4,7 @@ import { CONFIG } from "./config.js";
 import { DB } from "./storage.js";
 import { $, S, UI, refreshColors } from "./state.js";
 import { T, lang, setLang } from "./i18n.js";
-import { cabecera, drawRows, localDays, localRuns, worldRows } from "./scores.js";
+import { cabecera, drawRows, inSpan, localDays, localRuns, notaVacia, spanCut, worldRows } from "./scores.js";
 import { finishTutor, goHome, paintOver, saveMark, start, startTutor, subirPartida } from "./game.js";
 import { shareCard, toast } from "./share.js";
 import { BOARDS, boardTime } from "./scoring.js";
@@ -68,8 +68,8 @@ export function drawTimers(){
 }
 
 /* ── clasificaciones ──────────────────────────────────────────────
-   Cinco tablas: el reto diario, que se acumula por temporadas, y una
-   por cada regla de tiempo del juego libre.                         */
+   Cinco tablas: el reto diario y una por cada regla de tiempo del
+   juego libre.                                                      */
 export function drawBoards(){
   const box = $("seg-board");
   box.innerHTML = "";
@@ -79,8 +79,36 @@ export function drawBoards(){
     btn.textContent = b === "daily" ? T("dailyShort") : (t ? String(t) : "∞");
     btn.className = b === S.board ? "on" : "";
     btn.setAttribute("aria-label", b === "daily" ? T("daily") : (t ? t + " s" : T("noLimit")));
-    btn.addEventListener("click", () => { S.board = b; DB.set("board", b); drawBoards(); paintScores(); });
+    /* al cambiar de tabla se repinta también el tramo: cada familia
+       recuerda el suyo, y el marcado tiene que seguirlo            */
+    btn.addEventListener("click", () => { S.board = b; DB.set("board", b); drawBoards(); drawSpans(); paintScores(); });
     box.appendChild(btn);
+  }
+}
+
+/* Desde cuándo se mira la tabla. Cada familia recuerda el suyo por
+   separado —ver S.periods en state.js—, así que cambiar de reto a
+   juego libre devuelve cada uno a donde lo dejaste.                 */
+export const SPANS = ["today", "month", "all"];
+export const familia = () => S.board === "daily" ? "daily" : "free";
+export const spanActual = () => S.periods[familia()];
+
+export function drawSpans(){
+  const box = $("seg-span");
+  box.innerHTML = "";
+  const activo = spanActual();
+  for (const s of SPANS){
+    const b = document.createElement("button");
+    b.textContent = T("span" + s[0].toUpperCase() + s.slice(1));
+    b.className = s === activo ? "on" : "";
+    b.setAttribute("aria-label", T("span" + s[0].toUpperCase() + s.slice(1) + "Long"));
+    b.addEventListener("click", () => {
+      if (s === spanActual()) return;
+      S.periods = { ...S.periods, [familia()]: s };
+      DB.set("periods", S.periods);
+      drawSpans(); paintScores();
+    });
+    box.appendChild(b);
   }
 }
 
@@ -108,20 +136,30 @@ export function drawScope(){
    se ha quitado: son cifras tuyas, y se ven al terminar de jugar el
    reto, que es cuando dicen algo.                                   */
 export async function paintScores(){
-  const daily = S.board === "daily";
+  const daily = S.board === "daily", span = spanActual();
 
   if (S.scope === "mine"){
-    if (daily){ drawRows($("tbl-all"), localDays(), "", cabecera("colDay")); return; }
+    if (daily){
+      const dias = localDays(span);
+      drawRows($("tbl-all"), dias, dias.length ? "" : notaVacia(span, "mine"), cabecera("colDay"));
+      return;
+    }
     /* las marcas de antes no sabían con qué reloj se hicieron y están
        todas aquí; y ninguna guardó los tiempos de sus cortes, así que
        sus puntos son una estimación. Mejor decirlo las dos veces que
-       dejar que cuadre mal.                                         */
-    const viejas = DB.list(S.board);
-    const nota = [
+       dejar que cuadre mal.
+
+       Los avisos se cuentan sobre lo que se está enseñando y no sobre
+       todo el historial: si el tramo deja fuera las marcas viejas, no
+       hay nada de lo que avisar.                                    */
+    const filas = localRuns(S.board, CONFIG.keep, null, span);
+    const corte = spanCut(span);
+    const viejas = DB.list(S.board).filter(r => inSpan(r, corte));
+    const nota = filas.length ? [
       S.board === "free-0" && viejas.some(r => r.old) ? T("oldNote") : "",
       viejas.some(r => r.est) ? T("estNote") : ""
-    ].filter(Boolean).join(" ");
-    drawRows($("tbl-all"), localRuns(S.board, CONFIG.keep), nota, cabecera("colName"));
+    ].filter(Boolean).join(" ") : notaVacia(span, "mine");
+    drawRows($("tbl-all"), filas, nota, cabecera("colName"));
     return;
   }
 
@@ -129,7 +167,7 @@ export async function paintScores(){
      está yendo: una tabla vacía sin explicación parece un error    */
   drawRows($("tbl-all"), [], T("loading"));
   const marca = ++peticion;
-  const filas = await worldRows(S.board);
+  const filas = await worldRows(S.board, span);
   if (marca !== peticion) return;          // llegó tarde: manda la última
   drawRows($("tbl-all"), filas.rows, filas.nota, cabecera("colName"));
 }
@@ -143,7 +181,7 @@ let peticion = 0;
    taparla hay algo a lo que volver, y el gesto de atrás tiene que
    enterarse: si no, atrás cierra la aplicación entera.             */
 export function openScores(){
-  drawBoards(); drawScope(); paintScores();
+  drawBoards(); drawSpans(); drawScope(); paintScores();
   $("scr-scores").hidden = false;
   syncBack();
 }
@@ -206,7 +244,7 @@ export function applyLang(next){
   UI.cap(S.capDesc); UI.level();
   if (S.numErr !== null) UI.num(S.numErr, S.numOk);
   drawTimers(); paintOver();
-  if (!$("scr-scores").hidden){ drawBoards(); paintScores(); }
+  if (!$("scr-scores").hidden){ drawBoards(); drawSpans(); paintScores(); }
   syncTheme(); syncInstall();
 }
 

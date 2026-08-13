@@ -1,6 +1,7 @@
 /* La conexión con la clasificación mundial.
 
-   Sin bibliotecas: son cuatro peticiones y `fetch` las hace todas.
+   Sin bibliotecas: son un puñado de peticiones y `fetch` las hace
+   todas.
 
    Regla de oro: esto nunca puede romper una partida. Si no hay red,
    si el servidor tarda o si responde cualquier cosa rara, se devuelve
@@ -54,12 +55,25 @@ async function pedir(ruta, cuerpo, espera = 9000){
 /* ── clasificaciones (sólo lectura) ─────────────────────────────── */
 export const rpc = (nombre, args) => pedir("/rest/v1/rpc/" + nombre, args);
 
-/* Cuatro, no seis: la temporada ya no existe. Los puntos son de una
-   partida, así que sumarlos por meses no medía nada.                */
+/* El periodo natural de cada familia: el reto de hoy y la tabla de
+   siempre. Son las que deciden quién va ganando, y las que se
+   consultan para ofrecer un puesto antes de subir.                  */
 export const worldFree   = (board, limite = 100) => rpc("free_board",   { p_board: board, p_limit: limite });
 export const worldDaily  = (dia, limite = 100)   => rpc("daily_board",  { p_day: dia, p_limit: limite });
 export const meFree      = (id, board) => rpc("free_me",   { p_player: id, p_board: board });
 export const meDaily     = (id, dia)   => rpc("daily_me",  { p_player: id, p_day: dia });
+
+/* Y los otros dos tramos de cada una: la mejor partida desde una
+   fecha acá. Con `desde` a null es «desde siempre», que en el reto es
+   un tramo más y en el juego libre ya lo da `free_board`.
+
+   El corte del reto es una fecha suelta y el del juego libre un
+   instante: uno se juega por días de calendario y el otro se apunta
+   con la hora exacta. Los prepara util.js.                          */
+export const worldFreeSpan  = (board, desde, limite = 100) => rpc("free_span",     { p_board: board, p_from: desde, p_limit: limite });
+export const worldDailySpan = (desde, limite = 100)        => rpc("daily_span",    { p_from: desde, p_limit: limite });
+export const meFreeSpan     = (id, board, desde)           => rpc("free_span_me",  { p_player: id, p_board: board, p_from: desde });
+export const meDailySpan    = (id, desde)                  => rpc("daily_span_me", { p_player: id, p_from: desde });
 
 /* ── partidas ───────────────────────────────────────────────────── */
 /* El vale y la semilla, antes de empezar a jugar. */

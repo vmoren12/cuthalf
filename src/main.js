@@ -17,5 +17,6 @@ mq.addEventListener("change", e => { if (!DB.get("theme", null)) setTheme(e.matc
 S.timer = DB.get("timer", 0);
 S.board = DB.get("board", "daily");
 S.scope = DB.get("scope", "world");
+S.periods = { ...S.periods, ...DB.get("periods", null) };
 applyLang(DB.get("lang", /^(es|ca|gl)/i.test(navigator.language || "") ? "es" : "en"));
 UI.lives(); UI.level(); refreshColors(); resize();

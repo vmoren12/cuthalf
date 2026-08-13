@@ -10,12 +10,21 @@
    tarjeta · ?medir=1 cuenta los anchos                              */
 const html = await (await fetch("../index.html")).text();
 document.body.innerHTML = html.split("<body>")[1].split("</body>")[0];
+
+/* Las fechas se cuentan desde hoy y no se escriben a mano: ahora las
+   tablas se filtran por tramos, y unas fechas fijas irían saliendo
+   del mes hasta dejar el retrato en blanco sin que nada esté roto. */
+const dia = n => { const d = new Date(); d.setDate(d.getDate() - n);
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
+const hace = n => Date.now() - n*86400000;
 localStorage.setItem("half.v1", JSON.stringify({
   v:3, name:"VICTOR", tutorDone:true,
   /* una marca vieja a propósito: es lo que hace salir el pie de la
      tabla, que es donde peor se ve si algo se apretuja               */
-  records:[{n:"VICTOR",lv:12,av:97.4,pts:1840,tl:0,ts:1},{n:"VICTOR",lv:7,av:94.1,pts:610,tl:0,ts:2,old:1,est:1},{n:"VICTOR",lv:4,av:91,pts:280,tl:3,ts:3}],
-  days:{"2026-08-11":{lv:9,av:96.2,pts:1120,tries:2},"2026-08-10":{lv:6,av:93,pts:540,tries:1}}
+  records:[{n:"VICTOR",lv:12,av:97.4,pts:1840,tl:0,ts:hace(0)},
+           {n:"VICTOR",lv:7,av:94.1,pts:610,tl:0,ts:1,old:1,est:1},
+           {n:"VICTOR",lv:4,av:91,pts:280,tl:3,ts:hace(2)}],
+  days:{ [dia(0)]:{lv:9,av:96.2,pts:1120,tries:2}, [dia(3)]:{lv:6,av:93,pts:540,tries:1} }
 }));
 const { S, $ } = await import("../src/state.js");
 const { openScores, paintScores, ask } = await import("../src/menu.js");
@@ -23,7 +32,11 @@ await import("../src/main.js");
 
 const params = new URL(location).searchParams;
 const cual = params.get("p") || "scores";
-if (cual === "scores"){ S.scope = "mine"; S.board = "daily"; openScores(); await paintScores(); }
+/* En «siempre» y no en el tramo de por defecto: este retrato existe
+   para ver si algo se apretuja, y para eso hace falta la tabla más
+   llena, no la más fiel. Con «hoy» el reto enseña una fila y una fila
+   no aprieta nada.                                                  */
+if (cual === "scores"){ S.scope = "mine"; S.board = "daily"; S.periods = { ...S.periods, daily:"all" }; openScores(); await paintScores(); }
 if (cual === "libre"){ S.scope = "mine"; S.board = "free-0"; openScores(); await paintScores(); }
 /* La partida en marcha. Los puntos van dentro del escenario, en el
    renglón de las vidas y la cuenta atrás, así que aquí se juega de
@@ -90,6 +103,8 @@ if (params.get("medir")){
   for (const el of s.children) lineas.push("  " + el.tagName.toLowerCase() + "." + (el.className || el.id) + "   " + ancho(el));
   lineas.push("seg-board     " + ancho($("seg-board")));
   lineas.push("  botones     " + [...$("seg-board").children].map(b => Math.round(b.getBoundingClientRect().width)).join("  "));
+  lineas.push("seg-span      " + ancho($("seg-span")));
+  lineas.push("  botones     " + [...$("seg-span").children].map(b => Math.round(b.getBoundingClientRect().width)).join("  "));
   lineas.push("seg-scope     " + ancho($("seg-scope")));
   lineas.push("rename        " + ancho($("rename")));
   await fetch("/resultado", { method: "POST", body: lineas.join("\n") });

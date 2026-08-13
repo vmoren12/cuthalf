@@ -61,7 +61,7 @@ const { S, $ }                            = await import("../src/state.js");
 const { start, doCut, gameOver, saveMark, goHome } = await import("../src/game.js");
 const { DB, DAILY, qualifies }            = await import("../src/storage.js");
 const { CUT, cutPoints, freeBoard }       = await import("../src/scoring.js");
-const { porDelante }                      = await import("../src/scores.js");
+const { porDelante, inSpan, spanCut, localDays, localRuns } = await import("../src/scores.js");
 const { normalize, evaluate, bisector }   = await import("../src/geometry.js");
 const { SHAPES }                          = await import("../src/shapes.js");
 const { setRNG, mulberry32 }              = await import("../src/rng.js");
@@ -72,7 +72,9 @@ const { paint }                           = await import("../src/render.js");
 const { replay, toShapeSpace }            = await import("../src/replay.js");
 const { ME }                              = await import("../src/player.js");
 const { ENVIO }                           = await import("../src/submit.js");
-const { NET, runSubmit, meFree }          = await import("../src/net.js");
+const { NET, runSubmit, meFree,
+        worldFreeSpan, worldDailySpan, meFreeSpan, meDailySpan } = await import("../src/net.js");
+const { startOfToday, monthKey }          = await import("../src/util.js");
 await import("../src/main.js");            // arranque, igual que en la página
 
 const log = [];
@@ -356,6 +358,54 @@ await step("la tabla mundial del reto de hoy responde", async () => {
   const texto = $("tbl-all").textContent;
   if (/Cargando|Loading/.test(texto)) throw new Error("se queda cargando");
   closeScores();
+});
+
+/* ── el tramo: hoy · mes · siempre ─────────────────────────────────
+   Lo de este aparato se comprueba entero y sin red: es un corte en
+   milisegundos y una comparación.                                  */
+await step("el tramo sabe qué marcas caen dentro", () => {
+  const hoy = spanCut("today"), mes = spanCut("month"), siempre = spanCut("all");
+  if (siempre !== 0) throw new Error("«siempre» no puede tener corte");
+  if (!(mes <= hoy)) throw new Error("el mes tendría que empezar antes que hoy");
+
+  const ahora    = { ts: Date.now() };
+  const anteayer = { ts: Date.now() - 2*24*3600*1000 };
+  const sinFecha = { pts: 1 };            // de una versión que no apuntaba la hora
+
+  if (!inSpan(ahora, hoy))       throw new Error("una marca de ahora mismo no cuenta como de hoy");
+  if (inSpan(anteayer, hoy))     throw new Error("una de anteayer cuela como de hoy");
+  if (!inSpan(anteayer, siempre))throw new Error("«siempre» deja fuera una marca");
+  /* sin fecha no se puede afirmar que sea de hoy, y afirmarlo sería
+     colocar marcas viejas en un tramo al que no se sabe si pertenecen */
+  if (inSpan(sinFecha, hoy))     throw new Error("una marca sin fecha se da por de hoy");
+  if (!inSpan(sinFecha, siempre))throw new Error("«siempre» pierde las marcas sin fecha");
+});
+
+/* y que las listas lo apliquen de verdad. La sonda acaba de jugar en
+   las dos familias, así que hoy tiene que haber algo y cada tramo ha
+   de caber en el siguiente.                                        */
+await step("cada tramo cabe en el siguiente", () => {
+  const dias = s => localDays(s).length, libres = s => localRuns("free-3", 100, null, s).length;
+  if (!(dias("today") <= dias("month") && dias("month") <= dias("all")))
+    throw new Error("los días del reto no encajan: " + [dias("today"), dias("month"), dias("all")]);
+  if (!(libres("today") <= libres("month") && libres("month") <= libres("all")))
+    throw new Error("las partidas libres no encajan: " + [libres("today"), libres("month"), libres("all")]);
+  if (!dias("today")) throw new Error("se acaba de jugar el reto y hoy sale vacío");
+});
+
+/* El mundo por tramos son cuatro funciones nuevas en Supabase. Si
+   esto falla, lo más probable es que el código esté bien y lo que
+   falte sea aplicar la migración 0006.                             */
+await step("el mundo responde a los tres tramos", async () => {
+  const yo = ME.id(), hoy = startOfToday(), mes = monthKey();
+  const faltan = [];
+  const probar = async (nombre, p) => { if (!Array.isArray(await p)) faltan.push(nombre); };
+  await probar("free_span",     worldFreeSpan("free-3", hoy));
+  await probar("free_span_me",  meFreeSpan(yo, "free-3", hoy));
+  await probar("daily_span",    worldDailySpan(mes));
+  await probar("daily_span_me", meDailySpan(yo, mes));
+  if (faltan.length)
+    throw new Error("el servidor no tiene " + faltan.join(", ") + " (¿falta aplicar la migración 0006?) · " + NET.ultimoError);
 });
 
 /* En el móvil, con la app instalada, el gesto de atrás dentro de las
