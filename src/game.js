@@ -254,9 +254,7 @@ export function paintOver(){
   /* los puntos de la partida, arriba del todo y en las dos formas de
      juego: son el resultado, y son sólo de esta partida             */
   $("s-pts").textContent  = S.score.pts.toLocaleString();
-  $("s-lvl").textContent  = String(S.score.lv).padStart(2,"0");
   $("s-avg").textContent  = S.score.av.toFixed(1) + "%";
-  $("s-best").textContent = S.cuts.length ? S.score.best.toFixed(1) + "%" : "—";
 
   $("again").textContent = T(S.mode === "daily" ? "retry" : "again");
   $("rec-badge").hidden = !S.score.record;
@@ -268,14 +266,12 @@ export function paintOver(){
   $("save").textContent = T(primeraVez ? "save" : "rename");
 
   if (S.mode === "daily"){
-    const d = S.score.daily, st = DAILY.streak();
+    const d = S.score.daily;
     $("daily-over").hidden = false;
     $("tbl-over").hidden = true;
-    $("d-try").textContent    = "#" + d.tries;
     /* el mejor intento de hoy, que es el que va a la clasificación
        del día: la partida que acaba de terminar puede no serlo     */
-    $("d-best").textContent   = d.pts.toLocaleString() + " · N." + String(d.lv).padStart(2,"0");
-    $("d-streak").textContent = st.n + " " + T("days");
+    $("d-best").textContent = d.pts.toLocaleString() + " · N." + String(d.lv).padStart(2,"0");
   } else {
     $("daily-over").hidden = true; $("tbl-over").hidden = false;
 

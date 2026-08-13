@@ -85,19 +85,24 @@
 <section class="screen" id="scr-over" hidden>
   <h1 class="headline" id="over-mark">FIN</h1>
   <div class="pts" id="pts-row"><span class="lbl" data-t="runPoints">Puntos de la partida</span><b class="val" id="s-pts">—</b></div>
+  <!-- El resumen se ha quedado en lo que no está dicho ya. Fuera el
+       nivel alcanzado, que es el titular de esta misma pantalla; y
+       fuera el mejor corte, que cuenta una jugada suelta y no la
+       partida — sigue yendo en la tarjeta que se comparte, que es
+       donde presumir tiene sentido. -->
   <div class="stats">
-    <div class="stat"><span class="lbl" data-t="reached">Nivel alcanzado</span><b class="val" id="s-lvl">01</b></div>
     <div class="stat"><span class="lbl" data-t="avg">Precisión media</span><b class="val" id="s-avg">—</b></div>
-    <div class="stat"><span class="lbl" data-t="bestCut">Mejor corte</span><b class="val" id="s-best">—</b></div>
     <div class="stat" id="world-row" hidden><span class="lbl" data-t="world">Puesto mundial</span><b class="val" id="world-pos">—</b></div>
   </div>
 
   <p class="record" id="rec-badge" data-t="newRecord" hidden>¡Nuevo récord!</p>
 
+  <!-- Del reto queda lo único que decide algo: tu mejor de hoy, que
+       es lo que va a la clasificación del día. El número de intento y
+       la racha se siguen contando y guardando —la racha sale en la
+       tarjeta compartida— pero aquí no cambiaban ninguna decisión. -->
   <div class="stats" id="daily-over" hidden>
-    <div class="stat"><span class="lbl" data-t="attempt">Intento de hoy</span><b class="val" id="d-try">—</b></div>
     <div class="stat"><span class="lbl" data-t="bestToday">Tu mejor de hoy</span><b class="val" id="d-best">—</b></div>
-    <div class="stat"><span class="lbl" data-t="streak">Racha</span><b class="val" id="d-streak">—</b></div>
   </div>
 
   <div class="keep" id="keep" hidden>

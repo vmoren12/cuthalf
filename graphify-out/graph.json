@@ -167,7 +167,7 @@
       "label": "subirPartida()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L339",
+      "source_location": "L335",
       "_origin": "ast",
       "id": "src_game_subirpartida",
       "community": 1,
@@ -177,7 +177,7 @@
       "label": "guardarMarca()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L355",
+      "source_location": "L351",
       "_origin": "ast",
       "id": "src_game_guardarmarca",
       "community": 1,
@@ -187,7 +187,7 @@
       "label": "saveMark()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L365",
+      "source_location": "L361",
       "_origin": "ast",
       "id": "src_game_savemark",
       "community": 1,
@@ -197,7 +197,7 @@
       "label": "goHome()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L372",
+      "source_location": "L368",
       "_origin": "ast",
       "id": "src_game_gohome",
       "community": 0,
@@ -207,7 +207,7 @@
       "label": "start()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L385",
+      "source_location": "L381",
       "_origin": "ast",
       "id": "src_game_start",
       "community": 1,
@@ -6008,9 +6008,9 @@
       "source_file": "src/menu.js",
       "source_location": "L96",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_menu",
-      "target": "src_menu_drawspans",
-      "confidence_score": 1.0
+      "target": "src_menu_drawspans"
     },
     {
       "relation": "contains",
@@ -6028,9 +6028,9 @@
       "source_file": "src/menu.js",
       "source_location": "L93",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_menu",
-      "target": "src_menu_familia",
-      "confidence_score": 1.0
+      "target": "src_menu_familia"
     },
     {
       "relation": "contains",
@@ -6178,9 +6178,9 @@
       "source_file": "src/menu.js",
       "source_location": "L94",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_menu",
-      "target": "src_menu_spanactual",
-      "confidence_score": 1.0
+      "target": "src_menu_spanactual"
     },
     {
       "relation": "contains",
@@ -6188,9 +6188,9 @@
       "source_file": "src/menu.js",
       "source_location": "L92",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_menu",
-      "target": "src_menu_spans",
-      "confidence_score": 1.0
+      "target": "src_menu_spans"
     },
     {
       "relation": "contains",
@@ -6294,9 +6294,9 @@
       "source_file": "src/menu.js",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_menu",
-      "target": "src_scores_inspan",
-      "confidence_score": 1.0
+      "target": "src_scores_inspan"
     },
     {
       "relation": "imports",
@@ -6327,9 +6327,9 @@
       "source_file": "src/menu.js",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_menu",
-      "target": "src_scores_notavacia",
-      "confidence_score": 1.0
+      "target": "src_scores_notavacia"
     },
     {
       "relation": "imports",
@@ -6338,9 +6338,9 @@
       "source_file": "src/menu.js",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_menu",
-      "target": "src_scores_spancut",
-      "confidence_score": 1.0
+      "target": "src_scores_spancut"
     },
     {
       "relation": "imports",
@@ -6646,9 +6646,9 @@
       "source_file": "src/menu.js",
       "source_location": "L94",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_menu_spanactual",
-      "target": "src_menu_familia",
-      "confidence_score": 1.0
+      "target": "src_menu_familia"
     },
     {
       "relation": "calls",
@@ -6657,9 +6657,9 @@
       "source_file": "src/menu.js",
       "source_location": "L99",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_menu_drawspans",
-      "target": "src_menu_spanactual",
-      "confidence_score": 1.0
+      "target": "src_menu_spanactual"
     },
     {
       "relation": "calls",
@@ -6668,9 +6668,9 @@
       "source_file": "src/menu.js",
       "source_location": "L139",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_menu_paintscores",
-      "target": "src_menu_spanactual",
-      "confidence_score": 1.0
+      "target": "src_menu_spanactual"
     },
     {
       "relation": "calls",
@@ -6679,9 +6679,9 @@
       "source_file": "src/menu.js",
       "source_location": "L247",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_menu_applylang",
-      "target": "src_menu_drawspans",
-      "confidence_score": 1.0
+      "target": "src_menu_drawspans"
     },
     {
       "relation": "calls",
@@ -6701,9 +6701,9 @@
       "source_file": "src/menu.js",
       "source_location": "L184",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_menu_openscores",
-      "target": "src_menu_drawspans",
-      "confidence_score": 1.0
+      "target": "src_menu_drawspans"
     },
     {
       "relation": "calls",
@@ -7237,9 +7237,9 @@
       "source_file": "src/net.js",
       "source_location": "L76",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_net",
-      "target": "src_net_medailyspan",
-      "confidence_score": 1.0
+      "target": "src_net_medailyspan"
     },
     {
       "relation": "contains",
@@ -7257,9 +7257,9 @@
       "source_file": "src/net.js",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_net",
-      "target": "src_net_mefreespan",
-      "confidence_score": 1.0
+      "target": "src_net_mefreespan"
     },
     {
       "relation": "contains",
@@ -7337,9 +7337,9 @@
       "source_file": "src/net.js",
       "source_location": "L74",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_net",
-      "target": "src_net_worlddailyspan",
-      "confidence_score": 1.0
+      "target": "src_net_worlddailyspan"
     },
     {
       "relation": "contains",
@@ -7357,9 +7357,9 @@
       "source_file": "src/net.js",
       "source_location": "L73",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_net",
-      "target": "src_net_worldfreespan",
-      "confidence_score": 1.0
+      "target": "src_net_worldfreespan"
     },
     {
       "relation": "imports_from",
@@ -7456,9 +7456,9 @@
       "source_file": "src/net.js",
       "source_location": "L76",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_net_medailyspan",
-      "target": "src_net_rpc",
-      "confidence_score": 1.0
+      "target": "src_net_rpc"
     },
     {
       "relation": "calls",
@@ -7478,9 +7478,9 @@
       "source_file": "src/net.js",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_net_mefreespan",
-      "target": "src_net_rpc",
-      "confidence_score": 1.0
+      "target": "src_net_rpc"
     },
     {
       "relation": "calls",
@@ -7500,9 +7500,9 @@
       "source_file": "src/net.js",
       "source_location": "L74",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_net_worlddailyspan",
-      "target": "src_net_rpc",
-      "confidence_score": 1.0
+      "target": "src_net_rpc"
     },
     {
       "relation": "calls",
@@ -7522,9 +7522,9 @@
       "source_file": "src/net.js",
       "source_location": "L73",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_net_worldfreespan",
-      "target": "src_net_rpc",
-      "confidence_score": 1.0
+      "target": "src_net_rpc"
     },
     {
       "relation": "imports",
@@ -7544,9 +7544,9 @@
       "source_file": "src/scores.js",
       "source_location": "L145",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores_pedirmundo",
-      "target": "src_net_worldfree",
-      "confidence_score": 1.0
+      "target": "src_net_worldfree"
     },
     {
       "relation": "calls",
@@ -7588,9 +7588,9 @@
       "source_file": "src/scores.js",
       "source_location": "L141",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores_pedirmundo",
-      "target": "src_net_worlddaily",
-      "confidence_score": 1.0
+      "target": "src_net_worlddaily"
     },
     {
       "relation": "calls",
@@ -7632,9 +7632,9 @@
       "source_file": "src/scores.js",
       "source_location": "L145",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores_pedirmundo",
-      "target": "src_net_mefree",
-      "confidence_score": 1.0
+      "target": "src_net_mefree"
     },
     {
       "relation": "calls",
@@ -7698,9 +7698,9 @@
       "source_file": "src/scores.js",
       "source_location": "L141",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores_pedirmundo",
-      "target": "src_net_medaily",
-      "confidence_score": 1.0
+      "target": "src_net_medaily"
     },
     {
       "relation": "calls",
@@ -7753,9 +7753,9 @@
       "source_file": "src/scores.js",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores",
-      "target": "src_net_worldfreespan",
-      "confidence_score": 1.0
+      "target": "src_net_worldfreespan"
     },
     {
       "relation": "calls",
@@ -7764,9 +7764,9 @@
       "source_file": "src/scores.js",
       "source_location": "L147",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores_pedirmundo",
-      "target": "src_net_worldfreespan",
-      "confidence_score": 1.0
+      "target": "src_net_worldfreespan"
     },
     {
       "relation": "imports",
@@ -7775,9 +7775,9 @@
       "source_file": "src/scores.js",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores",
-      "target": "src_net_worlddailyspan",
-      "confidence_score": 1.0
+      "target": "src_net_worlddailyspan"
     },
     {
       "relation": "calls",
@@ -7786,9 +7786,9 @@
       "source_file": "src/scores.js",
       "source_location": "L143",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores_pedirmundo",
-      "target": "src_net_worlddailyspan",
-      "confidence_score": 1.0
+      "target": "src_net_worlddailyspan"
     },
     {
       "relation": "imports",
@@ -7797,9 +7797,9 @@
       "source_file": "src/scores.js",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores",
-      "target": "src_net_mefreespan",
-      "confidence_score": 1.0
+      "target": "src_net_mefreespan"
     },
     {
       "relation": "calls",
@@ -7808,9 +7808,9 @@
       "source_file": "src/scores.js",
       "source_location": "L147",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores_pedirmundo",
-      "target": "src_net_mefreespan",
-      "confidence_score": 1.0
+      "target": "src_net_mefreespan"
     },
     {
       "relation": "imports",
@@ -7819,9 +7819,9 @@
       "source_file": "src/scores.js",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores",
-      "target": "src_net_medailyspan",
-      "confidence_score": 1.0
+      "target": "src_net_medailyspan"
     },
     {
       "relation": "calls",
@@ -7830,9 +7830,9 @@
       "source_file": "src/scores.js",
       "source_location": "L143",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores_pedirmundo",
-      "target": "src_net_medailyspan",
-      "confidence_score": 1.0
+      "target": "src_net_medailyspan"
     },
     {
       "relation": "imports",
@@ -8640,9 +8640,9 @@
       "source_file": "src/scores.js",
       "source_location": "L80",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores",
-      "target": "src_scores_inspan",
-      "confidence_score": 1.0
+      "target": "src_scores_inspan"
     },
     {
       "relation": "contains",
@@ -8680,9 +8680,9 @@
       "source_file": "src/scores.js",
       "source_location": "L85",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores",
-      "target": "src_scores_notavacia",
-      "confidence_score": 1.0
+      "target": "src_scores_notavacia"
     },
     {
       "relation": "contains",
@@ -8690,9 +8690,9 @@
       "source_file": "src/scores.js",
       "source_location": "L139",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores",
-      "target": "src_scores_pedirmundo",
-      "confidence_score": 1.0
+      "target": "src_scores_pedirmundo"
     },
     {
       "relation": "contains",
@@ -8730,9 +8730,9 @@
       "source_file": "src/scores.js",
       "source_location": "L79",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores",
-      "target": "src_scores_spancut",
-      "confidence_score": 1.0
+      "target": "src_scores_spancut"
     },
     {
       "relation": "contains",
@@ -8740,9 +8740,9 @@
       "source_file": "src/scores.js",
       "source_location": "L74",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores",
-      "target": "src_scores_spanday",
-      "confidence_score": 1.0
+      "target": "src_scores_spanday"
     },
     {
       "relation": "contains",
@@ -8750,9 +8750,9 @@
       "source_file": "src/scores.js",
       "source_location": "L73",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores",
-      "target": "src_scores_spaninstant",
-      "confidence_score": 1.0
+      "target": "src_scores_spaninstant"
     },
     {
       "relation": "contains",
@@ -8869,9 +8869,9 @@
       "source_file": "src/scores.js",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores",
-      "target": "src_util_monthkey",
-      "confidence_score": 1.0
+      "target": "src_util_monthkey"
     },
     {
       "relation": "imports",
@@ -8880,9 +8880,9 @@
       "source_file": "src/scores.js",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores",
-      "target": "src_util_startofmonth",
-      "confidence_score": 1.0
+      "target": "src_util_startofmonth"
     },
     {
       "relation": "imports",
@@ -8891,9 +8891,9 @@
       "source_file": "src/scores.js",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores",
-      "target": "src_util_startoftoday",
-      "confidence_score": 1.0
+      "target": "src_util_startoftoday"
     },
     {
       "relation": "calls",
@@ -8957,9 +8957,9 @@
       "source_file": "src/scores.js",
       "source_location": "L146",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores_pedirmundo",
-      "target": "src_scores_spaninstant",
-      "confidence_score": 1.0
+      "target": "src_scores_spaninstant"
     },
     {
       "relation": "calls",
@@ -8968,9 +8968,9 @@
       "source_file": "src/scores.js",
       "source_location": "L79",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores_spancut",
-      "target": "src_scores_spaninstant",
-      "confidence_score": 1.0
+      "target": "src_scores_spaninstant"
     },
     {
       "relation": "calls",
@@ -9001,9 +9001,9 @@
       "source_file": "src/scores.js",
       "source_location": "L112",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores_localdays",
-      "target": "src_scores_spanday",
-      "confidence_score": 1.0
+      "target": "src_scores_spanday"
     },
     {
       "relation": "calls",
@@ -9012,9 +9012,9 @@
       "source_file": "src/scores.js",
       "source_location": "L142",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores_pedirmundo",
-      "target": "src_scores_spanday",
-      "confidence_score": 1.0
+      "target": "src_scores_spanday"
     },
     {
       "relation": "calls",
@@ -9045,9 +9045,9 @@
       "source_file": "src/scores.js",
       "source_location": "L91",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores_localruns",
-      "target": "src_scores_spancut",
-      "confidence_score": 1.0
+      "target": "src_scores_spancut"
     },
     {
       "relation": "calls",
@@ -9056,9 +9056,9 @@
       "source_file": "src/scores.js",
       "source_location": "L162",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores_worldrows",
-      "target": "src_scores_notavacia",
-      "confidence_score": 1.0
+      "target": "src_scores_notavacia"
     },
     {
       "relation": "calls",
@@ -9078,9 +9078,9 @@
       "source_file": "src/scores.js",
       "source_location": "L141",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores_pedirmundo",
-      "target": "src_util_daykey",
-      "confidence_score": 1.0
+      "target": "src_util_daykey"
     },
     {
       "relation": "calls",
@@ -9089,9 +9089,9 @@
       "source_file": "src/scores.js",
       "source_location": "L152",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores_worldrows",
-      "target": "src_scores_pedirmundo",
-      "confidence_score": 1.0
+      "target": "src_scores_pedirmundo"
     },
     {
       "relation": "calls",
@@ -9960,9 +9960,9 @@
       "source_file": "src/util.js",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_util",
-      "target": "src_util_monthkey",
-      "confidence_score": 1.0
+      "target": "src_util_monthkey"
     },
     {
       "relation": "contains",
@@ -9970,9 +9970,9 @@
       "source_file": "src/util.js",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_util",
-      "target": "src_util_startofmonth",
-      "confidence_score": 1.0
+      "target": "src_util_startofmonth"
     },
     {
       "relation": "contains",
@@ -9980,9 +9980,9 @@
       "source_file": "src/util.js",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_util",
-      "target": "src_util_startoftoday",
-      "confidence_score": 1.0
+      "target": "src_util_startoftoday"
     },
     {
       "relation": "calls",
@@ -10002,9 +10002,9 @@
       "source_file": "src/util.js",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_util_monthkey",
-      "target": "src_util_daykey",
-      "confidence_score": 1.0
+      "target": "src_util_daykey"
     },
     {
       "relation": "contains",
@@ -12102,9 +12102,9 @@
       "source_file": "DATOS.md",
       "source_location": "L157",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "datos_3_en_el_servidor_supabase",
-      "target": "datos_y_por_tramos_de_tiempo_0006_periodos_sql",
-      "confidence_score": 1.0
+      "target": "datos_y_por_tramos_de_tiempo_0006_periodos_sql"
     },
     {
       "relation": "contains",
@@ -12168,5 +12168,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "51c47c11baf3f60b5b2c36a318db96079d97437b"
+  "built_at_commit": "62714da36f6ff86e53e5df3fcb4aee5e84a751ba"
 }
