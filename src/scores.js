@@ -60,9 +60,33 @@ export const ptsText = p => Number(p || 0).toLocaleString();
 /* «2026-08-12» → «12 ago», que es como se lee un día del calendario.
    Lo traduce el navegador y así no hay doce nombres de mes por idioma
    en el diccionario.                                                */
+const fechaCorta = d => d.toLocaleDateString(lang, { day:"2-digit", month:"short" });
 export const dayText = iso => {
   const [y, m, d] = String(iso).split("-").map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString(lang, { day:"2-digit", month:"short" });
+  return fechaCorta(new Date(y, m - 1, d));
+};
+
+/* Cuándo se jugó una partida, para la columna en la que la tabla del
+   mundo pone el nombre.
+
+   Ahí, en tu propia tabla, el nombre era el tuyo cien veces seguidas:
+   no distinguía una fila de otra, que es justo lo que esa columna
+   tiene que hacer. El reto diario ya lo había resuelto poniendo la
+   fecha, y aquí vale el mismo razonamiento — sólo que una tarde da
+   para varias partidas y la fecha sola las volvería a igualar. Por
+   eso las de hoy llevan la hora: pasado el día, lo que se recuerda
+   es qué día fue, no que fueran las siete y media.
+
+   Las marcas de versiones que no apuntaban la hora se quedan sin
+   nada que decir, y lo dicen.                                       */
+export const runWhen = ts => {
+  if (!Number.isFinite(ts) || ts <= 0) return "—";
+  const d = new Date(ts), hoy = new Date();
+  const mismoDia = d.getFullYear() === hoy.getFullYear()
+                && d.getMonth()    === hoy.getMonth()
+                && d.getDate()     === hoy.getDate();
+  return mismoDia ? d.toLocaleTimeString(lang, { hour:"2-digit", minute:"2-digit" })
+                  : fechaCorta(d);
 };
 
 /* ── desde cuándo ─────────────────────────────────────────────────
@@ -94,7 +118,7 @@ export function localRuns(board, max, mark, span){
     .slice(0, max)
     .map((r, i) => ({
       r: String(i+1).padStart(2,"0"),
-      n: r.n,
+      n: runWhen(r.ts),
       l: ptsText(r.pts),
       a: levelText(r.lv),
       me: !!mark && r.ts === mark
@@ -230,7 +254,7 @@ export function textoPuesto(p){
 
 /* la tabla que se pinta al terminar una partida libre */
 export function drawTable(el, max, mark, tl){
-  drawRows(el, localRuns(freeBoard(tl), max, mark), "", cabecera("colName"));
+  drawRows(el, localRuns(freeBoard(tl), max, mark), "", cabecera("colWhen"));
 }
 
 /* La portada llevaba aquí tu mejor marca, junto al botón que abre las

@@ -61,7 +61,7 @@ const { S, $ }                            = await import("../src/state.js");
 const { start, doCut, gameOver, saveMark, goHome } = await import("../src/game.js");
 const { DB, DAILY, qualifies }            = await import("../src/storage.js");
 const { CUT, cutPoints, freeBoard }       = await import("../src/scoring.js");
-const { porDelante, inSpan, spanCut, localDays, localRuns } = await import("../src/scores.js");
+const { porDelante, inSpan, spanCut, localDays, localRuns, runWhen } = await import("../src/scores.js");
 const { normalize, evaluate, bisector }   = await import("../src/geometry.js");
 const { SHAPES }                          = await import("../src/shapes.js");
 const { setRNG, mulberry32 }              = await import("../src/rng.js");
@@ -304,9 +304,12 @@ await step("la pantalla de clasificaciones", async () => {
   if (!cab) throw new Error("la tabla no lleva cabecera");
   if (!/Día/.test(cab.textContent) || !/Puntos/.test(cab.textContent))
     throw new Error("la cabecera no nombra las columnas: " + cab.textContent);
+  /* en tu tabla la segunda columna es cuándo jugaste, no quién eres:
+     el nombre sería el tuyo en todas las filas                      */
   S.board = "free-3"; await paintScores();
-  if (!/Jugador/.test($("tbl-all").querySelector("li.head").textContent))
-    throw new Error("el juego libre no nombra la columna del nombre");
+  const cabLibre = $("tbl-all").querySelector("li.head").textContent;
+  if (!/Cuándo/.test(cabLibre)) throw new Error("el juego libre no nombra la columna: " + cabLibre);
+  if (/Jugador/.test(cabLibre)) throw new Error("tu propia tabla sigue titulando «Jugador»");
   if ($("tbl-all").textContent.includes("LENTO")) throw new Error("la de 3 s enseña marcas de ∞");
 });
 
@@ -408,6 +411,22 @@ await step("cada tramo cabe en el siguiente", () => {
   if (!(libres("today") <= libres("month") && libres("month") <= libres("all")))
     throw new Error("las partidas libres no encajan: " + [libres("today"), libres("month"), libres("all")]);
   if (!dias("today")) throw new Error("se acaba de jugar el reto y hoy sale vacío");
+});
+
+/* En tu propia tabla la segunda columna era tu nombre repetido cien
+   veces, que no distingue una fila de otra. Ahora dice cuándo se jugó
+   cada partida: la hora si es de hoy, el día si no.                 */
+await step("en tu tabla, la columna dice cuándo y no quién", () => {
+  const ahora = Date.now();
+  const deHoy = runWhen(ahora), deOtroDia = runWhen(ahora - 30*3600*1000);
+  if (!/\d/.test(deHoy)) throw new Error("una partida de hoy no dice la hora: " + deHoy);
+  if (deHoy === deOtroDia) throw new Error("hoy y otro día se leen igual: " + deHoy);
+  if (runWhen(undefined) !== "—") throw new Error("una marca sin hora se inventa una fecha");
+  if (runWhen(0) !== "—") throw new Error("el instante cero pasa por fecha buena");
+
+  const fila = localRuns("free-3", 100, null, "all")[0];
+  if (!fila) throw new Error("la sonda no tiene ninguna partida de 3 s");
+  if (fila.n === ME.name()) throw new Error("la tabla sigue enseñando el nombre: " + fila.n);
 });
 
 /* El mundo por tramos son cuatro funciones nuevas en Supabase. Si

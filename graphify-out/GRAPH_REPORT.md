@@ -1,16 +1,16 @@
 # Graph Report - cuthalf  (2026-08-14)
 
 ## Corpus Check
-- 46 files · ~37,988 words
+- 46 files · ~38,447 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 308 nodes · 852 edges · 13 communities (11 shown, 2 thin omitted)
+- 310 nodes · 856 edges · 13 communities (11 shown, 2 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5d776c5d`
+- Built from commit: `47bc0d62`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -60,22 +60,22 @@
 
 ### Community 0 - "Community 0"
 Cohesion: 0.08
-Nodes (64): finishTutor(), goHome(), startTutor(), tutorChrome(), tutorStep(), L, setLang(), T() (+56 more)
+Nodes (66): finishTutor(), goHome(), tutorChrome(), L, setLang(), T(), savedTheme, applyLang() (+58 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.11
-Nodes (38): CONFIG, levelConfig(), STAGES, TUTOR, gameOver(), guardarMarca(), newLevel(), paintOver() (+30 more)
+Nodes (39): CONFIG, levelConfig(), STAGES, TUTOR, gameOver(), guardarMarca(), newLevel(), paintOver() (+31 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.17
-Nodes (25): advance(), doCut(), timeUp(), area(), bisector(), centroid(), clipHalf(), evaluate() (+17 more)
+Nodes (25): advance(), doCut(), timeUp(), tutorStep(), area(), bisector(), centroid(), clipHalf() (+17 more)
 
 ### Community 3 - "Community 3"
 Cohesion: 0.07
 Nodes (46): CONFIG, levelConfig(), STAGES, TUTOR, area(), bisector(), centroid(), clipHalf() (+38 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.16
+Cohesion: 0.17
 Nodes (30): hayRemoto(), meDaily(), meDailySpan(), meFree(), meFreeSpan(), NET, pedir(), REMOTO (+22 more)
 
 ### Community 5 - "Community 5"
@@ -119,8 +119,8 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `STAGES`, `L`, `savedTheme` to the rest of the system?**
   _57 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.07942097026604068 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07515734912995187 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.11020408163265306 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.10823529411764705 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
   _Cohesion score 0.06892010535557506 - nodes in this community are weakly interconnected._

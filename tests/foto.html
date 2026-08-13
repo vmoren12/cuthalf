@@ -17,12 +17,19 @@ document.body.innerHTML = html.split("<body>")[1].split("</body>")[0];
 const dia = n => { const d = new Date(); d.setDate(d.getDate() - n);
   return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
 const hace = n => Date.now() - n*86400000;
+/* una hora concreta de hoy, no «hace tres horas»: a la una de la
+   madrugada eso caería en ayer y el retrato enseñaría una fecha
+   donde quiere enseñar una hora                                    */
+const hoyALas = (h, m) => { const d = new Date(); d.setHours(h, m, 0, 0); return d.getTime(); };
 localStorage.setItem("half.v1", JSON.stringify({
   v:3, name:"VICTOR", tutorDone:true,
   /* una marca vieja a propósito: es lo que hace salir el pie de la
      tabla, que es donde peor se ve si algo se apretuja               */
-  records:[{n:"VICTOR",lv:12,av:97.4,pts:1840,tl:0,ts:hace(0)},
-           {n:"VICTOR",lv:7,av:94.1,pts:610,tl:0,ts:1,old:1,est:1},
+  /* una de hoy, una de hace días y una sin hora: la columna «cuándo»
+     tiene que enseñar las tres formas que sabe decir                */
+  records:[{n:"VICTOR",lv:12,av:97.4,pts:1840,tl:0,ts:hoyALas(19,42)},
+           {n:"VICTOR",lv:9,av:95.8,pts:960,tl:0,ts:hace(4)},
+           {n:"VICTOR",lv:7,av:94.1,pts:610,tl:0,old:1,est:1},
            {n:"VICTOR",lv:4,av:91,pts:280,tl:3,ts:hace(2)}],
   days:{ [dia(0)]:{lv:9,av:96.2,pts:1120,tries:2}, [dia(3)]:{lv:6,av:93,pts:540,tries:1} }
 }));

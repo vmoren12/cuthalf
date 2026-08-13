@@ -159,7 +159,7 @@ export async function paintScores(){
       S.board === "free-0" && viejas.some(r => r.old) ? T("oldNote") : "",
       viejas.some(r => r.est) ? T("estNote") : ""
     ].filter(Boolean).join(" ") : notaVacia(span, "mine");
-    drawRows($("tbl-all"), filas, nota, cabecera("colName"));
+    drawRows($("tbl-all"), filas, nota, cabecera("colWhen"));
     return;
   }
 
