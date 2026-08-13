@@ -65,7 +65,8 @@ const { porDelante }                      = await import("../src/scores.js");
 const { normalize, evaluate, bisector }   = await import("../src/geometry.js");
 const { SHAPES }                          = await import("../src/shapes.js");
 const { setRNG, mulberry32 }              = await import("../src/rng.js");
-const { applyLang, openScores, paintScores, renameMe } = await import("../src/menu.js");
+const { applyLang, openScores, closeScores, paintScores, renameMe,
+        handleBack, backHeld }            = await import("../src/menu.js");
 const { shareText }                       = await import("../src/share.js");
 const { paint }                           = await import("../src/render.js");
 const { replay, toShapeSpace }            = await import("../src/replay.js");
@@ -354,7 +355,29 @@ await step("la tabla mundial del reto de hoy responde", async () => {
   await paintScores();
   const texto = $("tbl-all").textContent;
   if (/Cargando|Loading/.test(texto)) throw new Error("se queda cargando");
-  $("scr-scores").hidden = true;
+  closeScores();
+});
+
+/* En el móvil, con la app instalada, el gesto de atrás dentro de las
+   marcas o de los donativos cerraba la aplicación entera. Las dos se
+   abren desde la portada, donde atrás sí tiene que salir, así que
+   quien las abre es quien tiene que retener el gesto.               */
+await step("atrás, desde las marcas y los donativos, vuelve a la portada", () => {
+  goHome();
+  if (backHeld()) throw new Error("en la portada, atrás tiene que salir de la app");
+
+  openScores();
+  if (!backHeld()) throw new Error("las marcas no retienen atrás: cerraría la app");
+  handleBack();
+  if (!$("scr-scores").hidden) throw new Error("atrás no cierra las marcas");
+  if ($("scr-intro").hidden) throw new Error("atrás no deja la portada a la vista");
+  if (backHeld()) throw new Error("ya en la portada, atrás sigue retenido");
+
+  $("go-donate").click();
+  if (!backHeld()) throw new Error("los donativos no retienen atrás: cerraría la app");
+  handleBack();
+  if (!$("scr-donate").hidden) throw new Error("atrás no cierra los donativos");
+  if (backHeld()) throw new Error("ya en la portada, atrás sigue retenido");
 });
 
 await step("la taza lleva a los donativos, y avisa de que aún no", () => {

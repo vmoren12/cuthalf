@@ -138,10 +138,18 @@ export async function paintScores(){
    contesta el servidor                                              */
 let peticion = 0;
 
+/* Las dos pantallas que se abren desde la portada. Se abren y se
+   cierran por aquí —y no soltando el `hidden` donde toque— porque al
+   taparla hay algo a lo que volver, y el gesto de atrás tiene que
+   enterarse: si no, atrás cierra la aplicación entera.             */
 export function openScores(){
   drawBoards(); drawScope(); paintScores();
   $("scr-scores").hidden = false;
+  syncBack();
 }
+export function closeScores(){ $("scr-scores").hidden = true; syncBack(); }
+export function openDonate(){ $("scr-donate").hidden = false; syncBack(); }
+export function closeDonate(){ $("scr-donate").hidden = true; syncBack(); }
 
 /* El nombre se puede cambiar cuando se quiera: la próxima partida que
    suba lo lleva, y el servidor actualiza el de todas tus marcas —eres
@@ -237,9 +245,9 @@ export async function promptInstall(){
 
 $("close-run").addEventListener("click", quitRun);
 $("open-scores").addEventListener("click", openScores);
-$("scores-close").addEventListener("click", () => { $("scr-scores").hidden = true; });
-$("go-donate").addEventListener("click", () => { $("scr-donate").hidden = false; });
-$("donate-close").addEventListener("click", () => { $("scr-donate").hidden = true; });
+$("scores-close").addEventListener("click", closeScores);
+$("go-donate").addEventListener("click", openDonate);
+$("donate-close").addEventListener("click", closeDonate);
 $("rename").addEventListener("click", renameMe);
 $("theme-intro").addEventListener("click", () => setTheme(!isDark(), true));
 $("install-intro").addEventListener("click", promptInstall);
@@ -261,8 +269,8 @@ addEventListener("keydown", e => {
      recogería el mismo Escape y lo volvería a atender por su cuenta   */
   if (e.key === "Escape"){
     if (!$("scr-ask").hidden) closeAsk(false);
-    else if (!$("scr-donate").hidden) $("scr-donate").hidden = true;
-    else if (!$("scr-scores").hidden) $("scr-scores").hidden = true;
+    else if (!$("scr-donate").hidden) closeDonate();
+    else if (!$("scr-scores").hidden) closeScores();
     else if (S.mode === "tutor" && S.phase !== "intro") finishTutor(false);
     else return;                      // sin overlay: que lo recoja quien toque
     e.preventDefault();
@@ -332,14 +340,33 @@ addEventListener("popstate", () => {
   handleBack();
 });
 
+/* ¿Queda algo a lo que volver? La trampa se pone cuando lo hay y se
+   quita cuando no, en vez de ponerla al empezar la partida y quitarla
+   al llegar a la portada: así también la sostienen las pantallas que
+   se abren *desde* la portada —las marcas y las donaciones—, que si no
+   quedan sin ella y el gesto de atrás cierra la aplicación.        */
+export function hayVuelta(){
+  return !$("scr-ask").hidden
+      || !$("scr-donate").hidden
+      || !$("scr-scores").hidden
+      || S.mode === "tutor"
+      || S.phase !== "intro";
+}
+export function syncBack(){ hayVuelta() ? armBack() : disarmBack(); }
+/* si el gesto está retenido —o lo estará en cuanto aterrice el viaje
+   en vuelo del plan B, que para el caso es lo mismo               */
+export const backHeld = () => !!closeWatch || backArmed || backWanted;
+
 export function handleBack(){
-  /* se repone antes de actuar: si el gesto acaba en «cancelar», el
-     siguiente atrás tiene que seguir encontrando la trampa puesta   */
-  armBack();
-  if (!$("scr-ask").hidden){ closeAsk(false); return; }
-  if (!$("scr-donate").hidden){ $("scr-donate").hidden = true; return; }
-  if (!$("scr-scores").hidden){ $("scr-scores").hidden = true; return; }
-  if (S.mode === "tutor"){ finishTutor(false); return; }
-  if (S.phase === "play" || S.phase === "result" || S.pause){ quitRun(); return; }
-  goHome();                                    // p. ej. desde el final de partida
+  if (!$("scr-ask").hidden) closeAsk(false);
+  else if (!$("scr-donate").hidden) closeDonate();
+  else if (!$("scr-scores").hidden) closeScores();
+  else if (S.mode === "tutor") finishTutor(false);
+  else if (S.phase === "play" || S.phase === "result" || S.pause) quitRun();
+  else goHome();                               // p. ej. desde el final de partida
+  /* y se repone al terminar, no antes: si el gesto acaba en
+     «cancelar» —quitRun deja la pregunta abierta— el siguiente atrás
+     tiene que encontrar la trampa puesta, y si acaba en la portada,
+     quitada. Preguntarlo después es lo que distingue los dos casos. */
+  syncBack();
 }
