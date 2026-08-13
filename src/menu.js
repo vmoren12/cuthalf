@@ -7,7 +7,7 @@ import { T, lang, setLang } from "./i18n.js";
 import { cabecera, drawRows, inSpan, localDays, localRuns, notaVacia, spanCut, worldRows } from "./scores.js";
 import { finishTutor, goHome, paintOver, saveMark, start, startTutor, subirPartida } from "./game.js";
 import { shareCard, toast } from "./share.js";
-import { BOARDS, boardTime } from "./scoring.js";
+import { BOARDS, boardTime, freeBoard } from "./scoring.js";
 import { ME } from "./player.js";
 
 /* Preguntar algo con la cara del juego, no con la del navegador.
@@ -283,6 +283,18 @@ export async function promptInstall(){
 
 $("close-run").addEventListener("click", quitRun);
 $("open-scores").addEventListener("click", openScores);
+/* El de la pantalla de fin, que sale cuando la marca ya ha entrado.
+   Abre la misma pantalla, encima del resumen y sin perderlo, pero
+   colocada en la tabla del mundo a la que acaba de subir y no en la
+   última que se estuviera mirando: es la que contesta a lo que se
+   acaba de hacer. Se recuerda igual que si se hubieran pulsado los
+   dos selectores, porque para el caso es lo mismo.                 */
+$("over-scores").addEventListener("click", () => {
+  const b = S.mode === "daily" ? "daily" : freeBoard(S.score ? S.score.tl : 0);
+  S.board = b;       DB.set("board", b);
+  S.scope = "world"; DB.set("scope", "world");
+  openScores();
+});
 $("scores-close").addEventListener("click", closeScores);
 $("go-donate").addEventListener("click", openDonate);
 $("donate-close").addEventListener("click", closeDonate);

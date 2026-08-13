@@ -1,16 +1,16 @@
 # Graph Report - cuthalf  (2026-08-14)
 
 ## Corpus Check
-- 46 files · ~37,594 words
+- 46 files · ~37,988 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 308 nodes · 850 edges · 13 communities (11 shown, 2 thin omitted)
+- 308 nodes · 852 edges · 13 communities (11 shown, 2 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `62714da3`
+- Built from commit: `5d776c5d`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -31,7 +31,7 @@
 
 ## God Nodes (most connected - your core abstractions)
 1. `$()` - 56 edges
-2. `T()` - 31 edges
+2. `T()` - 32 edges
 3. `paintOver()` - 16 edges
 4. `start()` - 14 edges
 5. `paintScores()` - 14 edges
@@ -39,7 +39,7 @@
 7. `pedirMundo()` - 13 edges
 8. `worldRows()` - 13 edges
 9. `applyLang()` - 12 edges
-10. `enviarPartida()` - 12 edges
+10. `freeBoard()` - 12 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `partidaPerfecta()` --calls--> `bisector()`  [EXTRACTED]
@@ -111,7 +111,7 @@ Nodes (10): Al desplegar, Al empezar una sesión, Al terminar cualquier cambio, 
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `$()` connect `Community 0` to `Community 1`, `Community 2`, `Community 4`?**
-  _High betweenness centrality (0.060) - this node is a cross-community bridge._
+  _High betweenness centrality (0.059) - this node is a cross-community bridge._
 - **Why does `T()` connect `Community 0` to `Community 1`, `Community 2`, `Community 4`?**
   _High betweenness centrality (0.020) - this node is a cross-community bridge._
 - **Why does `evaluate()` connect `Community 2` to `Community 1`?**

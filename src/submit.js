@@ -11,9 +11,7 @@
 import { $, S } from "./state.js";
 import { T } from "./i18n.js";
 import { ME } from "./player.js";
-import { meDaily, meFree, runSubmit } from "./net.js";
-import { freeBoard } from "./scoring.js";
-import { dayKey } from "./util.js";
+import { runSubmit } from "./net.js";
 
 /* cómo va el envío de la partida que se acaba de terminar */
 export const ENVIO = { estado: "", texto: "" };
@@ -21,17 +19,19 @@ export const ENVIO = { estado: "", texto: "" };
 /* La nota de debajo la comparten dos cosas: lo que ha pasado con la
    partida —que lo escribe la pantalla de fin— y lo que pasa con el
    envío. Mientras el envío tenga algo que contar, manda él; cuando no
-   hay envío en marcha ni acaba de terminar uno, no se toca.        */
+   hay envío en marcha ni acaba de terminar uno, no se toca.
+
+   Al terminar bien salen dos cosas: que ha entrado, y el camino a la
+   tabla donde ha entrado. El texto de «hecho» se resuelve al pintar y
+   no se guarda, que así el cambio de idioma también lo alcanza.    */
 function pintar(){
-  const fila = $("world-row"), nota = $("entry-note");
-  if (ENVIO.estado === "hecho"){
-    fila.hidden = false;
-    $("world-pos").textContent = ENVIO.texto;
-    nota.hidden = true;                 // el puesto ya lo cuenta todo
-  } else {
-    fila.hidden = true;
-  }
-  if (ENVIO.estado === "enviando" || ENVIO.estado === "fallo" || ENVIO.estado === "sin-red"){
+  const nota = $("entry-note"), verMarcas = $("over-scores");
+  const hecho = ENVIO.estado === "hecho";
+  verMarcas.hidden = !hecho;
+  if (hecho){
+    nota.hidden = false;
+    nota.textContent = T("sent");
+  } else if (ENVIO.estado === "enviando" || ENVIO.estado === "fallo" || ENVIO.estado === "sin-red"){
     nota.hidden = false;
     nota.textContent = ENVIO.texto;
   }
@@ -39,8 +39,8 @@ function pintar(){
 
 export function limpiarEnvio(){
   ENVIO.estado = ""; ENVIO.texto = "";
-  const fila = $("world-row");
-  if (fila) fila.hidden = true;
+  const verMarcas = $("over-scores");
+  if (verMarcas) verMarcas.hidden = true;
 }
 
 export async function enviarPartida(){
@@ -68,14 +68,12 @@ export async function enviarPartida(){
   if (!r){ S.enviada = false; ENVIO.estado = "sin-red"; ENVIO.texto = T("offline"); pintar(); return; }
   if (r.error){ ENVIO.estado = "fallo"; ENVIO.texto = T("notSent") + " · " + r.error; pintar(); return; }
 
-  /* ya está dentro: ahora se pregunta en qué puesto ha quedado */
-  const puesto = S.mode === "daily"
-    ? await meDaily(ME.id(), dayKey())
-    : await meFree(ME.id(), freeBoard(S.score ? S.score.tl : 0));
-
-  const fila = Array.isArray(puesto) ? puesto[0] : null;
-  ENVIO.estado = "hecho";
-  ENVIO.texto  = fila ? T("rankOf")(fila.pos, fila.total) : "—";
+  /* Ya está dentro. Aquí se preguntaba además en qué puesto había
+     quedado, para enseñarlo: una cifra suelta que no llevaba a
+     ninguna parte. Ahora se ofrece la tabla entera, donde el puesto
+     se ve en su sitio y con quién tienes delante — y es una petición
+     menos.                                                          */
+  ENVIO.estado = "hecho"; ENVIO.texto = "";
   pintar();
 }
 

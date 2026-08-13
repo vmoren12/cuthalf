@@ -92,7 +92,6 @@
        donde presumir tiene sentido. -->
   <div class="stats">
     <div class="stat"><span class="lbl" data-t="avg">Precisión media</span><b class="val" id="s-avg">—</b></div>
-    <div class="stat" id="world-row" hidden><span class="lbl" data-t="world">Puesto mundial</span><b class="val" id="world-pos">—</b></div>
   </div>
 
   <p class="record" id="rec-badge" data-t="newRecord" hidden>¡Nuevo récord!</p>
@@ -114,6 +113,11 @@
     <button class="btn btn--solid" id="keep-up" data-t="keepUp">Subir a la clasificación</button>
   </div>
   <p class="note" id="entry-note" hidden></p>
+  <!-- Aparece justo donde estaba el botón de subir y en cuanto la
+       marca ha entrado: lo que se quiere ver después de publicar es
+       la tabla en la que acabas de meterte. Antes salía aquí el
+       puesto mundial, una cifra que no llevaba a ninguna parte. -->
+  <button class="btn btn--solid" id="over-scores" data-t="scores" hidden>Mejores marcas</button>
 
   <ol class="tbl" id="tbl-over"></ol>
   <button class="btn" id="again" data-t="again">Volver a empezar</button>

@@ -338,8 +338,25 @@ await step("una partida sube a la clasificación mundial", async () => {
     const directo = await runSubmit({ ticket: S.ticket, cuts: S.trace, player: ME.credenciales(), name: ME.name() });
     throw new Error("no ha subido · " + ENVIO.estado + " · net=" + NET.vivo + "/" + NET.ultimoError + " · directo=" + JSON.stringify(directo));
   }
-  if ($("world-row").hidden) throw new Error("no enseña el puesto mundial");
-  if (!/\d/.test($("world-pos").textContent)) throw new Error("puesto sin número: " + $("world-pos").textContent);
+  /* Al subir ya no sale el puesto —una cifra suelta que no llevaba a
+     ninguna parte— sino el camino a la tabla, y la confirmación de
+     que ha entrado: sin ninguna de las dos, pulsar el botón parecería
+     no haber hecho nada.                                            */
+  if ($("over-scores").hidden) throw new Error("no ofrece ver las marcas después de subir");
+  if ($("entry-note").hidden || !$("entry-note").textContent.trim())
+    throw new Error("no dice que la marca haya subido");
+  if (!$("keep-up").closest(".keep").hidden) throw new Error("sigue ofreciendo subir lo ya subido");
+});
+
+/* y que lleve a la tabla donde acaba de entrar, no a la última que se
+   estuviera mirando */
+await step("de ahí se va a la tabla en la que acaba de entrar", async () => {
+  S.board = "daily"; S.scope = "mine";       // dejarlo en otra cosa a propósito
+  $("over-scores").click();
+  if ($("scr-scores").hidden) throw new Error("el botón no abre las marcas");
+  if (S.board !== freeBoard(S.score.tl)) throw new Error("abre en la tabla equivocada: " + S.board);
+  if (S.scope !== "world") throw new Error("abre en «este aparato», y la marca ha subido al mundo");
+  closeScores();
 });
 
 await step("y aparece en la tabla mundial", async () => {
