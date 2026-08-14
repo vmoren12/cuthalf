@@ -1,16 +1,16 @@
 # Graph Report - cuthalf  (2026-08-14)
 
 ## Corpus Check
-- 46 files · ~38,447 words
+- 46 files · ~38,722 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 310 nodes · 856 edges · 13 communities (11 shown, 2 thin omitted)
+- 310 nodes · 857 edges · 13 communities (11 shown, 2 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `47bc0d62`
+- Built from commit: `4ea930d9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -33,7 +33,7 @@
 1. `$()` - 56 edges
 2. `T()` - 32 edges
 3. `paintOver()` - 16 edges
-4. `start()` - 14 edges
+4. `start()` - 15 edges
 5. `paintScores()` - 14 edges
 6. `paint()` - 13 edges
 7. `pedirMundo()` - 13 edges

@@ -362,6 +362,24 @@ await step("de ahí se va a la tabla en la que acaba de entrar", async () => {
   closeScores();
 });
 
+/* Al subir, el estado del envío se quedaba puesto. La partida
+   siguiente heredaba el «marca subida» de ésta —una frase falsa sobre
+   una partida que nadie había mandado— y, peor, se quedaba sin el
+   botón de subir: paintOver retira la oferta mientras haya un envío
+   del que hablar. Empezar una partida borra todo rastro de la
+   anterior, y éste era el único que se le escapaba.                 */
+await step("la partida siguiente vuelve a ofrecer subir", async () => {
+  if (ENVIO.estado !== "hecho") throw new Error("esta prueba tiene que venir de una subida");
+  await start("free");
+  if (ENVIO.estado !== "") throw new Error("el envío anterior sobrevive a empezar otra partida: " + ENVIO.estado);
+  frame(); cortePerfecto(0.3); terminarNivel();
+  gameOver();
+  if ($("keep").hidden) throw new Error("la partida nueva no ofrece subir");
+  if (!$("over-scores").hidden) throw new Error("sigue el botón de marcas de la partida anterior");
+  if ($("entry-note").textContent.trim() && !$("entry-note").hidden)
+    throw new Error("arrastra la nota de la anterior: " + $("entry-note").textContent);
+});
+
 await step("y aparece en la tabla mundial", async () => {
   S.board = "free-0"; S.scope = "world";
   openScores();

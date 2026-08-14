@@ -399,8 +399,14 @@ export async function start(mode, seed){
   /* El vale de la partida. Si el servidor contesta, la semilla es la
      suya y al terminar se podrá comprobar lo que se ha jugado. Si no
      contesta —o no hay red— se juega igual con la semilla de casa,
-     sin subir a la clasificación: nadie se queda sin jugar por eso. */
-  S.ticket = null; S.enviada = false;
+     sin subir a la clasificación: nadie se queda sin jugar por eso.
+
+     Y del envío anterior no puede quedar nada. `S.enviada` dice que
+     ésta no se ha mandado, pero quien decide si la pantalla de fin
+     ofrece subir es ENVIO, que vive en su módulo y sólo lo limpiaba
+     la portada: sin esto, repetir el reto heredaba el «marca subida»
+     de la anterior y se quedaba sin botón con el que desmentirlo.  */
+  S.ticket = null; S.enviada = false; limpiarEnvio();
   const vale = await runStart(S.mode === "daily" ? "daily" : freeBoard(S.runTimer), dayKey());
   if (vale && !vale.error && typeof vale.seed === "number"){
     seed = vale.seed;

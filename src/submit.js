@@ -37,10 +37,15 @@ function pintar(){
   }
 }
 
+/* Deshace lo que dejó pintado, las dos cosas: si sólo se retirara el
+   botón, la frase de que la marca subió seguiría en pantalla hasta el
+   siguiente repintado — y entre empezar una partida y que el servidor
+   dé el vale hay un viaje de red por delante.                       */
 export function limpiarEnvio(){
   ENVIO.estado = ""; ENVIO.texto = "";
-  const verMarcas = $("over-scores");
+  const verMarcas = $("over-scores"), nota = $("entry-note");
   if (verMarcas) verMarcas.hidden = true;
+  if (nota) nota.hidden = true;
 }
 
 export async function enviarPartida(){

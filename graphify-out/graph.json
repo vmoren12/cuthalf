@@ -1747,7 +1747,7 @@
       "label": "limpiarEnvio()",
       "file_type": "code",
       "source_file": "src/submit.js",
-      "source_location": "L40",
+      "source_location": "L44",
       "_origin": "ast",
       "id": "src_submit_limpiarenvio",
       "community": 0,
@@ -1757,7 +1757,7 @@
       "label": "enviarPartida()",
       "file_type": "code",
       "source_file": "src/submit.js",
-      "source_location": "L46",
+      "source_location": "L51",
       "_origin": "ast",
       "id": "src_submit_enviarpartida",
       "community": 1,
@@ -1767,7 +1767,7 @@
       "label": "repintarEnvio()",
       "file_type": "code",
       "source_file": "src/submit.js",
-      "source_location": "L82",
+      "source_location": "L87",
       "_origin": "ast",
       "id": "src_submit_repintarenvio",
       "community": 1,
@@ -5010,6 +5010,17 @@
       "weight": 1.0,
       "source": "src_game_start",
       "target": "src_state"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/game.js",
+      "source_location": "L409",
+      "weight": 1.0,
+      "source": "src_game_start",
+      "target": "src_submit_limpiarenvio"
     },
     {
       "relation": "calls",
@@ -8682,9 +8693,9 @@
       "source_file": "src/scores.js",
       "source_location": "L63",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores",
-      "target": "src_scores_fechacorta",
-      "confidence_score": 1.0
+      "target": "src_scores_fechacorta"
     },
     {
       "relation": "contains",
@@ -8782,9 +8793,9 @@
       "source_file": "src/scores.js",
       "source_location": "L82",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores",
-      "target": "src_scores_runwhen",
-      "confidence_score": 1.0
+      "target": "src_scores_runwhen"
     },
     {
       "relation": "contains",
@@ -9019,9 +9030,9 @@
       "source_file": "src/scores.js",
       "source_location": "L66",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores_daytext",
-      "target": "src_scores_fechacorta",
-      "confidence_score": 1.0
+      "target": "src_scores_fechacorta"
     },
     {
       "relation": "calls",
@@ -9030,9 +9041,9 @@
       "source_file": "src/scores.js",
       "source_location": "L89",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_scores_runwhen",
-      "target": "src_scores_fechacorta",
-      "confidence_score": 1.0
+      "target": "src_scores_fechacorta"
     },
     {
       "relation": "calls",
@@ -12252,5 +12263,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "47bc0d62fe116084e2d1fc412662fe49d8bd3508"
+  "built_at_commit": "4ea930d9843d80c32474d6ef03e5158088ac5a47"
 }
