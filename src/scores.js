@@ -185,7 +185,15 @@ export async function worldRows(board, span){
   const rows = lista.map(fila);
   if (!rows.length) return { rows: [], nota: notaVacia(span, "span") || T("worldEmpty") };
 
-  /* ¿estás en la lista? Si no, tu puesto va al final */
+  /* ¿estás en la lista? Si no, tu puesto va al final.
+
+     Tu nombre ahí sale del aparato porque `free_me` y `daily_me`
+     devuelven puesto y puntos, no nombre — y pedirlo obligaría a
+     tocarlas para repetir el dato que ya tienes en la mano. Los dos
+     coinciden: renombrarse avisa al servidor al momento
+     (`renameMe()`). Si aquella llamada no llegó, durante un rato te
+     verás con el nombre nuevo aquí y con el viejo en las filas de
+     arriba; es justo lo que pasa, y se avisa al cambiarlo.          */
   const yoDentro = rows.some(r => r.me);
   const m = Array.isArray(mio) ? mio[0] : null;
   if (!yoDentro && m)

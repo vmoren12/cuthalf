@@ -104,6 +104,16 @@ puede cambiarse desde la pantalla de clasificaciones. No es único: dos
 jugadores pueden llamarse igual, y lo que distingue a uno de otro es
 el secreto, no el nombre.
 
+Es una columna de `players`, o sea **una fila por jugador y no una por
+marca**: cambiarlo cambia a la vez todas tus marcas, en las cinco
+tablas y en los días del reto ya cerrados. Es a propósito —eres el
+mismo jugador con otra etiqueta— y la alternativa es peor: congelar el
+nombre en cada marca te dejaría con tres nombres distintos en tres días
+del mismo tramo, indistinguible de tres personas, y una errata sería
+para siempre, porque aquí no hay cuenta que recuperar. El cambio viaja
+al momento por `/run/name` (punto 4); si esa llamada no llega, el
+nombre se queda cambiado en el aparato y sube con la siguiente partida.
+
 ### `players`
 
 | Columna | Tipo | Notas |
@@ -194,8 +204,12 @@ resuelve comparando `day`, que va indexado.
 
 - El cliente **sólo lee** las clasificaciones (clave pública `anon`).
 - **Nadie escribe directamente.** Toda marca entra por la función del
-  servidor, que es la única con permiso: `submit_run` y
-  `ensure_player` tienen el `execute` retirado para `anon`.
+  servidor, que es la única con permiso: `submit_run`, `ensure_player`
+  y `rename_player` tienen el `execute` retirado para `anon`.
+- `rename_player` (`0007_renombrar.sql`) sólo cambia el nombre, y
+  **no crea a nadie**: si el jugador no está, contesta `nuevo` y no
+  toca nada. A la clasificación se entra jugando, así que no se pueden
+  apalabrar nombres sin jugar.
 - `player_secrets` y `runs` tienen RLS activada y **ninguna política**:
   existen, pero no enseñan nada a nadie.
 

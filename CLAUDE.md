@@ -144,8 +144,18 @@ dice que seguirías donde estás — el servidor se queda con la mejor de
 las dos, así que subir no te movería.
 
 **Nada se escribe desde el navegador.** La clave `anon` sólo lee.
-`submit_run` y `ensure_player` tienen el `execute` retirado para
-`anon`; la única forma de entrar en la clasificación es jugando.
+`submit_run`, `ensure_player` y `rename_player` tienen el `execute`
+retirado para `anon`; la única forma de entrar en la clasificación es
+jugando — y por eso `rename_player` renombra pero no crea jugadores.
+
+**El nombre es del jugador, no de la marca.** Vive en una columna de
+`players` y las clasificaciones lo leen con un join, así que cambiarlo
+alcanza a todas tus marcas y a los días del reto ya cerrados. Sin
+cuentas, la identidad es el secreto del aparato y el nombre sólo es la
+etiqueta: congelarlo por marca dejaría a uno con tres nombres en tres
+días del mismo tramo, y una errata sería para siempre. `renameMe()` en
+`src/menu.js` avisa al servidor al momento (`/run/name`); si no llega,
+el cambio se queda hecho aquí y sube con la siguiente partida.
 
 **Cinco tablas, no una.** Sin límite y con 3 s por figura no son el
 mismo juego. Cada marca guarda con qué reloj se hizo.

@@ -9,6 +9,7 @@ import { finishTutor, goHome, paintOver, saveMark, start, startTutor, subirParti
 import { shareCard, toast } from "./share.js";
 import { BOARDS, boardTime, freeBoard } from "./scoring.js";
 import { ME } from "./player.js";
+import { runRename } from "./net.js";
 
 /* Preguntar algo con la cara del juego, no con la del navegador.
 
@@ -189,9 +190,15 @@ export function closeScores(){ $("scr-scores").hidden = true; syncBack(); }
 export function openDonate(){ $("scr-donate").hidden = false; syncBack(); }
 export function closeDonate(){ $("scr-donate").hidden = true; syncBack(); }
 
-/* El nombre se puede cambiar cuando se quiera: la próxima partida que
-   suba lo lleva, y el servidor actualiza el de todas tus marcas —eres
-   el mismo jugador, sólo que con otro nombre.                       */
+/* El nombre se puede cambiar cuando se quiera, y el cambio alcanza a
+   todas tus marcas —eres el mismo jugador, sólo que con otro nombre—
+   porque las clasificaciones lo leen de `players` y allí hay una fila
+   por jugador, no una por partida.
+
+   Antes eso sólo ocurría al entregar la siguiente partida, que era el
+   único sitio donde se escribía el nombre en el servidor: se cambiaba
+   aquí, se decía «guardado» y en el mundo seguías llamándote como
+   antes hasta vete a saber cuándo. Ahora se avisa al momento.       */
 export async function renameMe(){
   const actual = DB.name();
   const nuevo = await ask(T("askName"), T("save"), actual);
@@ -200,7 +207,16 @@ export async function renameMe(){
   if (!limpio || limpio === actual) return;
   DB.set("name", limpio);
   drawScope(); paintScores();
-  toast(T("saved"));
+  toast(T("nameSaved"));
+
+  /* Y al mundo, que es donde se te ve. Si no llega —sin red, o el
+     servidor caído— el cambio de aquí se queda hecho igual: perderlo
+     por un túnel sería peor, y la próxima partida que suba lo lleva de
+     todas formas, porque `ensure_player` también escribe el nombre.
+     Lo único que hace falta es no dejar creer que ya está puesto.   */
+  const r = await runRename({ player: ME.credenciales(), name: limpio });
+  if (!r || r.error){ toast(T("nameLater")); return; }
+  paintScores();   // la tabla del mundo ya te llama de la otra forma
 }
 
 

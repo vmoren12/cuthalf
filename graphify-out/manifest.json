@@ -15,8 +15,8 @@
     "semantic_hash": ""
   },
   "src/i18n.js": {
-    "mtime": 1786664668.1650648,
-    "ast_hash": "80af18c567c11187e06721e77966a2c2",
+    "mtime": 1786740201.3458765,
+    "ast_hash": "b1f8373dc8e6bfe15a2e1b21ac6350a3",
     "semantic_hash": ""
   },
   "src/input.js": {
@@ -30,13 +30,13 @@
     "semantic_hash": ""
   },
   "src/menu.js": {
-    "mtime": 1786664661.7040868,
-    "ast_hash": "e3e7b8171d4d2db33a30352cadfc65b5",
+    "mtime": 1786740190.7707727,
+    "ast_hash": "a2a78ce089d2011d9c953a8a18a5d387",
     "semantic_hash": ""
   },
   "src/net.js": {
-    "mtime": 1786660813.196861,
-    "ast_hash": "aebb7de2859b2b136d0ac63fd052a34a",
+    "mtime": 1786740173.8774736,
+    "ast_hash": "4546a0f0d88bb4af845c78785a5e5649",
     "semantic_hash": ""
   },
   "src/player.js": {
@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   "src/pwa.js": {
-    "mtime": 1786666794.4843097,
-    "ast_hash": "82668968bfe5a1ab7903cf5eff1a546c",
+    "mtime": 1786740215.6232736,
+    "ast_hash": "304bfeb13f5bfe787ec9be5f87bd2a63",
     "semantic_hash": ""
   },
   "src/render.js": {
@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "src/scores.js": {
-    "mtime": 1786664660.0151384,
-    "ast_hash": "940250cb9a1e8bd41b4bfd07645f2391",
+    "mtime": 1786740210.334506,
+    "ast_hash": "672b3e443c595ccbb74fe59ef0c248ef",
     "semantic_hash": ""
   },
   "src/scoring.js": {
@@ -145,8 +145,8 @@
     "semantic_hash": ""
   },
   "supabase/functions/run/index.ts": {
-    "mtime": 1786483928.1628594,
-    "ast_hash": "0b2f733c0935cc38e163095455cf7170",
+    "mtime": 1786740167.6138294,
+    "ast_hash": "3c86a5056ecf53dc27838a53763d886e",
     "semantic_hash": ""
   },
   "supabase/migrations/20260811000001_tablas.sql": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "sw.js": {
-    "mtime": 1786666793.4387753,
-    "ast_hash": "ba34acf2b7f34f8be167afa4f3d321f9",
+    "mtime": 1786740214.5892477,
+    "ast_hash": "52e9fd494bb88e68c7f2208f6611865e",
     "semantic_hash": ""
   },
   "tests/serve.mjs": {
@@ -205,8 +205,8 @@
     "semantic_hash": ""
   },
   "DATOS.md": {
-    "mtime": 1786661415.4042654,
-    "ast_hash": "27be69fbe8f00e887d79f8a152ddc8d0",
+    "mtime": 1786740467.3114588,
+    "ast_hash": "8b8b7a07fbab18f4c967adddf8692545",
     "semantic_hash": ""
   },
   "README.md": {
@@ -245,8 +245,8 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1786661423.8555055,
-    "ast_hash": "ba91b120967151ec586c75eb3a9f877e",
+    "mtime": 1786740475.336491,
+    "ast_hash": "39734115cc5651f45120f69df1f218ec",
     "semantic_hash": ""
   },
   "supabase/migrations/20260812000004_puntos.sql": {
@@ -262,6 +262,11 @@
   "supabase/migrations/20260814000006_periodos.sql": {
     "mtime": 1786661481.9537644,
     "ast_hash": "5a6dcd9c682a50b45aa389d8feb203e3",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260814000007_renombrar.sql": {
+    "mtime": 1786740129.2250192,
+    "ast_hash": "76a618cb79440bfaf3be945eaece5791",
     "semantic_hash": ""
   }
 }

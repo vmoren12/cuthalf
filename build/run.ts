@@ -114,6 +114,19 @@ export const dayKey = (offset = 0) => {
 /* cada día tiene su propia regla de tiempo, sorteada por la fecha */
 export const dayTimer = key => CONFIG.dailyTimers[hashStr("t" + key) % CONFIG.dailyTimers.length];
 
+/* ── dónde empieza un tramo de la clasificación ───────────────────
+   «Hoy» y «este mes» son del reloj de quien juega, no del servidor.
+   El histórico del juego libre se guarda en UTC, y a la una de la
+   madrugada en Madrid el día de UTC todavía es el de ayer: preguntar
+   allí por «hoy» devolvería la tabla de otro día. Por eso el corte se
+   resuelve aquí, que es el único sitio que sabe en qué huso estamos,
+   y viaja como instante exacto.                                     */
+export const startOfToday = () => { const d = new Date(); d.setHours(0,0,0,0); return d.toISOString(); };
+export const startOfMonth = () => { const d = new Date(); d.setDate(1); d.setHours(0,0,0,0); return d.toISOString(); };
+/* el reto se juega por días de calendario y se guarda por fecha
+   suelta, así que su corte del mes es el día 1 y no un instante   */
+export const monthKey = () => dayKey().slice(0, 8) + "01";
+
 export const clamp = (v,a,b) => v < a ? a : v > b ? b : v;
 
 
@@ -520,13 +533,16 @@ export async function huella(secreto: string): Promise<string> {
 
 /* SPLITINHALF · la puerta de la clasificación mundial.
  *
- * Dos llamadas:
+ * Tres llamadas:
  *
  *   POST /run/start   { board, day? }
  *        → { seed, tl, ticket }          la semilla y el vale firmado
  *
  *   POST /run/submit  { ticket, cuts, player:{id,secret}, name }
  *        → { level, av, points, best }   lo que el servidor calcula
+ *
+ *   POST /run/name    { player:{id,secret}, name }
+ *        → { ok, nuevo }                 sólo cambiar de nombre
  *
  * La segunda no cree lo que le cuentan: vuelve a jugar la partida con
  * las mismas reglas que el navegador —los ficheros de _shared/core son
@@ -589,6 +605,13 @@ function limpiarNombre(n: unknown): string {
   return limpio || "—";
 }
 
+/* Quién dice ser, con la forma que se le dio: el identificador es
+   público —sale en la clasificación— y el secreto no sale del aparato.
+   Lo comprueban las dos llamadas que escriben, así que vive aquí.   */
+const jugadorValido = (id: unknown, secreto: unknown) =>
+  typeof id === "string" && /^[0-9a-f-]{36}$/i.test(id) &&
+  typeof secreto === "string" && secreto.length >= 20 && secreto.length <= 200;
+
 function cortesValidos(cuts: unknown): cuts is any[] {
   if (!Array.isArray(cuts) || cuts.length === 0 || cuts.length > MAX_CORTES) return false;
   return cuts.every(c => {
@@ -632,8 +655,7 @@ async function entregar(cuerpo: any, origen: string | null){
   if (!cortesValidos(cuerpo?.cuts)) return responder({ error: "cortes mal formados" }, 400, origen);
 
   const id = cuerpo?.player?.id, secreto = cuerpo?.player?.secret;
-  if (typeof id !== "string" || !/^[0-9a-f-]{36}$/i.test(id) ||
-      typeof secreto !== "string" || secreto.length < 20 || secreto.length > 200)
+  if (!jugadorValido(id, secreto))
     return responder({ error: "jugador mal identificado" }, 400, origen);
 
   /* Una partida lleva su tiempo: cada corte pide su gesto y su pausa.
@@ -650,7 +672,10 @@ async function entregar(cuerpo: any, origen: string | null){
     p_id: id, p_name: limpiarNombre(cuerpo?.name), p_hash: await huella(secreto)
   });
   if (ok.error)  return responder({ error: "no se ha podido registrar el jugador" }, 500, origen);
-  if (ok.data === false) return responder({ error: "ese nombre es de otro aparato" }, 403, origen);
+  /* lo que no cuadra es el identificador con su secreto, no el nombre:
+     los nombres se repiten sin problema, y decir «ese nombre es de otro
+     aparato» mandaba a probar otro, que tampoco iba a funcionar.     */
+  if (ok.data === false) return responder({ error: "este jugador es de otro aparato" }, 403, origen);
 
   const { data, error } = await db.rpc("submit_run", {
     p_player: id, p_board: vale.b, p_day: vale.d,
@@ -666,6 +691,30 @@ async function entregar(cuerpo: any, origen: string | null){
   if (!fila?.accepted) return responder({ error: fila?.reason || "rechazada" }, 429, origen);
 
   return responder({ level: r.level, av: r.av, points: r.points, best: fila.best }, 200, origen);
+}
+
+/* ── renombrar ─────────────────────────────────────────────────── */
+/* El nombre es del jugador, no de la partida: las clasificaciones lo
+   leen de `players`, así que cambiarlo cambia todas tus marcas a la
+   vez. Eso ya era así; lo que no había era manera de cambiarlo sin
+   entregar una partida, y quien se renombraba seguía saliendo con el
+   nombre viejo hasta que volvía a subir algo.
+
+   No crea a nadie: quien todavía no ha subido ninguna partida no está
+   en la clasificación, y de ahí vuelve un «nuevo» que para quien
+   pregunta no es un error — su nombre subirá con la primera.        */
+async function renombrar(cuerpo: any, origen: string | null){
+  const id = cuerpo?.player?.id, secreto = cuerpo?.player?.secret;
+  if (!jugadorValido(id, secreto))
+    return responder({ error: "jugador mal identificado" }, 400, origen);
+
+  const { data, error } = await db.rpc("rename_player", {
+    p_id: id, p_name: limpiarNombre(cuerpo?.name), p_hash: await huella(secreto)
+  });
+  if (error) return responder({ error: "no se ha podido cambiar el nombre" }, 500, origen);
+  if (data === "ajeno") return responder({ error: "este jugador es de otro aparato" }, 403, origen);
+
+  return responder({ ok: true, nuevo: data === "nuevo" }, 200, origen);
 }
 
 /* ── entrada ───────────────────────────────────────────────────── */
@@ -688,6 +737,7 @@ Deno.serve(async req => {
   try {
     if (camino === "start")  return await empezar(cuerpo, origen);
     if (camino === "submit") return await entregar(cuerpo, origen);
+    if (camino === "name")   return await renombrar(cuerpo, origen);
     return responder({ error: "no existe" }, 404, origen);
   } catch (e) {
     console.error(e);

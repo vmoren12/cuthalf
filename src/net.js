@@ -82,3 +82,8 @@ export const runStart = (board, day) => pedir("/functions/v1/run/start", { board
 /* Los cortes, al terminar. Lo que vuelve son las cuentas del
    servidor, que son las que valen.                                  */
 export const runSubmit = datos => pedir("/functions/v1/run/submit", datos, 15000);
+
+/* El nombre, cuando se cambia. Es del jugador y no de la partida —las
+   clasificaciones lo leen de `players`— así que no tiene por qué
+   esperar a la siguiente subida para que se vea.                    */
+export const runRename = datos => pedir("/functions/v1/run/name", datos);
