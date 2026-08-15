@@ -203,61 +203,88 @@ export async function worldRows(board, span){
   return { rows, nota: m ? T("rankOf")(m.pos, m.total) : "" };
 }
 
-/* ── qué puesto ocuparía esta partida ─────────────────────────────
-   Antes de subirla, para poder decidir con el número delante.
+/* ── qué puesto ocuparía esta partida, y si vale la pena subirla ───
+   Antes de subirla, para poder decidir con el número delante — y
+   para no ofrecer siquiera lo que no cambiaría nada.
 
-   Se cuenta aquí, con la tabla del mundo en la mano, y no se le
-   pregunta al servidor: haría falta una función nueva para algo que
-   sólo es contar cuántos van por delante de una cifra. Ahora todas
-   las tablas ordenan igual —por puntos— así que la cuenta es una, y
-   los empates los gana quien llegó antes, que nunca es una partida
-   que se acaba de terminar.
+   El puesto se cuenta aquí, con la tabla del mundo en la mano, y no
+   se le pregunta al servidor: haría falta una función nueva para algo
+   que sólo es contar cuántos van por delante de una cifra. Todas las
+   tablas ordenan igual —por puntos— así que la cuenta es una, y los
+   empates los gana quien llegó antes, que nunca es una partida que
+   se acaba de terminar.
 
-   Esto no sigue al selector de tramo de la pantalla de marcas, y es
-   a propósito: aquel filtra lo que se está mirando, pero una partida
-   se sube a la clasificación de siempre, que es donde se compite.
-   Decir «quedarías 3.º» contando sólo hoy sería mentir.
+   El puesto que se enseña es el de la tabla donde se compite: el reto
+   de hoy, o la de siempre en juego libre. No sigue al selector de
+   tramo de la pantalla de marcas — aquel filtra lo que se mira, no
+   dónde se compite, y decir «quedarías 3.º» contando sólo hoy sería
+   mentir.
 
-   Si tu marca de esa tabla ya era mejor, subir ésta no te mueve: el
-   servidor se queda con la mejor de las dos. Entonces se dice que
-   seguirías donde estás, que es la verdad y evita la sorpresa.      */
+   Pero la pregunta de si merece subirla es otra, y se responde con
+   otro dato: **tu mejor marca subida hoy**. En el reto las dos
+   preguntas coinciden, porque su clasificación es el día. En juego
+   libre no: los tramos «hoy» y «mes» de la pantalla de marcas salen
+   del histórico de partidas subidas (`free_span`), así que tu mejor
+   partida de hoy tiene una fila propia que mover aunque tu récord de
+   siempre, el de julio, siga siendo mayor. Comparar sólo contra la
+   tabla de siempre dejaría fuera del histórico justo las partidas que
+   esos dos tramos necesitan.
+
+   Y sólo se descarta con el dato en la mano. Si la consulta del día
+   no llegó, se ofrece: esconder el botón por una respuesta que no
+   vino sería perder la marca por un túnel.                          */
 export function porDelante(lista, yo, sc){
   /* tu propia fila no cuenta: la partida la sustituye, no se suma */
   return lista.filter(r => r.player_id !== yo && Number(r.points) >= sc.pts).length;
 }
 
 export async function puestoProyectado(board, sc){
-  const yo = ME.id(), dia = dayKey();
+  const yo = ME.id(), dia = dayKey(), esReto = board === "daily";
 
-  const [lista, mio] = board === "daily"
-    ? await Promise.all([worldDaily(dia, TOPE), meDaily(yo, dia)])
-    : await Promise.all([worldFree(board, TOPE), meFree(yo, board)]);
+  const [lista, mio, delDia] = await Promise.all(esReto
+    ? [worldDaily(dia, TOPE), meDaily(yo, dia), null]
+    : [worldFree(board, TOPE), meFree(yo, board), meFreeSpan(yo, board, startOfToday())]);
   if (!Array.isArray(lista)) return null;
 
-  const m = Array.isArray(mio) ? mio[0] : null;
-  if (m && sc.pts <= Number(m.points))
-    return { pos: Number(m.pos), total: Number(m.total), mejora: false };
+  const m   = Array.isArray(mio)    ? mio[0]    : null;
+  const hoy = Array.isArray(delDia) ? delDia[0] : null;
+
+  /* ¿te mueve de sitio en la tabla donde compites? */
+  const mejora = !m || sc.pts > Number(m.points);
+
+  /* ¿mueve alguna fila que se pueda mirar? En el reto es la misma
+     pregunta; en juego libre basta con ser tu mejor de hoy.        */
+  const sube = esReto ? mejora
+    : mejora || !Array.isArray(delDia) || !hoy || sc.pts > Number(hoy.points);
+
+  if (!mejora)
+    return { pos: Number(m.pos), total: Number(m.total), mejora: false, sube };
 
   const delante = porDelante(lista, yo, sc);
 
   /* si cae más allá de lo que se ha traído, no hay con qué contar */
-  if (delante >= lista.length && lista.length >= TOPE) return { fuera: TOPE };
+  if (delante >= lista.length && lista.length >= TOPE) return { fuera: TOPE, sube: true };
 
   /* el total sólo se sabe si ya estabas dentro —te lo dice el propio
      servidor— o si la tabla entera cabía en lo que se ha traído     */
   return {
     pos: delante + 1,
     total: m ? Number(m.total) : (lista.length < TOPE ? lista.length + 1 : 0),
-    mejora: true
+    mejora: true,
+    sube: true
   };
 }
 
-/* y cómo se cuenta eso en una línea */
+/* y cómo se cuenta eso en una línea. Tres cosas distintas que decir:
+   dónde quedarías, que esta partida es tu mejor de hoy aunque no
+   mueva la de siempre, o que no mueve nada — y en ese último caso la
+   línea se queda sola, porque el botón ya no está.                  */
 export function textoPuesto(p){
   if (!p) return "";
   if (p.fuera) return T("wouldRankFar")(p.fuera);
   if (!p.total) return T("wouldRankOnly")(p.pos);
-  return T(p.mejora ? "wouldRank" : "wouldKeep")(p.pos, p.total);
+  if (p.mejora) return T("wouldRank")(p.pos, p.total);
+  return T(p.sube ? "wouldDay" : "wouldKeep")(p.pos, p.total);
 }
 
 /* la tabla que se pinta al terminar una partida libre */

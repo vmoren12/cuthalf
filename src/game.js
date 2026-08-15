@@ -293,23 +293,32 @@ export function paintOver(){
      puede fallar se dice lo que pasa.                               */
   const conVale = !!S.ticket && S.trace.length > 0;
   const enMarcha = ENVIO.estado !== "" && ENVIO.estado !== "sin-red";
-  /* El bloque se queda también sin vale la primera vez: sin nombre no
-     hay marca ni en casa, así que la casilla tiene que estar aunque no
-     haya nada que subir. Lo que se va entonces es el botón.         */
-  $("keep").hidden = (!conVale && !primeraVez) || enMarcha;
-  $("keep-up").hidden = !conVale;
+  const sc = S.score;
 
-  /* Y con el número delante, que decidir a ciegas no es decidir. Se
+  /* Con el número delante, que decidir a ciegas no es decidir. Se
      pregunta una sola vez por partida —`proy` deja de ser undefined en
      cuanto se pide— y se vuelve a pintar cuando llega. Si para
      entonces ya se está en otra partida, no se toca nada.           */
-  const sc = S.score;
   if (sc.proy === undefined && conVale){
     sc.proy = null;
     puestoProyectado(S.mode === "daily" ? "daily" : freeBoard(sc.tl), sc)
       .then(p => { sc.proy = p; if (S.score === sc) paintOver(); })
       .catch(() => {});
   }
+
+  /* El bloque se queda también sin vale la primera vez: sin nombre no
+     hay marca ni en casa, así que la casilla tiene que estar aunque no
+     haya nada que subir. Lo que se va entonces es el botón.         */
+  $("keep").hidden = (!conVale && !primeraVez) || enMarcha;
+  /* Y el botón, además, sólo si subir mueve algo. Una partida que no
+     mejora ninguna clasificación que el jugador pueda mirar no tiene
+     nada que ofrecerle: pedirle que decida sobre eso es hacerle
+     trabajar para nada. En su sitio queda la línea que dice por qué.
+
+     `sube` vale false únicamente cuando se ha podido comprobar; con
+     `proy` a null —la consulta no llegó— el botón se queda.         */
+  $("keep-up").hidden = !conVale || sc.proy?.sube === false;
+
   const texto = textoPuesto(sc.proy);
   $("rank-note").textContent = texto;
   $("rank-note").hidden = !texto;

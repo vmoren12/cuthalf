@@ -58,7 +58,7 @@ localStorage.clear();
 localStorage.setItem("half.v1", JSON.stringify(identidad));
 
 const { S, $ }                            = await import("../src/state.js");
-const { start, doCut, gameOver, saveMark, goHome } = await import("../src/game.js");
+const { start, doCut, gameOver, saveMark, goHome, paintOver } = await import("../src/game.js");
 const { DB, DAILY, qualifies }            = await import("../src/storage.js");
 const { CUT, cutPoints, freeBoard }       = await import("../src/scoring.js");
 const { porDelante, inSpan, spanCut, localDays, localRuns, runWhen } = await import("../src/scores.js");
@@ -290,6 +290,39 @@ await step("qué puesto ocuparía una partida", () => {
   if (pos({ pts:1200 }) !== 3) throw new Error("un empate se cuela por delante");
   /* tu propia fila no cuenta: la sustituyes, no te sumas */
   if (pos({ pts:1500 }) !== 2) throw new Error("te cuentas a ti mismo");
+});
+
+/* Y si subirla no cambia ninguna tabla que se pueda mirar, no se
+   ofrece: un botón que no hace nada es trabajo para el jugador a
+   cambio de nada. Aquí no hay a quién preguntarle el puesto, así que
+   se le pone la respuesta delante y se mira qué hace la pantalla.   */
+await step("no se ofrece subir una partida que no mueve ninguna tabla", async () => {
+  S.timer = 0;
+  await start("free");
+  frame(); cut(0, 140);
+  S.cuts = [96.4];
+  gameOver();
+  const ofrecible = !!S.ticket && S.trace.length > 0;
+
+  /* mientras no se sepa, se ofrece: esconder el botón por una
+     respuesta que no ha llegado sería perder la marca por un túnel  */
+  S.score.proy = null; paintOver();
+  if ($("keep-up").hidden !== !ofrecible) throw new Error("sin dato deja de ofrecer subir");
+
+  /* con el dato y sin nada que mover: fuera el botón, y la línea que
+     queda en su sitio tiene que decir por qué                       */
+  S.score.proy = { pos:7, total:120, mejora:false, sube:false }; paintOver();
+  if (!$("keep-up").hidden) throw new Error("ofrece subir una partida que no mueve nada");
+  if ($("rank-note").hidden || !$("rank-note").textContent.trim())
+    throw new Error("retira el botón sin decir por qué");
+  /* y la casilla del nombre se queda: cambiarlo sigue valiendo */
+  if (ofrecible && $("keep").hidden) throw new Error("se lleva por delante el nombre");
+
+  /* mejora sólo el tramo de hoy —tu récord de siempre es mayor— y aun
+     así mueve una fila que se mira: el botón vuelve                 */
+  S.score.proy = { pos:7, total:120, mejora:false, sube:true }; paintOver();
+  if ($("keep-up").hidden !== !ofrecible) throw new Error("no ofrece subir tu mejor de hoy");
+  goHome();
 });
 
 await step("la pantalla de clasificaciones", async () => {

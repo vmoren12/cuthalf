@@ -75,6 +75,13 @@ vienen de una versión anterior, que no guardaba `tl`: se colocan en
 puntos: nadie apuntó lo que se tardó en cada corte, así que sus puntos
 se estiman a ritmo normal al abrirlas y la tabla también lo avisa.
 
+En un día del reto, `tries` cuenta los intentos de ese día **en este
+aparato y para este aparato**: es lo único que distingue mejorar tu
+marca del día de estrenarla, y de ahí sale el sello de récord al
+terminar. No viaja en el envío, no se publica y no ordena ninguna
+clasificación — el servidor tuvo una columna igual y se retiró
+(`0008_intentos.sql`).
+
 Se guardan **100 marcas por tabla** y **400 días** de reto. Si el
 navegador no deja escribir (modo privado), todo funciona igual pero sólo
 durante la sesión.
@@ -139,7 +146,11 @@ nombre se queda cambiado en el aparato y sube con la siguiente partida.
 | `ms` | `int` | lo que duró |
 | `created_at` | `timestamptz` | |
 
-Es el registro crudo: sirve de auditoría y para revisar sospechas.
+Es el registro crudo: sirve de auditoría, para revisar sospechas y —lo
+que no es evidente— de **única fuente de los tramos «hoy» y «mes» del
+juego libre**, que `free_best` no puede dar. Por eso importa que una
+partida que no bate tu récord de siempre pueda subir igual: si no llega
+aquí, esos dos tramos no la ven nunca.
 
 ### `free_best` y `daily_best` — lo que se consulta
 
@@ -148,11 +159,18 @@ una por jugador y día (`daily_best`, clave `player_id + day`). Las
 mantiene el servidor al aceptar una partida, y son las que leen las
 clasificaciones: así una consulta no tiene que recorrer el histórico.
 Se queda la mejor de las dos por puntos, así que subir una partida
-peor que la tuya no te mueve.
+peor que la tuya no te mueve — y por eso el juego ni te lo ofrece (ver
+el punto 4).
 
 La columna `daily_best.season` no la lee nadie desde que los puntos no
 se acumulan; se queda porque es la forma barata de agrupar por mes el
 día que haga falta.
+
+Tuvo también una `tries`, que contaba los intentos de cada día. Se
+retiró en `0008_intentos.sql`: no la pintaba ninguna pantalla, no
+ordenaba ninguna clasificación y era el único efecto que le quedaba a
+subir una partida que no mejora nada. Los puntos son de la partida;
+cuántas veces se ha intentado no es asunto de ninguna tabla.
 
 ### Cómo se leen
 
@@ -194,8 +212,12 @@ navegador**, no como fecha: `created_at` es UTC y el día es el del
 reloj de quien juega. A la una de la madrugada en Madrid, para UTC
 todavía es ayer.
 
-El puesto que se ofrece antes de subir una partida **no** sigue este
-filtro: se sube a la clasificación de siempre, que es donde se compite.
+El **puesto** que se ofrece antes de subir una partida no sigue este
+filtro: se sube a la clasificación de siempre, que es donde se compite,
+y decir «quedarías 3.º» contando sólo hoy sería mentir. La **decisión
+de ofrecerlo** sí mira el día, y son dos cosas distintas: mira tu mejor
+partida subida hoy, porque es la fila más pequeña que esta partida
+puede mover. Lo cuenta el punto 4.
 
 `daily_best.season` sigue sin leerla nadie — el tramo del mes se
 resuelve comparando `day`, que va indexado.
@@ -236,6 +258,7 @@ determinista, se puede comprobar de verdad:
    corte **en coordenadas de la figura**, no de la pantalla, y el
    momento en que se hizo. Sin vale la oferta ni aparece: una partida
    que no empezó el servidor no puede comprobarla.
+
 3. **El servidor repite la partida**: genera las mismas figuras con la
    misma semilla, aplica cada corte con la misma geometría y saca su
    propio resultado. Si no coincide con lo declarado, la marca no entra.
@@ -249,6 +272,42 @@ el navegador: [src/geometry.js](src/geometry.js),
 [src/config.js](src/config.js) y [src/scoring.js](src/scoring.js) no
 tocan el DOM ni el navegador precisamente por esto. Si cambia una
 fórmula ahí, hay que desplegar el servidor a la vez.
+
+### Cuándo se ofrece subir
+
+Sólo cuando subir cambia algo que el jugador pueda mirar. La regla es
+una para las cinco tablas: **la partida tiene que superar tu mejor
+marca subida hoy**. Lo decide `puestoProyectado()` en
+[src/scores.js](src/scores.js), que devuelve dos cosas distintas:
+
+- `mejora` · si te mueve en la clasificación donde compites —el reto de
+  hoy, o la de siempre en juego libre—. Decide **qué se dice** encima
+  del botón.
+- `sube` · si mueve alguna fila de alguna tabla. Decide **si hay
+  botón**.
+
+En el reto las dos coinciden, porque su clasificación es el día: si no
+mejoras tu marca de hoy, `daily_best` no cambia, y los tramos del mes y
+de siempre salen de ahí. En juego libre no coinciden, y por eso hacen
+falta las dos: los tramos «hoy» y «mes» se leen de `runs`, así que tu
+mejor partida de hoy mueve una fila aunque tu récord de siempre, el de
+julio, siga por encima. Comparar sólo contra la tabla de siempre
+dejaría fuera del histórico justo las partidas que esos tramos
+necesitan; comparar sólo contra el día mentiría sobre el puesto.
+
+Que la regla sea «tu mejor de hoy» no es un punto medio: es el umbral
+más bajo que sirve. Tu mejor partida de cualquier día siempre supera a
+las que llevabas ese día cuando se juega, así que siempre se ofrece — y
+las que quedan por debajo no podrían ser la mejor de ningún tramo.
+
+Cuesta una consulta más en juego libre (`free_span_me` acotado a hoy).
+Y hay una regla que no se salta: **el botón se retira sólo con el dato
+en la mano**. Si esa consulta no llegó, se ofrece — esconderlo por una
+respuesta que no vino sería perder la marca por un túnel.
+
+Cuando no hay nada que mover, en el sitio del botón queda la frase que
+lo explica: «Tu marca de esta tabla es mejor: seguirías 12.º de 300».
+La casilla del nombre se queda, que cambiarlo sigue valiendo.
 
 ---
 

@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "src/game.js": {
-    "mtime": 1786666774.8124733,
-    "ast_hash": "a7502e2caa9ea56b3cca51c643e5b455",
+    "mtime": 1786833308.7962992,
+    "ast_hash": "0a1eb7d1c7b104684b02ef23d6b440ae",
     "semantic_hash": ""
   },
   "src/geometry.js": {
@@ -15,8 +15,8 @@
     "semantic_hash": ""
   },
   "src/i18n.js": {
-    "mtime": 1786740201.3458765,
-    "ast_hash": "b1f8373dc8e6bfe15a2e1b21ac6350a3",
+    "mtime": 1786833315.892174,
+    "ast_hash": "7108ab2a3eca52db79902a2e35d2d55e",
     "semantic_hash": ""
   },
   "src/input.js": {
@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   "src/pwa.js": {
-    "mtime": 1786740215.6232736,
-    "ast_hash": "304bfeb13f5bfe787ec9be5f87bd2a63",
+    "mtime": 1786833418.5142038,
+    "ast_hash": "112edcbc9f260b9386ba688a7085c0f9",
     "semantic_hash": ""
   },
   "src/render.js": {
@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "src/scores.js": {
-    "mtime": 1786740210.334506,
-    "ast_hash": "672b3e443c595ccbb74fe59ef0c248ef",
+    "mtime": 1786833284.7726593,
+    "ast_hash": "cf862c73f858b4a4b94dcb77e7694fca",
     "semantic_hash": ""
   },
   "src/scoring.js": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "sw.js": {
-    "mtime": 1786740214.5892477,
-    "ast_hash": "52e9fd494bb88e68c7f2208f6611865e",
+    "mtime": 1786833417.485767,
+    "ast_hash": "6751b3bf38b56eb9803292117157df62",
     "semantic_hash": ""
   },
   "tests/serve.mjs": {
@@ -205,8 +205,8 @@
     "semantic_hash": ""
   },
   "DATOS.md": {
-    "mtime": 1786740467.3114588,
-    "ast_hash": "8b8b7a07fbab18f4c967adddf8692545",
+    "mtime": 1786833508.9596453,
+    "ast_hash": "fb8f0264d6c9dd8a833d030c09c1779c",
     "semantic_hash": ""
   },
   "README.md": {
@@ -225,8 +225,8 @@
     "semantic_hash": ""
   },
   "tests/probe.html": {
-    "mtime": 1786666734.284132,
-    "ast_hash": "65caf7be2c2d4f8796480d896044dacf",
+    "mtime": 1786833404.814561,
+    "ast_hash": "5a762d52b5aed80a505c42eb9cf5b53d",
     "semantic_hash": ""
   },
   "icons/icon-192-any.png": {
@@ -245,8 +245,8 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1786740475.336491,
-    "ast_hash": "39734115cc5651f45120f69df1f218ec",
+    "mtime": 1786833538.8198707,
+    "ast_hash": "ebe0b96e197474993aeee2ae498d9c49",
     "semantic_hash": ""
   },
   "supabase/migrations/20260812000004_puntos.sql": {
@@ -267,6 +267,11 @@
   "supabase/migrations/20260814000007_renombrar.sql": {
     "mtime": 1786740129.2250192,
     "ast_hash": "76a618cb79440bfaf3be945eaece5791",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260816000008_intentos.sql": {
+    "mtime": 1786833371.417267,
+    "ast_hash": "cf270a213caf07f872540c9847d5b872",
     "semantic_hash": ""
   }
 }

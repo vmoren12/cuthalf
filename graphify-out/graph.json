@@ -10,7 +10,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_config",
-      "community": 2,
+      "community": 1,
       "norm_label": "config.js"
     },
     {
@@ -20,7 +20,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "src_config_config",
-      "community": 2,
+      "community": 1,
       "norm_label": "config"
     },
     {
@@ -30,7 +30,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_config_stages",
-      "community": 2,
+      "community": 1,
       "norm_label": "stages"
     },
     {
@@ -50,7 +50,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_config_tutor",
-      "community": 2,
+      "community": 1,
       "norm_label": "tutor"
     },
     {
@@ -110,7 +110,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "src_game_tutorchrome",
-      "community": 0,
+      "community": 1,
       "norm_label": "tutorchrome()"
     },
     {
@@ -120,7 +120,7 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "src_game_docut",
-      "community": 2,
+      "community": 1,
       "norm_label": "docut()"
     },
     {
@@ -167,17 +167,17 @@
       "label": "subirPartida()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L335",
+      "source_location": "L344",
       "_origin": "ast",
       "id": "src_game_subirpartida",
-      "community": 1,
+      "community": 0,
       "norm_label": "subirpartida()"
     },
     {
       "label": "guardarMarca()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L351",
+      "source_location": "L360",
       "_origin": "ast",
       "id": "src_game_guardarmarca",
       "community": 1,
@@ -187,7 +187,7 @@
       "label": "saveMark()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L361",
+      "source_location": "L370",
       "_origin": "ast",
       "id": "src_game_savemark",
       "community": 1,
@@ -197,7 +197,7 @@
       "label": "goHome()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L368",
+      "source_location": "L377",
       "_origin": "ast",
       "id": "src_game_gohome",
       "community": 0,
@@ -207,7 +207,7 @@
       "label": "start()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L381",
+      "source_location": "L390",
       "_origin": "ast",
       "id": "src_game_start",
       "community": 1,
@@ -220,7 +220,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_geometry",
-      "community": 2,
+      "community": 1,
       "norm_label": "geometry.js"
     },
     {
@@ -230,7 +230,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_geometry_area",
-      "community": 2,
+      "community": 1,
       "norm_label": "area()"
     },
     {
@@ -240,7 +240,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_geometry_centroid",
-      "community": 2,
+      "community": 1,
       "norm_label": "centroid()"
     },
     {
@@ -250,7 +250,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_geometry_cliphalf",
-      "community": 2,
+      "community": 1,
       "norm_label": "cliphalf()"
     },
     {
@@ -260,7 +260,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "src_geometry_evaluate",
-      "community": 2,
+      "community": 1,
       "norm_label": "evaluate()"
     },
     {
@@ -270,7 +270,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_geometry_bisector",
-      "community": 2,
+      "community": 1,
       "norm_label": "bisector()"
     },
     {
@@ -280,7 +280,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "src_geometry_partscentroid",
-      "community": 2,
+      "community": 1,
       "norm_label": "partscentroid()"
     },
     {
@@ -317,7 +317,7 @@
       "label": "T()",
       "file_type": "code",
       "source_file": "src/i18n.js",
-      "source_location": "L143",
+      "source_location": "L145",
       "_origin": "ast",
       "id": "src_i18n_t",
       "community": 0,
@@ -327,7 +327,7 @@
       "label": "setLang()",
       "file_type": "code",
       "source_file": "src/i18n.js",
-      "source_location": "L144",
+      "source_location": "L146",
       "_origin": "ast",
       "id": "src_i18n_setlang",
       "community": 0,
@@ -490,7 +490,7 @@
       "source_location": "L139",
       "_origin": "ast",
       "id": "src_menu_paintscores",
-      "community": 0,
+      "community": 4,
       "norm_label": "paintscores()"
     },
     {
@@ -670,7 +670,7 @@
       "source_location": "L369",
       "_origin": "ast",
       "id": "src_menu_armback",
-      "community": 1,
+      "community": 0,
       "norm_label": "armback()"
     },
     {
@@ -1170,7 +1170,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "src_scores_cabecera",
-      "community": 0,
+      "community": 4,
       "norm_label": "cabecera()"
     },
     {
@@ -1180,7 +1180,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_scores_drawrows",
-      "community": 0,
+      "community": 4,
       "norm_label": "drawrows()"
     },
     {
@@ -1260,7 +1260,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "src_scores_spancut",
-      "community": 0,
+      "community": 4,
       "norm_label": "spancut()"
     },
     {
@@ -1280,7 +1280,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "src_scores_notavacia",
-      "community": 0,
+      "community": 4,
       "norm_label": "notavacia()"
     },
     {
@@ -1290,7 +1290,7 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "src_scores_localruns",
-      "community": 0,
+      "community": 4,
       "norm_label": "localruns()"
     },
     {
@@ -1327,7 +1327,7 @@
       "label": "porDelante()",
       "file_type": "code",
       "source_file": "src/scores.js",
-      "source_location": "L224",
+      "source_location": "L236",
       "_origin": "ast",
       "id": "src_scores_pordelante",
       "community": 4,
@@ -1337,7 +1337,7 @@
       "label": "puestoProyectado()",
       "file_type": "code",
       "source_file": "src/scores.js",
-      "source_location": "L229",
+      "source_location": "L241",
       "_origin": "ast",
       "id": "src_scores_puestoproyectado",
       "community": 4,
@@ -1347,7 +1347,7 @@
       "label": "textoPuesto()",
       "file_type": "code",
       "source_file": "src/scores.js",
-      "source_location": "L256",
+      "source_location": "L282",
       "_origin": "ast",
       "id": "src_scores_textopuesto",
       "community": 1,
@@ -1357,10 +1357,10 @@
       "label": "drawTable()",
       "file_type": "code",
       "source_file": "src/scores.js",
-      "source_location": "L264",
+      "source_location": "L291",
       "_origin": "ast",
       "id": "src_scores_drawtable",
-      "community": 1,
+      "community": 4,
       "norm_label": "drawtable()"
     },
     {
@@ -1650,7 +1650,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "src_state_flash",
-      "community": 2,
+      "community": 0,
       "norm_label": "flash()"
     },
     {
@@ -1730,7 +1730,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_submit",
-      "community": 1,
+      "community": 4,
       "norm_label": "submit.js"
     },
     {
@@ -1740,7 +1740,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_submit_envio",
-      "community": 1,
+      "community": 4,
       "norm_label": "envio"
     },
     {
@@ -1750,7 +1750,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_submit_pintar",
-      "community": 1,
+      "community": 4,
       "norm_label": "pintar()"
     },
     {
@@ -1760,7 +1760,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "src_submit_limpiarenvio",
-      "community": 1,
+      "community": 0,
       "norm_label": "limpiarenvio()"
     },
     {
@@ -1770,7 +1770,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_submit_enviarpartida",
-      "community": 1,
+      "community": 4,
       "norm_label": "enviarpartida()"
     },
     {
@@ -1780,7 +1780,7 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "src_submit_repintarenvio",
-      "community": 1,
+      "community": 4,
       "norm_label": "repintarenvio()"
     },
     {
@@ -1790,7 +1790,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_util",
-      "community": 2,
+      "community": 1,
       "norm_label": "util.js"
     },
     {
@@ -2897,7 +2897,7 @@
       "label": "Trampas que ya nos han mordido",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L189",
+      "source_location": "L209",
       "_origin": "ast",
       "id": "claude_trampas_que_ya_nos_han_mordido",
       "community": 12,
@@ -2907,7 +2907,7 @@
       "label": "C\u00f3mo se prueba",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L212",
+      "source_location": "L232",
       "_origin": "ast",
       "id": "claude_c\u00f3mo_se_prueba",
       "community": 12,
@@ -2917,7 +2917,7 @@
       "label": "Estilo",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L225",
+      "source_location": "L245",
       "_origin": "ast",
       "id": "claude_estilo",
       "community": 12,
@@ -2967,7 +2967,7 @@
       "label": "3 \u00b7 En el servidor \u00b7 Supabase",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L88",
+      "source_location": "L95",
       "_origin": "ast",
       "id": "datos_3_en_el_servidor_supabase",
       "community": 5,
@@ -2977,7 +2977,7 @@
       "label": "`players`",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L117",
+      "source_location": "L124",
       "_origin": "ast",
       "id": "datos_players",
       "community": 5,
@@ -2987,7 +2987,7 @@
       "label": "`runs` \u2014 hist\u00f3rico de partidas aceptadas",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L127",
+      "source_location": "L134",
       "_origin": "ast",
       "id": "datos_runs_hist\u00f3rico_de_partidas_aceptadas",
       "community": 5,
@@ -2997,7 +2997,7 @@
       "label": "`free_best` y `daily_best` \u2014 lo que se consulta",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L144",
+      "source_location": "L155",
       "_origin": "ast",
       "id": "datos_free_best_y_daily_best_lo_que_se_consulta",
       "community": 5,
@@ -3007,7 +3007,7 @@
       "label": "C\u00f3mo se leen",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L157",
+      "source_location": "L175",
       "_origin": "ast",
       "id": "datos_c\u00f3mo_se_leen",
       "community": 5,
@@ -3017,7 +3017,7 @@
       "label": "Y por tramos de tiempo \u00b7 `0006_periodos.sql`",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L167",
+      "source_location": "L185",
       "_origin": "ast",
       "id": "datos_y_por_tramos_de_tiempo_0006_periodos_sql",
       "community": 5,
@@ -3027,7 +3027,7 @@
       "label": "Permisos",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L203",
+      "source_location": "L225",
       "_origin": "ast",
       "id": "datos_permisos",
       "community": 5,
@@ -3037,17 +3037,27 @@
       "label": "4 \u00b7 C\u00f3mo se comprueba que una marca es real",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L222",
+      "source_location": "L244",
       "_origin": "ast",
       "id": "datos_4_c\u00f3mo_se_comprueba_que_una_marca_es_real",
       "community": 5,
       "norm_label": "4 \u00b7 como se comprueba que una marca es real"
     },
     {
+      "label": "Cu\u00e1ndo se ofrece subir",
+      "file_type": "document",
+      "source_file": "DATOS.md",
+      "source_location": "L276",
+      "_origin": "ast",
+      "id": "datos_cu\u00e1ndo_se_ofrece_subir",
+      "community": 5,
+      "norm_label": "cuando se ofrece subir"
+    },
+    {
       "label": "5 \u00b7 Dominio",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L255",
+      "source_location": "L314",
       "_origin": "ast",
       "id": "datos_5_dominio",
       "community": 5,
@@ -3057,7 +3067,7 @@
       "label": "6 \u00b7 Limpieza",
       "file_type": "document",
       "source_file": "DATOS.md",
-      "source_location": "L291",
+      "source_location": "L350",
       "_origin": "ast",
       "id": "datos_6_limpieza",
       "community": 5,
@@ -6311,9 +6321,9 @@
       "source_file": "src/menu.js",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_menu",
-      "target": "src_net",
-      "confidence_score": 1.0
+      "target": "src_net"
     },
     {
       "relation": "imports",
@@ -6322,9 +6332,9 @@
       "source_file": "src/menu.js",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_menu",
-      "target": "src_net_runrename",
-      "confidence_score": 1.0
+      "target": "src_net_runrename"
     },
     {
       "relation": "imports_from",
@@ -7423,9 +7433,9 @@
       "source_file": "src/net.js",
       "source_location": "L89",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_net",
-      "target": "src_net_runrename",
-      "confidence_score": 1.0
+      "target": "src_net_runrename"
     },
     {
       "relation": "contains",
@@ -7549,9 +7559,9 @@
       "source_file": "src/net.js",
       "source_location": "L89",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_net_runrename",
-      "target": "src_net_pedir",
-      "confidence_score": 1.0
+      "target": "src_net_pedir"
     },
     {
       "relation": "calls",
@@ -7947,6 +7957,17 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "src_scores_pedirmundo",
+      "target": "src_net_mefreespan"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/scores.js",
+      "source_location": "L246",
+      "weight": 1.0,
+      "source": "src_scores_puestoproyectado",
       "target": "src_net_mefreespan"
     },
     {
@@ -9304,6 +9325,17 @@
       "weight": 1.0,
       "source": "src_scores_puestoproyectado",
       "target": "src_util_daykey"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/scores.js",
+      "source_location": "L246",
+      "weight": 1.0,
+      "source": "src_scores_puestoproyectado",
+      "target": "src_util_startoftoday"
     },
     {
       "relation": "calls",
@@ -11635,9 +11667,9 @@
       "source_file": "supabase/functions/run/index.ts",
       "source_location": "L184",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_index_renombrar",
-      "target": "shared_vale_huella",
-      "confidence_score": 1.0
+      "target": "shared_vale_huella"
     },
     {
       "relation": "imports",
@@ -11716,9 +11748,9 @@
       "source_file": "supabase/functions/run/index.ts",
       "source_location": "L83",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_index",
-      "target": "run_index_jugadorvalido",
-      "confidence_score": 1.0
+      "target": "run_index_jugadorvalido"
     },
     {
       "relation": "contains",
@@ -11756,9 +11788,9 @@
       "source_file": "supabase/functions/run/index.ts",
       "source_location": "L178",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_index",
-      "target": "run_index_renombrar",
-      "confidence_score": 1.0
+      "target": "run_index_renombrar"
     },
     {
       "relation": "contains",
@@ -11810,9 +11842,9 @@
       "source_file": "supabase/functions/run/index.ts",
       "source_location": "L181",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_index_renombrar",
-      "target": "run_index_responder",
-      "confidence_score": 1.0
+      "target": "run_index_responder"
     },
     {
       "relation": "calls",
@@ -11843,9 +11875,9 @@
       "source_file": "supabase/functions/run/index.ts",
       "source_location": "L184",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_index_renombrar",
-      "target": "run_index_limpiarnombre",
-      "confidence_score": 1.0
+      "target": "run_index_limpiarnombre"
     },
     {
       "relation": "calls",
@@ -11854,9 +11886,9 @@
       "source_file": "supabase/functions/run/index.ts",
       "source_location": "L130",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_index_entregar",
-      "target": "run_index_jugadorvalido",
-      "confidence_score": 1.0
+      "target": "run_index_jugadorvalido"
     },
     {
       "relation": "calls",
@@ -11865,9 +11897,9 @@
       "source_file": "supabase/functions/run/index.ts",
       "source_location": "L180",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "run_index_renombrar",
-      "target": "run_index_jugadorvalido",
-      "confidence_score": 1.0
+      "target": "run_index_jugadorvalido"
     },
     {
       "relation": "calls",
@@ -12363,6 +12395,16 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "DATOS.md",
+      "source_location": "L276",
+      "weight": 1.0,
+      "source": "datos_4_c\u00f3mo_se_comprueba_que_una_marca_es_real",
+      "target": "datos_cu\u00e1ndo_se_ofrece_subir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "README.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -12422,5 +12464,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "4e8de13d1a711b0fb8cc3523d3d2e2956a6345ad"
+  "built_at_commit": "c0e339196cdbf9d6ab3f2013c555f7f23d29c9b8"
 }

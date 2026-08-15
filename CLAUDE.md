@@ -135,13 +135,26 @@ para conseguir lo mismo que no hacer nada sobra siempre. Y sin vale del
 servidor la oferta ni aparece —esa partida no se puede comprobar—: en
 su sitio se dice que no ha subido.
 
-Encima del botón van el nombre con el que se sube —relleno, editable— y
-**el puesto que ocuparía**, que se cuenta aquí (`puestoProyectado()` en
+**Y sólo se ofrece si subir mueve algo.** Un botón que no cambia
+ninguna tabla que el jugador pueda mirar le hace decidir a cambio de
+nada. La regla es una para las cinco tablas: la partida tiene que
+superar **tu mejor marca subida hoy**. En el reto eso es exactamente
+mejorar tu marca del día. En juego libre hace falta ese umbral y no el
+récord de siempre, porque los tramos «hoy» y «mes» de la pantalla de
+marcas se leen del histórico de partidas subidas (`runs`): tu mejor
+partida de hoy mueve una fila aunque tu récord de julio siga por
+encima. Se retira el botón **sólo con el dato en la mano**: si la
+consulta no llegó, se ofrece.
+
+Encima va el nombre con el que se sube —relleno, editable— y **el
+puesto que ocuparía**, que se cuenta aquí (`puestoProyectado()` en
 `src/scores.js`) sobre los cien primeros de la tabla, no se le pregunta
 al servidor: es contar cuántos van por delante de una cifra y no
-merecía una función nueva. Si tu marca de esa tabla ya era mejor, se
-dice que seguirías donde estás — el servidor se queda con la mejor de
-las dos, así que subir no te movería.
+merecía una función nueva. Ese puesto es el de la tabla donde se
+compite —el reto de hoy, o la de siempre— y no sigue al tramo: decir
+«quedarías 3.º» contando sólo hoy sería mentir. Si tu marca de esa
+tabla ya era mejor, se dice que seguirías donde estás; y si además no
+hay nada que mover, esa frase se queda sola. Lo cuenta [DATOS.md](DATOS.md).
 
 **Nada se escribe desde el navegador.** La clave `anon` sólo lee.
 `submit_run`, `ensure_player` y `rename_player` tienen el `execute`
@@ -171,6 +184,13 @@ sube con cada corte y es la única forma de ver qué lo sube.
 **Y no se acumulan.** Ni por días ni por meses. No hay temporada: cada
 día del reto tiene su clasificación y vale su mejor intento. Jugar más
 días no da más puntos, y ésa es la decisión, no un descuido.
+
+Los intentos tampoco cuentan en ninguna tabla. `daily_best` tuvo una
+columna `tries` y se retiró (`0008_intentos.sql`): no la pintaba
+ninguna pantalla, no ordenaba ninguna clasificación, y era el último
+efecto que le quedaba a subir una partida que no mejora nada. El
+aparato sigue contando los suyos en `localStorage`, que es de donde
+sale el sello de récord, y para nada más.
 
 La pantalla de marcas sí se puede mirar por tramos —hoy, mes,
 siempre—, pero eso no es acumular: cada tramo enseña **la mejor

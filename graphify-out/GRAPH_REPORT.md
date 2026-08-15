@@ -1,16 +1,16 @@
-# Graph Report - cuthalf  (2026-08-14)
+# Graph Report - cuthalf  (2026-08-16)
 
 ## Corpus Check
-- 47 files · ~39,973 words
+- 48 files · ~42,558 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 313 nodes · 869 edges · 14 communities (12 shown, 2 thin omitted)
+- 314 nodes · 872 edges · 14 communities (12 shown, 2 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4e8de13d`
+- Built from commit: `c0e33919`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -60,28 +60,28 @@
 ## Communities (14 total, 2 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.08
-Nodes (60): finishTutor(), goHome(), tutorChrome(), L, setLang(), T(), savedTheme, applyLang() (+52 more)
+Cohesion: 0.09
+Nodes (57): finishTutor(), goHome(), subirPartida(), L, setLang(), T(), savedTheme, applyLang() (+49 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.10
-Nodes (42): levelConfig(), gameOver(), guardarMarca(), newLevel(), paintOver(), saveMark(), start(), startTutor() (+34 more)
+Nodes (45): CONFIG, levelConfig(), STAGES, TUTOR, doCut(), gameOver(), guardarMarca(), newLevel() (+37 more)
 
 ### Community 2 - "Community 2"
-Cohesion: 0.16
-Nodes (25): CONFIG, STAGES, TUTOR, advance(), doCut(), timeUp(), area(), bisector() (+17 more)
+Cohesion: 0.30
+Nodes (14): advance(), timeUp(), drawClock(), drawGuide(), drawLine(), drawParts(), ease(), paint() (+6 more)
 
 ### Community 3 - "Community 3"
 Cohesion: 0.10
 Nodes (30): CONFIG, levelConfig(), STAGES, TUTOR, area(), bisector(), centroid(), clipHalf() (+22 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.14
-Nodes (34): hayRemoto(), meDaily(), meDailySpan(), meFree(), meFreeSpan(), NET, pedir(), REMOTO (+26 more)
+Cohesion: 0.11
+Nodes (45): paintScores(), hayRemoto(), meDaily(), meDailySpan(), meFree(), meFreeSpan(), NET, pedir() (+37 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.14
-Nodes (13): 1 · Las cinco clasificaciones, 2 · En el aparato · `localStorage`, 3 · En el servidor · Supabase, 4 · Cómo se comprueba que una marca es real, 5 · Dominio, 6 · Limpieza, Cómo se leen, `free_best` y `daily_best` — lo que se consulta (+5 more)
+Cohesion: 0.13
+Nodes (14): 1 · Las cinco clasificaciones, 2 · En el aparato · `localStorage`, 3 · En el servidor · Supabase, 4 · Cómo se comprueba que una marca es real, 5 · Dominio, 6 · Limpieza, Cuándo se ofrece subir, Cómo se leen (+6 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.25
@@ -116,16 +116,16 @@ Nodes (18): cors(), cortesValidos(), db, diaValido(), entregar(), jugadorValido(
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `$()` connect `Community 0` to `Community 1`, `Community 2`, `Community 4`?**
-  _High betweenness centrality (0.057) - this node is a cross-community bridge._
-- **Why does `T()` connect `Community 0` to `Community 1`, `Community 2`, `Community 4`?**
+  _High betweenness centrality (0.056) - this node is a cross-community bridge._
+- **Why does `T()` connect `Community 0` to `Community 1`, `Community 4`?**
   _High betweenness centrality (0.019) - this node is a cross-community bridge._
-- **Why does `evaluate()` connect `Community 2` to `Community 1`?**
+- **Why does `evaluate()` connect `Community 1` to `Community 2`?**
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
 - **What connects `STAGES`, `L`, `savedTheme` to the rest of the system?**
   _57 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.08428446005267778 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08557692307692308 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.10304789550072568 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09860859044162129 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
   _Cohesion score 0.10144927536231885 - nodes in this community are weakly interconnected._
