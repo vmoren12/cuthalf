@@ -410,20 +410,33 @@ export function goHome(){
    Cada tarjeta se lleva `hold` quieta más `flip` girando, así que el
    segundo por cifra —los tres de la cuenta— es la suma de los dos y
    no sólo la espera. Con 340+300 la cuenta acababa en menos de dos
-   segundos: parecía una cuenta atrás de tres y no lo era.           */
-export const CUENTA = { desde: 3, hold: 700, flip: 300 };
+   segundos: parecía una cuenta atrás de tres y no lo era.
+
+   `ya` es lo que se queda puesta la salida al acabar de contar, y va
+   aparte de `hold` porque no cuenta nada: los tres segundos son los
+   tres de las cifras. Corto a propósito — es el permiso para cortar,
+   y quien lo lee ya está mirando.                                   */
+export const CUENTA = { desde: 3, hold: 700, flip: 300, ya: 260 };
 
 const espera = ms => new Promise(r => setTimeout(r, ms));
 
+/* La palabra no cabe al cuerpo de una cifra: son cuatro signos donde
+   había uno. El tamaño lo pone el CSS; aquí sólo se señala cuál de
+   las cuatro mitades lleva palabra y cuál lleva número.             */
+function poner(id, txt){
+  const el = $(id);
+  el.textContent = txt;
+  el.classList.toggle("word", !/^\d*$/.test(txt));
+}
+
 /* de `de` a `a`: las mitades quietas enseñan ya la que viene y las
-   que se mueven, la que se va. Tras el uno no viene un cero — viene
-   la figura—, así que la última vuelta descubre una tarjeta vacía y
-   con eso la cuenta se retira sola.                                 */
+   que se mueven, la que se va. Tras el uno no viene un cero —viene
+   la figura—, así que lo que descubre la última vuelta es el ¡YA!  */
 function pintarCuenta(de, a){
-  $("count-top").textContent  = a;
-  $("count-rise").textContent = a;
-  $("count-bot").textContent  = de;
-  $("count-fold").textContent = de;
+  poner("count-top",  a);
+  poner("count-rise", a);
+  poner("count-bot",  de);
+  poner("count-fold", de);
 }
 
 /* `marca` es la partida que la pidió. Si mientras cuenta empieza otra,
@@ -435,7 +448,7 @@ async function cuentaAtras(marca){
   caja.style.setProperty("--flip", CUENTA.flip + "ms");
   caja.hidden = false;
   for (let n = CUENTA.desde; n >= 1; n--){
-    pintarCuenta(String(n), n > 1 ? String(n - 1) : "");
+    pintarCuenta(String(n), n > 1 ? String(n - 1) : T("go"));
     caja.classList.remove("turn");
     void caja.offsetWidth;             // para poder repetir la misma vuelta
     await espera(CUENTA.hold);
@@ -447,7 +460,16 @@ async function cuentaAtras(marca){
     await espera(CUENTA.flip);
     if (S.arranque !== marca) return;
   }
+  /* La salida, entera y quieta un momento: descubrirla a mitad de
+     giro es no enseñarla. Se pone en las cuatro mitades antes de
+     quitar el giro porque al quitarlo las tarjetas vuelven a su
+     sitio, y con el uno todavía puesto detrás eso sería un parpadeo.
+     Es también lo que ve quien no quiere animaciones, que llega aquí
+     sin haber girado ninguna.                                       */
+  pintarCuenta(T("go"), T("go"));
   caja.classList.remove("turn");
+  await espera(CUENTA.ya);
+  if (S.arranque !== marca) return;
   caja.hidden = true;
 }
 

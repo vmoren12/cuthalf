@@ -217,6 +217,14 @@ las tres tarjetas, no se nota que se le haya esperado. Mientras dura,
 cuenta y «Cerrar» sale sin preguntar. El compás vive en `CUENTA` y
 viaja al CSS en `--flip`; las pruebas lo ponen a cero.
 
+Cada cifra vale un segundo entero —`hold` quieta más `flip` girando—,
+y los tres segundos son los de las cifras. Tras el uno la última
+vuelta no descubre un cero sino la salida, **¡YA!** (`go` en
+`i18n.js`), que se queda puesta `CUENTA.ya` y ya no cuenta nada: es el
+permiso para cortar. La palabra lleva cuerpo propio (`.flap i.word`)
+porque son cuatro signos donde cabía uno, y sube 8 px para que el
+pliegue la parta por la mitad, que es de lo que va el juego.
+
 ## Trampas que ya nos han mordido
 
 - **`_headers` sin extensión.** Se llamaba `_headers.txt` y Netlify

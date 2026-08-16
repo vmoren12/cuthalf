@@ -67,6 +67,7 @@ const { SHAPES }                          = await import("../src/shapes.js");
 const { setRNG, mulberry32 }              = await import("../src/rng.js");
 const { applyLang, openScores, closeScores, paintScores, renameMe,
         handleBack, backHeld }            = await import("../src/menu.js");
+const { T }                               = await import("../src/i18n.js");
 const { shareText }                       = await import("../src/share.js");
 const { paint }                           = await import("../src/render.js");
 const { replay, toShapeSpace }            = await import("../src/replay.js");
@@ -387,7 +388,7 @@ await step("no se ofrece subir una partida que no mueve ninguna tabla", async ()
    la partida no ha empezado —el trazo no cuenta, que `input.js` sólo
    atiende jugando— y al acabar arranca sola.                        */
 await step("se cuenta atrás antes de jugar, y hasta que no acaba no hay figura", async () => {
-  Object.assign(CUENTA, { desde: 2, hold: 60, flip: 40 });
+  Object.assign(CUENTA, { desde: 2, hold: 60, flip: 40, ya: 40 });
   S.timer = 0;
   const partida = start("free");
   if ($("count").hidden) throw new Error("no aparece la cuenta atrás");
@@ -396,6 +397,17 @@ await step("se cuenta atrás antes de jugar, y hasta que no acaba no hay figura"
   await partida;
   if (!$("count").hidden) throw new Error("la cuenta atrás se queda puesta");
   if (S.phase !== "play") throw new Error("no arranca al acabar de contar: " + S.phase);
+  /* La cuenta no acaba en un cero ni en blanco: acaba en la salida, y
+     en las cuatro mitades, que es lo que la deja entera al quitar el
+     giro. El texto se queda puesto al esconderla, así que se puede
+     mirar después. Y con su clase, que sin ella saldría al cuerpo de
+     una cifra y no cabría en la tarjeta.                            */
+  for (const id of ["count-top", "count-rise", "count-bot", "count-fold"]){
+    if ($(id).textContent !== T("go"))
+      throw new Error("la cuenta no acaba en la salida (" + id + "): " + $(id).textContent);
+    if (!$(id).classList.contains("word"))
+      throw new Error("la salida sale al cuerpo de una cifra: " + id);
+  }
   goHome();
   CUENTA.desde = 0;
 });

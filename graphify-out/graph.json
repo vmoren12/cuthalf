@@ -50,7 +50,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_config_tutor",
-      "community": 1,
+      "community": 2,
       "norm_label": "tutor"
     },
     {
@@ -80,7 +80,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "src_game_tutorstep",
-      "community": 2,
+      "community": 1,
       "norm_label": "tutorstep()"
     },
     {
@@ -100,7 +100,7 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "src_game_finishtutor",
-      "community": 0,
+      "community": 1,
       "norm_label": "finishtutor()"
     },
     {
@@ -110,7 +110,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "src_game_tutorchrome",
-      "community": 0,
+      "community": 1,
       "norm_label": "tutorchrome()"
     },
     {
@@ -120,7 +120,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "src_game_docut",
-      "community": 2,
+      "community": 1,
       "norm_label": "docut()"
     },
     {
@@ -140,7 +140,7 @@
       "source_location": "L213",
       "_origin": "ast",
       "id": "src_game_advance",
-      "community": 2,
+      "community": 1,
       "norm_label": "advance()"
     },
     {
@@ -170,7 +170,7 @@
       "source_location": "L353",
       "_origin": "ast",
       "id": "src_game_subirpartida",
-      "community": 1,
+      "community": 0,
       "norm_label": "subirpartida()"
     },
     {
@@ -200,14 +200,14 @@
       "source_location": "L386",
       "_origin": "ast",
       "id": "src_game_gohome",
-      "community": 0,
+      "community": 1,
       "norm_label": "gohome()"
     },
     {
       "label": "CUENTA",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L414",
+      "source_location": "L419",
       "_origin": "ast",
       "id": "src_game_cuenta",
       "community": 1,
@@ -217,17 +217,27 @@
       "label": "espera()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L416",
+      "source_location": "L421",
       "_origin": "ast",
       "id": "src_game_espera",
       "community": 1,
       "norm_label": "espera()"
     },
     {
+      "label": "poner()",
+      "file_type": "code",
+      "source_file": "src/game.js",
+      "source_location": "L426",
+      "_origin": "ast",
+      "id": "src_game_poner",
+      "community": 1,
+      "norm_label": "poner()"
+    },
+    {
       "label": "pintarCuenta()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L422",
+      "source_location": "L435",
       "_origin": "ast",
       "id": "src_game_pintarcuenta",
       "community": 1,
@@ -237,7 +247,7 @@
       "label": "cuentaAtras()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L432",
+      "source_location": "L445",
       "_origin": "ast",
       "id": "src_game_cuentaatras",
       "community": 1,
@@ -247,7 +257,7 @@
       "label": "start()",
       "file_type": "code",
       "source_file": "src/game.js",
-      "source_location": "L458",
+      "source_location": "L480",
       "_origin": "ast",
       "id": "src_game_start",
       "community": 1,
@@ -260,7 +270,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_geometry",
-      "community": 2,
+      "community": 1,
       "norm_label": "geometry.js"
     },
     {
@@ -270,7 +280,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_geometry_area",
-      "community": 2,
+      "community": 1,
       "norm_label": "area()"
     },
     {
@@ -280,7 +290,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_geometry_centroid",
-      "community": 2,
+      "community": 1,
       "norm_label": "centroid()"
     },
     {
@@ -290,7 +300,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_geometry_cliphalf",
-      "community": 2,
+      "community": 1,
       "norm_label": "cliphalf()"
     },
     {
@@ -300,7 +310,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "src_geometry_evaluate",
-      "community": 2,
+      "community": 1,
       "norm_label": "evaluate()"
     },
     {
@@ -310,7 +320,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_geometry_bisector",
-      "community": 2,
+      "community": 1,
       "norm_label": "bisector()"
     },
     {
@@ -320,7 +330,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "src_geometry_partscentroid",
-      "community": 2,
+      "community": 1,
       "norm_label": "partscentroid()"
     },
     {
@@ -330,7 +340,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "src_geometry_normalize",
-      "community": 2,
+      "community": 1,
       "norm_label": "normalize()"
     },
     {
@@ -720,7 +730,7 @@
       "source_location": "L396",
       "_origin": "ast",
       "id": "src_menu_disarmback",
-      "community": 0,
+      "community": 1,
       "norm_label": "disarmback()"
     },
     {
@@ -910,7 +920,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "src_net_runstart",
-      "community": 4,
+      "community": 1,
       "norm_label": "runstart()"
     },
     {
@@ -930,7 +940,7 @@
       "source_location": "L89",
       "_origin": "ast",
       "id": "src_net_runrename",
-      "community": 0,
+      "community": 4,
       "norm_label": "runrename()"
     },
     {
@@ -940,7 +950,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_player",
-      "community": 1,
+      "community": 4,
       "norm_label": "player.js"
     },
     {
@@ -950,7 +960,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_player_azar",
-      "community": 1,
+      "community": 4,
       "norm_label": "azar()"
     },
     {
@@ -960,7 +970,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_player_me",
-      "community": 1,
+      "community": 4,
       "norm_label": "me"
     },
     {
@@ -980,7 +990,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_pwa_applyupdate",
-      "community": 0,
+      "community": 1,
       "norm_label": "applyupdate()"
     },
     {
@@ -1110,7 +1120,7 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "src_replay_toshapespace",
-      "community": 2,
+      "community": 1,
       "norm_label": "toshapespace()"
     },
     {
@@ -1120,7 +1130,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "src_replay_trim",
-      "community": 2,
+      "community": 1,
       "norm_label": "trim()"
     },
     {
@@ -1220,7 +1230,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_scores_drawrows",
-      "community": 0,
+      "community": 4,
       "norm_label": "drawrows()"
     },
     {
@@ -1300,7 +1310,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "src_scores_spancut",
-      "community": 4,
+      "community": 0,
       "norm_label": "spancut()"
     },
     {
@@ -1320,7 +1330,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "src_scores_notavacia",
-      "community": 0,
+      "community": 4,
       "norm_label": "notavacia()"
     },
     {
@@ -1330,7 +1340,7 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "src_scores_localruns",
-      "community": 4,
+      "community": 0,
       "norm_label": "localruns()"
     },
     {
@@ -1700,7 +1710,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "src_state_flash",
-      "community": 2,
+      "community": 0,
       "norm_label": "flash()"
     },
     {
@@ -1750,7 +1760,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_storage_db",
-      "community": 1,
+      "community": 4,
       "norm_label": "db"
     },
     {
@@ -1780,7 +1790,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_submit",
-      "community": 1,
+      "community": 4,
       "norm_label": "submit.js"
     },
     {
@@ -1800,7 +1810,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_submit_pintar",
-      "community": 1,
+      "community": 4,
       "norm_label": "pintar()"
     },
     {
@@ -1810,7 +1820,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "src_submit_limpiarenvio",
-      "community": 0,
+      "community": 1,
       "norm_label": "limpiarenvio()"
     },
     {
@@ -1820,7 +1830,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_submit_enviarpartida",
-      "community": 1,
+      "community": 4,
       "norm_label": "enviarpartida()"
     },
     {
@@ -1830,7 +1840,7 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "src_submit_repintarenvio",
-      "community": 1,
+      "community": 4,
       "norm_label": "repintarenvio()"
     },
     {
@@ -2947,7 +2957,7 @@
       "label": "Trampas que ya nos han mordido",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L220",
+      "source_location": "L228",
       "_origin": "ast",
       "id": "claude_trampas_que_ya_nos_han_mordido",
       "community": 12,
@@ -2957,7 +2967,7 @@
       "label": "C\u00f3mo se prueba",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L243",
+      "source_location": "L251",
       "_origin": "ast",
       "id": "claude_c\u00f3mo_se_prueba",
       "community": 12,
@@ -2967,7 +2977,7 @@
       "label": "Estilo",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L256",
+      "source_location": "L264",
       "_origin": "ast",
       "id": "claude_estilo",
       "community": 12,
@@ -3629,6 +3639,16 @@
       "confidence_score": 1.0,
       "source": "src_game",
       "target": "src_game_pintarcuenta"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/game.js",
+      "source_location": "L426",
+      "weight": 1.0,
+      "source": "src_game",
+      "target": "src_game_poner",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -5091,6 +5111,28 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/game.js",
+      "source_location": "L436",
+      "weight": 1.0,
+      "source": "src_game_pintarcuenta",
+      "target": "src_game_poner",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/game.js",
+      "source_location": "L427",
+      "weight": 1.0,
+      "source": "src_game_poner",
+      "target": "src_state",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/game.js",
       "source_location": "L433",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -5107,6 +5149,17 @@
       "confidence_score": 1.0,
       "source": "src_game_pintarcuenta",
       "target": "src_state"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/game.js",
+      "source_location": "L451",
+      "weight": 1.0,
+      "source": "src_game_cuentaatras",
+      "target": "src_i18n_t",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -12619,5 +12672,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "530429417ef0cfef91fd7ecbaac26055861828e6"
+  "built_at_commit": "da03769c67b9ae0128fa1d64d4a69b87cb217ef8"
 }

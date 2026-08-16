@@ -69,6 +69,18 @@ if (cual === "cuenta"){
   $("count-fold").textContent = "3"; $("count-bot").textContent = "3";
   $("count-top").textContent  = "2"; $("count-rise").textContent = "2";
 }
+/* Y la salida, que es la misma tarjeta con palabra en vez de cifra:
+   lo que se mira aquí es que quepa a lo ancho —cuatro signos donde
+   cabía uno— y que el pliegue la parta por donde partía el número. */
+if (cual === "ya"){
+  const { T } = await import("../src/i18n.js");
+  $("scr-intro").hidden = true;
+  $("count").hidden = false;
+  for (const id of ["count-fold", "count-bot", "count-top", "count-rise"]){
+    $(id).textContent = T("go");
+    $(id).classList.add("word");
+  }
+}
 if (cual === "cafe"){ $("go-donate").click(); }
 /* El botón de instalar sólo aparece cuando el navegador ofrece la
    instalación, y eso no pasa en una prueba: aquí se enseña a mano,
