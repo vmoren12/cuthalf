@@ -1,16 +1,16 @@
 # Graph Report - cuthalf  (2026-08-16)
 
 ## Corpus Check
-- 48 files · ~42,558 words
+- 48 files · ~44,158 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 314 nodes · 872 edges · 14 communities (12 shown, 2 thin omitted)
+- 319 nodes · 882 edges · 13 communities (11 shown, 2 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c0e33919`
+- Built from commit: `649edf7e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -28,13 +28,12 @@
 - [[_COMMUNITY_Community 10|Community 10]]
 - [[_COMMUNITY_Community 11|Community 11]]
 - [[_COMMUNITY_Community 12|Community 12]]
-- [[_COMMUNITY_Community 13|Community 13]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `$()` - 56 edges
+1. `$()` - 58 edges
 2. `T()` - 32 edges
 3. `paintOver()` - 16 edges
-4. `start()` - 15 edges
+4. `start()` - 16 edges
 5. `paintScores()` - 14 edges
 6. `paint()` - 13 edges
 7. `pedirMundo()` - 13 edges
@@ -51,33 +50,33 @@
   tools/test-core.mjs → supabase/functions/_shared/core/rng.js
 - `partidaPerfecta()` --calls--> `setRNG()`  [EXTRACTED]
   tools/test-core.mjs → supabase/functions/_shared/core/rng.js
-- `tutorStep()` --calls--> `T()`  [EXTRACTED]
-  src/game.js → src/i18n.js
+- `newLevel()` --calls--> `normalize()`  [EXTRACTED]
+  src/game.js → src/geometry.js
 
 ## Import Cycles
 - None detected.
 
-## Communities (14 total, 2 thin omitted)
+## Communities (13 total, 2 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.09
-Nodes (57): finishTutor(), goHome(), subirPartida(), L, setLang(), T(), savedTheme, applyLang() (+49 more)
+Cohesion: 0.08
+Nodes (60): finishTutor(), goHome(), tutorChrome(), L, setLang(), T(), savedTheme, applyLang() (+52 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.10
-Nodes (45): CONFIG, levelConfig(), STAGES, TUTOR, doCut(), gameOver(), guardarMarca(), newLevel() (+37 more)
+Nodes (44): CONFIG, levelConfig(), STAGES, TUTOR, CUENTA, cuentaAtras(), espera(), gameOver() (+36 more)
 
 ### Community 2 - "Community 2"
-Cohesion: 0.30
-Nodes (14): advance(), timeUp(), drawClock(), drawGuide(), drawLine(), drawParts(), ease(), paint() (+6 more)
+Cohesion: 0.16
+Nodes (26): advance(), doCut(), timeUp(), tutorStep(), area(), bisector(), centroid(), clipHalf() (+18 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.10
-Nodes (30): CONFIG, levelConfig(), STAGES, TUTOR, area(), bisector(), centroid(), clipHalf() (+22 more)
+Cohesion: 0.07
+Nodes (48): CONFIG, levelConfig(), STAGES, TUTOR, area(), bisector(), centroid(), clipHalf() (+40 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.11
-Nodes (45): paintScores(), hayRemoto(), meDaily(), meDailySpan(), meFree(), meFreeSpan(), NET, pedir() (+37 more)
+Cohesion: 0.13
+Nodes (35): hayRemoto(), meDaily(), meDailySpan(), meFree(), meFreeSpan(), NET, pedir(), REMOTO (+27 more)
 
 ### Community 5 - "Community 5"
 Cohesion: 0.13
@@ -103,12 +102,8 @@ Nodes (5): DESTINO, NUCLEO, ORIGEN, ROOT, soloComprueba
 Cohesion: 0.18
 Nodes (10): Al desplegar, Al empezar una sesión, Al terminar cualquier cambio, Cómo está repartido, Cómo se prueba, Decisiones que no son evidentes, Estilo, Si cambias una regla del juego (+2 more)
 
-### Community 13 - "Community 13"
-Cohesion: 0.17
-Nodes (18): cors(), cortesValidos(), db, diaValido(), entregar(), jugadorValido(), limpiarNombre(), ORIGENES (+10 more)
-
 ## Knowledge Gaps
-- **57 isolated node(s):** `STAGES`, `L`, `savedTheme`, `SPANS`, `REMOTO` (+52 more)
+- **58 isolated node(s):** `STAGES`, `CUENTA`, `L`, `savedTheme`, `SPANS` (+53 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -116,16 +111,16 @@ Nodes (18): cors(), cortesValidos(), db, diaValido(), entregar(), jugadorValido(
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `$()` connect `Community 0` to `Community 1`, `Community 2`, `Community 4`?**
-  _High betweenness centrality (0.056) - this node is a cross-community bridge._
-- **Why does `T()` connect `Community 0` to `Community 1`, `Community 4`?**
+  _High betweenness centrality (0.058) - this node is a cross-community bridge._
+- **Why does `T()` connect `Community 0` to `Community 1`, `Community 2`, `Community 4`?**
   _High betweenness centrality (0.019) - this node is a cross-community bridge._
-- **Why does `evaluate()` connect `Community 1` to `Community 2`?**
+- **Why does `evaluate()` connect `Community 2` to `Community 1`?**
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
-- **What connects `STAGES`, `L`, `savedTheme` to the rest of the system?**
-  _57 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `STAGES`, `CUENTA`, `L` to the rest of the system?**
+  _58 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.08557692307692308 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08384547848990342 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.09860859044162129 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09610389610389611 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
-  _Cohesion score 0.10144927536231885 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06790890269151138 - nodes in this community are weakly interconnected._

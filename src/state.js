@@ -18,6 +18,7 @@ export const S = {
   ticket: null, enviada: false,  // el vale del servidor y si ya se subió
   trace: [],                 // los cortes de la partida, para el servidor
   t0: 0, last: 0, aim: null, res: null, world: null, pause: null,
+  arranque: null,            // qué llamada a start() manda ahora mismo
   timer: 0, runTimer: 0, limit: 0, lastShape: null, mode: "free",
   board: "daily",            // clasificación que se está mirando
   scope: "world",            // el mundo o sólo este aparato
@@ -128,6 +129,19 @@ export const UI = {
     el.style.setProperty("--k", k);
     el.classList.toggle("miss", !!miss);
     el.classList.remove("on"); void el.offsetWidth; el.classList.add("on");
+  },
+  /* El pie a cero y sin despedirse.
+
+     `num(null)` sólo le quita el `on`, y eso es un desvanecido de
+     180 ms — el que hace falta al pasar de un nivel al siguiente,
+     donde el porcentaje que se va es el que acabas de leer. Al
+     empezar una partida ese mismo desvanecido se ve como un destello
+     del último corte de la partida anterior sobre una pantalla que
+     acaba de abrirse. Sin texto no hay nada que desvanecer.        */
+  numOff(){
+    const n = $("num");
+    S.numErr = null; S.numOk = false;
+    n.textContent = ""; n.className = "num";
   },
   num(err, ok){
     const n = $("num");

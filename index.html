@@ -33,7 +33,11 @@
        vidas y la cuenta atrás: las tres cosas que hay que poder mirar
        sin apartar la vista de la figura. Centrados en la pantalla, y
        sin recoger el dedo — el escenario entero es la zona de corte. -->
-  <div class="stage" id="stage"><canvas id="cv"></canvas><span class="lives" id="lives" data-ta="livesLeft"></span><span class="pts-live" id="pts-box"><b id="pts">0</b></span><p class="tip" id="tip" hidden></p><div class="hype" id="hype" aria-hidden="true"></div></div>
+  <div class="stage" id="stage"><canvas id="cv"></canvas><span class="lives" id="lives" data-ta="livesLeft"></span><span class="pts-live" id="pts-box"><b id="pts">0</b></span><p class="tip" id="tip" hidden></p><div class="hype" id="hype" aria-hidden="true"></div><!--
+       La cuenta atrás. Cuatro mitades porque una tarjeta que se parte
+       son cuatro: las dos quietas enseñan la cifra que viene, y las
+       dos que se mueven, la que se va. -->
+  <div class="flap" id="count" hidden aria-hidden="true"><b class="up"><i id="count-top">3</i></b><b class="lo"><i id="count-bot">3</i></b><b class="up fold"><i id="count-fold">3</i></b><b class="lo rise"><i id="count-rise">2</i></b></div></div>
 
   <footer class="readout">
     <div class="num" id="num" aria-hidden="true">0.0<small>%</small></div>

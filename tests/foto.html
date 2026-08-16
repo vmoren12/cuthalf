@@ -60,6 +60,15 @@ if (cual === "juego"){
   UI.num(1.3, true); UI.cap({ k:"cutOk", hit:true, gain:187 });
 }
 if (cual === "ask"){ ask("Elige un nombre para la clasificación mundial", "Guardar", "VICTOR"); }
+/* La cuenta atrás, quieta en la tarjeta del tres. Girando no hay
+   forma de mirarla, y lo que se comprueba en un retrato es que la
+   cifra quepa y que el pliegue caiga por el medio.                  */
+if (cual === "cuenta"){
+  $("scr-intro").hidden = true;
+  $("count").hidden = false;
+  $("count-fold").textContent = "3"; $("count-bot").textContent = "3";
+  $("count-top").textContent  = "2"; $("count-rise").textContent = "2";
+}
 if (cual === "cafe"){ $("go-donate").click(); }
 /* El botón de instalar sólo aparece cuando el navegador ofrece la
    instalación, y eso no pasa en una prueba: aquí se enseña a mano,

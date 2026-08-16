@@ -240,6 +240,12 @@ export function resumeRun(){
 /* abandonar: se pregunta con la partida detenida y, si se dice que
    no, se sigue donde estaba. Devuelve si se ha salido de verdad.   */
 export async function quitRun(){
+  /* Durante la cuenta atrás no se pregunta: no se ha jugado ni un
+     corte, así que no hay nada que abandonar y preguntarlo sería
+     pedir permiso para no hacer nada. Además `pauseRun()` no congela
+     esa fase —no hay reloj de figura todavía—, así que dejar correr
+     la pregunta arrancaría la partida por detrás del cartel.       */
+  if (S.phase === "count"){ goHome(); return true; }
   const mine = pauseRun();
   if (!await ask(T("quitAsk"), T("quitNow"))){
     if (mine) resumeRun();

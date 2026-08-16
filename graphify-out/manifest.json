@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "src/game.js": {
-    "mtime": 1786833308.7962992,
-    "ast_hash": "0a1eb7d1c7b104684b02ef23d6b440ae",
+    "mtime": 1786838210.6052685,
+    "ast_hash": "6f4c864eba10a57c1c37929c95436f17",
     "semantic_hash": ""
   },
   "src/geometry.js": {
@@ -30,8 +30,8 @@
     "semantic_hash": ""
   },
   "src/menu.js": {
-    "mtime": 1786740190.7707727,
-    "ast_hash": "a2a78ce089d2011d9c953a8a18a5d387",
+    "mtime": 1786838190.839185,
+    "ast_hash": "11b07711ef70a3a9b257adad78e597ed",
     "semantic_hash": ""
   },
   "src/net.js": {
@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   "src/pwa.js": {
-    "mtime": 1786833418.5142038,
-    "ast_hash": "112edcbc9f260b9386ba688a7085c0f9",
+    "mtime": 1786838631.2759738,
+    "ast_hash": "d98b8fa318ee3d8bb5131e6b04655445",
     "semantic_hash": ""
   },
   "src/render.js": {
@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "src/scores.js": {
-    "mtime": 1786833284.7726593,
-    "ast_hash": "cf862c73f858b4a4b94dcb77e7694fca",
+    "mtime": 1786838082.2737262,
+    "ast_hash": "c8b8015c3fb74b6725d768a8deea76e5",
     "semantic_hash": ""
   },
   "src/scoring.js": {
@@ -85,8 +85,8 @@
     "semantic_hash": ""
   },
   "src/state.js": {
-    "mtime": 1786660817.3095186,
-    "ast_hash": "96c99768d964bc94fe1e59c35f434be6",
+    "mtime": 1786838055.440851,
+    "ast_hash": "4d2d865f825d4bc58a979fc9e578232a",
     "semantic_hash": ""
   },
   "src/storage.js": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "sw.js": {
-    "mtime": 1786833417.485767,
-    "ast_hash": "6751b3bf38b56eb9803292117157df62",
+    "mtime": 1786838629.976889,
+    "ast_hash": "29bec90f115c256d070efeaa5a81548a",
     "semantic_hash": ""
   },
   "tests/serve.mjs": {
@@ -205,8 +205,8 @@
     "semantic_hash": ""
   },
   "DATOS.md": {
-    "mtime": 1786833508.9596453,
-    "ast_hash": "fb8f0264d6c9dd8a833d030c09c1779c",
+    "mtime": 1786838650.1297853,
+    "ast_hash": "ca6184bb607682171f21c3996527c268",
     "semantic_hash": ""
   },
   "README.md": {
@@ -215,18 +215,18 @@
     "semantic_hash": ""
   },
   "index.html": {
-    "mtime": 1786663669.8060389,
-    "ast_hash": "0add1710f0d2b4effcf66102900eb063",
+    "mtime": 1786838088.7129629,
+    "ast_hash": "79fb32ef32d87d5eb400ac35a3b4e39a",
     "semantic_hash": ""
   },
   "tests/foto.html": {
-    "mtime": 1786664787.6712203,
-    "ast_hash": "0acd221a9d58e8e5a5d90263aa8b474c",
+    "mtime": 1786838270.2725778,
+    "ast_hash": "de63f59033e3586e146cc474ff9a012d",
     "semantic_hash": ""
   },
   "tests/probe.html": {
-    "mtime": 1786833404.814561,
-    "ast_hash": "5a762d52b5aed80a505c42eb9cf5b53d",
+    "mtime": 1786838295.3258567,
+    "ast_hash": "f230a345ba125b3483e051b33d2a004a",
     "semantic_hash": ""
   },
   "icons/icon-192-any.png": {
@@ -245,8 +245,8 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1786833538.8198707,
-    "ast_hash": "ebe0b96e197474993aeee2ae498d9c49",
+    "mtime": 1786838639.833323,
+    "ast_hash": "7e205b64a952daabc12fe8eeb4e6732a",
     "semantic_hash": ""
   },
   "supabase/migrations/20260812000004_puntos.sql": {

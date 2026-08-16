@@ -206,6 +206,17 @@ debajo de ahí no hay nada que ganar declarando prisas imposibles.
 **Nada del juego depende de que el servidor responda.** Sin red se
 juega igual, con semilla local y sin subir nada.
 
+**La cuenta atrás no es un adorno.** Tres tarjetas partidas por la
+mitad —`CUENTA` y `cuentaAtras()` en `src/game.js`, el efecto en
+`.flap` de `css/game.css`— antes de la primera figura. Da tiempo a
+mirar y a colocar el dedo, que en un juego que paga ×2 hasta segundo
+y medio no es poco. Y corre **a la vez** que se pide el vale, así que
+la espera de red se gasta contando: si el servidor tarda menos que
+las tres tarjetas, no se nota que se le haya esperado. Mientras dura,
+`S.phase` vale `"count"` — ni portada ni juego, así que el trazo no
+cuenta y «Cerrar» sale sin preguntar. El compás vive en `CUENTA` y
+viaja al CSS en `--flip`; las pruebas lo ponen a cero.
+
 ## Trampas que ya nos han mordido
 
 - **`_headers` sin extensión.** Se llamaba `_headers.txt` y Netlify

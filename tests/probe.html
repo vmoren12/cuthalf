@@ -58,7 +58,7 @@ localStorage.clear();
 localStorage.setItem("half.v1", JSON.stringify(identidad));
 
 const { S, $ }                            = await import("../src/state.js");
-const { start, doCut, gameOver, saveMark, goHome, paintOver } = await import("../src/game.js");
+const { start, doCut, gameOver, saveMark, goHome, paintOver, CUENTA } = await import("../src/game.js");
 const { DB, DAILY, qualifies }            = await import("../src/storage.js");
 const { CUT, cutPoints, freeBoard }       = await import("../src/scoring.js");
 const { porDelante, inSpan, spanCut, localDays, localRuns, runWhen } = await import("../src/scores.js");
@@ -103,6 +103,11 @@ const cortePerfecto = angulo => {
   doCut({ x: P.x - N.y*90, y: P.y + N.x*90 }, { x: P.x + N.y*90, y: P.y - N.x*90 });
 };
 const terminarNivel = () => { frame(); paint(S.res.t0 + 5000); };
+
+/* Sin cuenta atrás salvo donde se la comprueba: son nueve partidas y
+   contar tres tarjetas en cada una son veinte segundos de prueba que
+   no miran nada. Lo que hace la cuenta tiene su paso, más abajo.   */
+CUENTA.desde = 0;
 
 /* ── geometría ─────────────────────────────────────────────────── */
 await step("un diámetro reparte al 50%", () => {
@@ -152,9 +157,12 @@ await step("la marca se guarda sola, pero no se sube sola", async () => {
   gameOver();
   if (DB.list(freeBoard(0)).length !== antes + 1) throw new Error("no ha guardado la marca en el aparato");
   if (ENVIO.estado !== "") throw new Error("ha subido sin que se lo pidan: " + ENVIO.estado);
-  /* y se ofrece subir exactamente cuando se puede: sin vale el
-     servidor no podría comprobar la partida                        */
-  if ($("keep-up").hidden === !!S.ticket) throw new Error("el botón de subir no cuadra con el vale");
+  /* y no se ofrece subir hasta saber si sirve de algo: mientras se
+     pregunta al mundo no hay botón, porque asomar y desaparecer se
+     ve. Lo que sí está desde el primer momento es el bloque, que
+     lleva el nombre.                                                */
+  if (!$("keep-up").hidden) throw new Error("ofrece subir antes de saber si mueve algo");
+  if (S.ticket && !S.score.pidiendo) throw new Error("ni siquiera lo ha preguntado");
   /* con el nombre delante y ya puesto, que es con el que se sube */
   if ($("name").value !== DB.name()) throw new Error("el nombre no viene puesto: " + $("name").value);
   goHome();
@@ -304,9 +312,12 @@ await step("no se ofrece subir una partida que no mueve ninguna tabla", async ()
   gameOver();
   const ofrecible = !!S.ticket && S.trace.length > 0;
 
-  /* mientras no se sepa, se ofrece: esconder el botón por una
-     respuesta que no ha llegado sería perder la marca por un túnel  */
-  S.score.proy = null; paintOver();
+  /* mientras se pregunta no hay botón —asomar y desaparecer se ve—,
+     pero preguntado y sin respuesta sí: esconderlo por algo que no
+     ha llegado sería perder la marca por un túnel                   */
+  S.score.pidiendo = true; S.score.proy = null; paintOver();
+  if (!$("keep-up").hidden) throw new Error("ofrece subir mientras aún lo está preguntando");
+  S.score.pidiendo = false; paintOver();
   if ($("keep-up").hidden !== !ofrecible) throw new Error("sin dato deja de ofrecer subir");
 
   /* con el dato y sin nada que mover: fuera el botón, y la línea que
@@ -322,6 +333,38 @@ await step("no se ofrece subir una partida que no mueve ninguna tabla", async ()
      así mueve una fila que se mira: el botón vuelve                 */
   S.score.proy = { pos:7, total:120, mejora:false, sube:true }; paintOver();
   if ($("keep-up").hidden !== !ofrecible) throw new Error("no ofrece subir tu mejor de hoy");
+  goHome();
+});
+
+/* Antes de la primera figura se cuentan tres tarjetas. Mientras dura,
+   la partida no ha empezado —el trazo no cuenta, que `input.js` sólo
+   atiende jugando— y al acabar arranca sola.                        */
+await step("se cuenta atrás antes de jugar, y hasta que no acaba no hay figura", async () => {
+  Object.assign(CUENTA, { desde: 2, hold: 60, flip: 40 });
+  S.timer = 0;
+  const partida = start("free");
+  if ($("count").hidden) throw new Error("no aparece la cuenta atrás");
+  if (S.phase !== "count") throw new Error("empieza a jugar mientras cuenta: " + S.phase);
+  if ($("count-fold").textContent !== "2") throw new Error("no empieza por el 2: " + $("count-fold").textContent);
+  await partida;
+  if (!$("count").hidden) throw new Error("la cuenta atrás se queda puesta");
+  if (S.phase !== "play") throw new Error("no arranca al acabar de contar: " + S.phase);
+  goHome();
+  CUENTA.desde = 0;
+});
+
+/* El pie arrastraba el porcentaje del último corte de la partida
+   anterior: `num(null)` lo desvanece en 180 ms y eso, con la pantalla
+   de fin recién cerrada, se ve como un destello.                    */
+await step("al empezar, el pie no arrastra el porcentaje de la anterior", async () => {
+  S.timer = 0;
+  await start("free");
+  frame(); cut(0, 140);
+  if (!$("num").textContent.trim()) throw new Error("el corte no ha escrito nada en el pie");
+  gameOver();
+  await start("free");
+  if ($("num").textContent.trim()) throw new Error("queda porcentaje de la anterior: " + $("num").textContent);
+  if ($("num").className !== "num") throw new Error("el pie sigue encendido: " + $("num").className);
   goHome();
 });
 
@@ -367,6 +410,9 @@ await step("una partida sube a la clasificación mundial", async () => {
   if (S.level !== 6) throw new Error("cinco cortes buenos deberían dejarlo en 6, y está en " + S.level);
   await esperar(1600);                       // una partida lleva su tiempo
   gameOver();
+  /* la pantalla pregunta primero si subir sirve de algo; se espera a
+     que conteste, que es lo que ve el jugador antes de decidir     */
+  for (let i = 0; i < 40 && S.score.pidiendo; i++) await esperar(100);
   $("keep-up").click();                      // ahora sube porque se lo piden
   for (let i = 0; i < 40 && ENVIO.estado !== "hecho" && ENVIO.estado !== "fallo" && ENVIO.estado !== "sin-red"; i++)
     await esperar(250);

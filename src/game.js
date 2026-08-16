@@ -3,7 +3,7 @@
 import { CONFIG, TUTOR, levelConfig } from "./config.js";
 import { DAILY, DB, qualifies } from "./storage.js";
 import { RNG, TAU, mulberry32, pick, setRNG } from "./rng.js";
-import { $, S, UI, flash } from "./state.js";
+import { $, S, UI, flash, reduceMotion } from "./state.js";
 import { SHAPES } from "./shapes.js";
 import { T } from "./i18n.js";
 import { applyUpdate, pendingReload, swReg } from "./pwa.js";
@@ -74,6 +74,7 @@ export function startTutor(pending){
   $("hype").classList.remove("on");
   armBack();
   tutorChrome(true);
+  UI.numOff();                    // sin destello del porcentaje anterior
   tutorStep();
 }
 
@@ -297,13 +298,21 @@ export function paintOver(){
 
   /* Con el número delante, que decidir a ciegas no es decidir. Se
      pregunta una sola vez por partida —`proy` deja de ser undefined en
-     cuanto se pide— y se vuelve a pintar cuando llega. Si para
-     entonces ya se está en otra partida, no se toca nada.           */
+     cuanto se pide— y se vuelve a pintar cuando conteste. Si para
+     entonces ya se está en otra partida, no se toca nada.
+
+     `pidiendo` es el estado que faltaba. Antes «todavía no sé» y «he
+     preguntado y no me han contestado» eran el mismo valor —null— y
+     como sin saber se ofrece, el botón asomaba en cuanto se abría la
+     pantalla y desaparecía al llegar la respuesta. Ese parpadeo se
+     veía. Ahora mientras se pregunta no hay botón, y aparece —o no—
+     de una vez, junto a la línea del puesto, que llega con él.     */
   if (sc.proy === undefined && conVale){
-    sc.proy = null;
+    sc.proy = null; sc.pidiendo = true;
     puestoProyectado(S.mode === "daily" ? "daily" : freeBoard(sc.tl), sc)
-      .then(p => { sc.proy = p; if (S.score === sc) paintOver(); })
-      .catch(() => {});
+      .then(p => { sc.proy = p; })
+      .catch(() => {})
+      .finally(() => { sc.pidiendo = false; if (S.score === sc) paintOver(); });
   }
 
   /* El bloque se queda también sin vale la primera vez: sin nombre no
@@ -317,7 +326,7 @@ export function paintOver(){
 
      `sube` vale false únicamente cuando se ha podido comprobar; con
      `proy` a null —la consulta no llegó— el botón se queda.         */
-  $("keep-up").hidden = !conVale || sc.proy?.sube === false;
+  $("keep-up").hidden = !conVale || sc.pidiendo || sc.proy?.sube === false;
 
   const texto = textoPuesto(sc.proy);
   $("rank-note").textContent = texto;
@@ -377,10 +386,64 @@ export function saveMark(){
 export function goHome(){
   limpiarEnvio();
   $("scr-over").hidden = true; $("scr-intro").hidden = false;
+  $("count").hidden = true;           // si se sale contando, la cuenta se va con ello
   S.phase = "intro"; S.score = null; S.pause = null;
   disarmBack();                       // en la portada, atrás vuelve a salir
   $("hype").classList.remove("on");
   if (pendingReload) applyUpdate();
+}
+
+/* ── cuenta atrás ─────────────────────────────────────────────────
+   Tres tarjetas partidas por la mitad antes de empezar. Da el tiempo
+   de mirar la pantalla y de colocar el dedo, que en un juego que se
+   decide en segundo y medio no es un adorno: sin ella la primera
+   figura sale mientras todavía se está llegando.
+
+   Y va a la vez que se pide el vale al servidor, así que la espera de
+   red se gasta contando. Si el servidor tarda menos que esto —lo
+   normal—, no se nota que se le haya esperado.
+
+   El compás vive aquí y viaja al CSS en `--flip`, que es la única
+   forma de que las dos mitades del efecto no discrepen. Las pruebas
+   lo ponen a cero: allí sólo alargaría.                             */
+export const CUENTA = { desde: 3, hold: 340, flip: 300 };
+
+const espera = ms => new Promise(r => setTimeout(r, ms));
+
+/* de `de` a `a`: las mitades quietas enseñan ya la que viene y las
+   que se mueven, la que se va. Tras el uno no viene un cero — viene
+   la figura—, así que la última vuelta descubre una tarjeta vacía y
+   con eso la cuenta se retira sola.                                 */
+function pintarCuenta(de, a){
+  $("count-top").textContent  = a;
+  $("count-rise").textContent = a;
+  $("count-bot").textContent  = de;
+  $("count-fold").textContent = de;
+}
+
+/* `marca` es la partida que la pidió. Si mientras cuenta empieza otra,
+   la tarjeta pasa a ser de aquélla y ésta se retira sin recogerla:
+   apagarla al terminar dejaría a oscuras la cuenta del vecino.     */
+async function cuentaAtras(marca){
+  const caja = $("count");
+  if (!CUENTA.desde) return;
+  caja.style.setProperty("--flip", CUENTA.flip + "ms");
+  caja.hidden = false;
+  for (let n = CUENTA.desde; n >= 1; n--){
+    pintarCuenta(String(n), n > 1 ? String(n - 1) : "");
+    caja.classList.remove("turn");
+    void caja.offsetWidth;             // para poder repetir la misma vuelta
+    await espera(CUENTA.hold);
+    if (S.arranque !== marca) return;
+    /* sin movimiento las cifras se relevan y ya: quien pide menos
+       animación no quiere una tarjeta girando en mitad de la pantalla */
+    if (reduceMotion) continue;
+    caja.classList.add("turn");
+    await espera(CUENTA.flip);
+    if (S.arranque !== marca) return;
+  }
+  caja.classList.remove("turn");
+  caja.hidden = true;
 }
 
 /* `seed` sólo llega en el juego libre y sólo cuando la reparte el
@@ -416,21 +479,45 @@ export async function start(mode, seed){
      la portada: sin esto, repetir el reto heredaba el «marca subida»
      de la anterior y se quedaba sin botón con el que desmentirlo.  */
   S.ticket = null; S.enviada = false; limpiarEnvio();
-  const vale = await runStart(S.mode === "daily" ? "daily" : freeBoard(S.runTimer), dayKey());
+
+  /* La partida se pone en blanco ANTES de contar, no después: lo que
+     se ve detrás de las tarjetas tiene que ser ya ésta y no los
+     restos de la anterior. El escenario se queda vacío solo —`paint()`
+     sólo dibuja jugando— y el pie se apaga de golpe, que es lo que
+     `numOff()` hace y `num(null)` no.                                */
+  S.recordShown = false;
+  S.level = 1; S.lives = CONFIG.lives; S.slots = CONFIG.lives; S.streak = 0;
+  S.cuts = []; S.score = null; S.pause = null; S.lastShape = null; S.points = 0;
+  S.trace = []; S.aim = null; S.res = null; S.world = null;
+  S.phase = "count";                  // ni portada ni juego: el trazo aún no cuenta
+  $("lives").innerHTML = "";
+  $("name").value = "";
+  $("scr-intro").hidden = true; $("scr-over").hidden = true;
+  $("hype").classList.remove("on");
+  armBack();
+  UI.lives(); UI.level(); UI.points(true); UI.numOff(); UI.cap({ k:"swipe" });
+
+  /* El vale y la cuenta atrás, a la vez, porque cuestan lo mismo y
+     esperar dos veces sería esperar de más.
+
+     `marca` distingue esta llamada de cualquier otra. Contar dura lo
+     suyo, y en ese rato caben un «atrás», una vuelta a la portada o
+     un segundo toque en «Reintentar»: si al volver aquí ya no manda
+     ésta, se sale sin tocar nada. Sin esto, irse a la portada durante
+     la cuenta arrancaba una partida por debajo de ella.             */
+  const marca = S.arranque = {};
+  const [vale] = await Promise.all([
+    runStart(S.mode === "daily" ? "daily" : freeBoard(S.runTimer), dayKey()),
+    cuentaAtras(marca)
+  ]);
+  if (S.arranque !== marca || S.phase !== "count") return;
+
   if (vale && !vale.error && typeof vale.seed === "number"){
     seed = vale.seed;
     S.ticket = vale.ticket;
     S.runTimer = vale.tl;
   }
   setRNG(mulberry32(seed));
-  S.recordShown = false;
-  S.level = 1; S.lives = CONFIG.lives; S.slots = CONFIG.lives; S.streak = 0;
-  S.cuts = []; S.score = null; S.pause = null; S.lastShape = null; S.points = 0;
-  S.trace = []; S.seed = seed; S.startedAt = Date.now();
-  $("lives").innerHTML = "";
-  $("name").value = "";
-  $("scr-intro").hidden = true; $("scr-over").hidden = true;
-  $("hype").classList.remove("on");
-  armBack();
-  UI.lives(); UI.points(true); newLevel();      // a cero de golpe, sin contar hacia atrás
+  S.seed = seed; S.startedAt = Date.now();
+  newLevel();
 }

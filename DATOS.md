@@ -305,6 +305,15 @@ Y hay una regla que no se salta: **el botón se retira sólo con el dato
 en la mano**. Si esa consulta no llegó, se ofrece — esconderlo por una
 respuesta que no vino sería perder la marca por un túnel.
 
+Para eso hacen falta **tres** estados y no dos, que es donde estuvo el
+parpadeo: `pidiendo` (se está preguntando), `proy` a null (se preguntó
+y no se supo) y `proy` con datos. Mientras se pregunta no hay botón; si
+«todavía no sé» y «no me han contestado» comparten valor, el botón
+asoma al abrirse la pantalla y desaparece al llegar la respuesta, y ese
+parpadeo se ve. La espera está acotada a 2,5 s en `puestoProyectado()`:
+es una consulta para decidir qué enseñar y hay alguien delante, así que
+no puede heredar el plazo de nueve segundos de `pedir()`.
+
 Cuando no hay nada que mover, en el sitio del botón queda la frase que
 lo explica: «Tu marca de esta tabla es mejor: seguirías 12.º de 300».
 La casilla del nombre se queda, que cambiarlo sigue valiendo.

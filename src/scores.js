@@ -238,12 +238,22 @@ export function porDelante(lista, yo, sc){
   return lista.filter(r => r.player_id !== yo && Number(r.points) >= sc.pts).length;
 }
 
+/* Lo que se espera al mundo antes de dar la pantalla de fin por
+   pintada. No es un dato de la partida —es una consulta para decidir
+   qué enseñar— y hay alguien delante mirando: si no contesta en este
+   rato se sigue sin saber, y sin saber se ofrece subir. Sin este
+   corte, una red colgada dejaría la pantalla sin botón hasta que
+   venciera el plazo de `pedir()`, nueve segundos más allá.          */
+const PLAZO = 2500;
+const aTiempo = p => Promise.race([p, new Promise(r => setTimeout(() => r(null), PLAZO))]);
+
 export async function puestoProyectado(board, sc){
   const yo = ME.id(), dia = dayKey(), esReto = board === "daily";
 
-  const [lista, mio, delDia] = await Promise.all(esReto
+  const [lista, mio, delDia] = await Promise.all((esReto
     ? [worldDaily(dia, TOPE), meDaily(yo, dia), null]
-    : [worldFree(board, TOPE), meFree(yo, board), meFreeSpan(yo, board, startOfToday())]);
+    : [worldFree(board, TOPE), meFree(yo, board), meFreeSpan(yo, board, startOfToday())]
+  ).map(aTiempo));
   if (!Array.isArray(lista)) return null;
 
   const m   = Array.isArray(mio)    ? mio[0]    : null;

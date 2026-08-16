@@ -68,6 +68,49 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
   100%{opacity:0;transform:translateY(-50%) scale(1.03)}
 }
 
+/* ── cuenta atrás ────────────────────────────────────────────────
+   Tres tarjetas que se dan la vuelta partiéndose por la mitad, como
+   los paneles de los aeropuertos: la mitad de arriba cae sobre la de
+   abajo y detrás queda la cifra siguiente. Es el gesto del juego
+   —partir en dos por el centro— ensayado antes de jugarlo, y por eso
+   el pliegue va donde va y no en otro sitio.
+
+   Sin caja ni sombra: la tarjeta es del color del fondo y lo único
+   que la dibuja es la línea del corte, que es como se dibuja todo
+   aquí. Lo que se ve es el movimiento.
+
+   Ni una duración escrita: `--flip` la pone game.js desde `CUENTA`,
+   que es quien reparte el compás. Así no pueden discrepar.        */
+.flap{
+  position:absolute;left:50%;top:50%;width:112px;height:140px;
+  transform:translate(-50%,-50%);perspective:600px;z-index:1;
+  pointer-events:none;
+}
+.flap b{
+  position:absolute;left:0;width:100%;height:50%;overflow:hidden;
+  background:var(--ground);backface-visibility:hidden;
+}
+/* Las cuatro mitades recortan la MISMA caja de 140 px, y la de abajo
+   la sube justo la mitad. Por eso el corte cae siempre en el mismo
+   sitio: no depende de la forma del dígito, sino de la caja.      */
+.flap i{
+  display:block;width:100%;height:140px;
+  font-family:var(--sans);font-style:normal;font-weight:600;
+  font-size:116px;line-height:140px;letter-spacing:-.05em;
+  text-align:center;color:var(--ink);
+}
+.flap .lo i{margin-top:-70px}
+.flap .up{top:0;transform-origin:50% 100%;border-bottom:1px solid var(--hair)}
+.flap .lo{bottom:0;transform-origin:50% 0}
+/* la que cae va delante de todo; la que sube espera de canto, que a
+   90 grados no se ve, y sólo entonces tapa a la cifra vieja       */
+.flap .fold{z-index:3}
+.flap .rise{z-index:2;transform:rotateX(90deg)}
+.flap.turn .fold{animation:flapFold calc(var(--flip)/2) ease-in forwards}
+.flap.turn .rise{animation:flapRise calc(var(--flip)/2) calc(var(--flip)/2) ease-out forwards}
+@keyframes flapFold{to{transform:rotateX(-90deg)}}
+@keyframes flapRise{from{transform:rotateX(90deg)}to{transform:rotateX(0)}}
+
 /* ── lectura inferior ────────────────────────────────────────── */
 .readout{min-height:118px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px}
 .num{
