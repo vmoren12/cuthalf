@@ -18,14 +18,18 @@
 .stage{position:relative}
 canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 /* vidas: dentro del escenario, arriba a la izquierda, enfrentadas
-   a la cuenta atrás que se dibuja en el lienzo arriba a la derecha */
-.stage .lives{position:absolute;left:12px;top:19px;z-index:2}
+   a la cuenta atrás que se dibuja en el lienzo arriba a la derecha.
+
+   Colgadas del renglón con el mismo gesto que el marcador —`top:26` y
+   medio tirón hacia arriba— y no de un `top` calculado a mano: así el
+   día que cambie el alto de la barra siguen centradas solas. Con la
+   cuenta a mano bastaba tocar ese alto para descolgarlas.           */
+.stage .lives{position:absolute;left:12px;top:26px;transform:translateY(-50%);z-index:2}
 /* El marcador en directo, en medio de esas dos.
 
-   Los tres van al mismo renglón: la cuenta atrás se dibuja centrada en
-   la altura 26 del lienzo y las vidas, de 19 a 33, quedan centradas
-   ahí también; de ahí el `top:26px` con el medio tirón hacia arriba,
-   que centra la caja en esa misma línea sea cual sea su tamaño.
+   Los tres van al mismo renglón: la altura 26 del lienzo, que es donde
+   render.js dibuja el reloj. El `top:26px` con el medio tirón hacia
+   arriba centra la caja en esa línea sea cual sea su tamaño.
 
    En azul, que es el color del acierto, y con cifra tabular para que
    no baile al rodar de 999 a 1.000. Y sin recoger el puntero: el
@@ -35,9 +39,17 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
    20 px y no más: es el marcador de la partida y merece verse, pero
    el techo lo pone el reloj de al lado, que ocupa de 12 a 40 en el
    lienzo. Pasado eso la cifra sobresale de su renglón y compite con
-   la figura en vez de acompañarla.                                  */
+   la figura en vez de acompañarla.
+
+   Y ese medio píxel de más: centrar la caja no centra la cifra. La
+   tinta de un número va de la línea base al alto de versal, y eso no
+   cae en medio de su caja — se queda 0,4 px alto. Lo que tiene que
+   quedar a la altura de las barras es la cifra, no la caja que la
+   contiene, así que se baja lo que sobra. Medido en el retrato del
+   renglón, no calculado: depende de la tipografía.                  */
 .pts-live{
-  position:absolute;left:0;right:0;top:26px;transform:translateY(-50%);
+  position:absolute;left:0;right:0;top:26px;
+  transform:translateY(calc(-50% + .4px));
   z-index:2;pointer-events:none;text-align:center;
   font-size:20px;letter-spacing:.04em;line-height:1;
 }

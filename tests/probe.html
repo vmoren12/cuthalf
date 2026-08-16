@@ -217,6 +217,48 @@ await step("los puntos se ganan en el corte y se ven en directo", async () => {
   goHome();
 });
 
+/* Vidas, marcador y reloj comparten el renglón de arriba del
+   escenario, y eso se descuadra solo: basta tocar el tamaño de la
+   cifra para que la tinta deje de caer donde cae la barra.
+
+   Se mide la tinta y no las cajas, que es lo único que se ve. La de
+   la barra es la caja, que va pintada entera; la de la cifra va de la
+   línea base al alto de versal, así que hace falta la línea base —una
+   caja de alto cero alineada a ella— y el alto que mida la propia
+   tipografía. El reloj no se mide: lo dibuja render.js centrado en 26
+   y ése es el renglón contra el que se comparan los otros dos.     */
+await step("vidas, marcador y reloj van a la misma altura", async () => {
+  S.timer = 0;
+  await start("free");
+  const RENGLON = 26, borde = $("stage").getBoundingClientRect().top;
+  const centro = r => (r.top + r.bottom) / 2 - borde;
+
+  const viva = document.querySelector("#lives i");
+  if (!viva) throw new Error("la partida no ha pintado las vidas");
+  const barra = centro(viva.getBoundingClientRect());
+  if (Math.abs(barra - RENGLON) > 0.5)
+    throw new Error("las vidas se salen del renglón: " + barra.toFixed(2));
+
+  const b = $("pts"), cs = getComputedStyle(b);
+  const marca = document.createElement("span");
+  marca.style.cssText = "display:inline-block;width:0;height:0;vertical-align:baseline";
+  b.appendChild(marca);
+  const base = marca.getBoundingClientRect().bottom - borde;
+  marca.remove();
+  const m = document.createElement("canvas").getContext("2d");
+  m.font = cs.fontWeight + " " + cs.fontSize + " " + cs.fontFamily;
+  const alto = m.measureText(b.textContent || "0");
+  const cifra = base - (alto.actualBoundingBoxAscent - alto.actualBoundingBoxDescent) / 2;
+  /* aquí el margen es de un cuarto de píxel y no de medio: centrar la
+     caja en vez de la cifra descoloca 0,4, y con medio píxel de manga
+     ancha esto no se enteraría. Cuenta con DM Mono cargada, que es de
+     donde salen las medidas — la prueba ya necesita red.            */
+  if (Math.abs(cifra - RENGLON) > 0.25)
+    throw new Error("el marcador se sale del renglón: " + cifra.toFixed(2) +
+                    " contra la barra en " + barra.toFixed(2));
+  goHome();
+});
+
 /* ── repetición: lo que hace el servidor ───────────────────────── */
 await step("un corte mide igual en la pantalla que en la figura", async () => {
   S.timer = 0; await start("free"); frame();

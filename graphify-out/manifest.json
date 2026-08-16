@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   "src/pwa.js": {
-    "mtime": 1786882584.8714807,
-    "ast_hash": "158a5238bc3ca49e260a02356d0afba2",
+    "mtime": 1786885808.9105918,
+    "ast_hash": "7abae8a3a9359d01e9e30bf6b5e45b86",
     "semantic_hash": ""
   },
   "src/render.js": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "sw.js": {
-    "mtime": 1786882583.6899283,
-    "ast_hash": "0f1c44547177020d7002f24c596b4770",
+    "mtime": 1786885807.8440838,
+    "ast_hash": "b6d53ad70075df3c5306580d6b7f3650",
     "semantic_hash": ""
   },
   "tests/serve.mjs": {
@@ -225,8 +225,8 @@
     "semantic_hash": ""
   },
   "tests/probe.html": {
-    "mtime": 1786838295.3258567,
-    "ast_hash": "f230a345ba125b3483e051b33d2a004a",
+    "mtime": 1786885750.3771286,
+    "ast_hash": "53c48eed35a8176f25b5e014168fc4cf",
     "semantic_hash": ""
   },
   "icons/icon-192-any.png": {

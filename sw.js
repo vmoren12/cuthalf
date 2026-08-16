@@ -11,7 +11,7 @@
    Desde que el juego está repartido en módulos, la instalación se
    los lleva todos de una vez: con una lista incompleta el HTML nuevo
    podría acabar cargando módulos de la versión anterior.            */
-const VERSION = "2026.08.16-9";
+const VERSION = "2026.08.16-10";
 const CACHE   = "splitinhalf-" + VERSION;
 const PAGE    = new URL(location).searchParams.get("page") || "./";
 
