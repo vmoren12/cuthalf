@@ -218,20 +218,26 @@ await step("los puntos se ganan en el corte y se ven en directo", async () => {
   goHome();
 });
 
-/* Vidas, marcador y reloj comparten el renglón de arriba del
-   escenario, y eso se descuadra solo: basta tocar el tamaño de la
-   cifra para que la tinta deje de caer donde cae la barra.
+/* Vidas, marcador y reloj comparten la banda de arriba del escenario,
+   y eso se descuadra solo: basta tocar el tamaño de la cifra para que
+   la tinta deje de caer donde se la espera.
+
+   Vidas y reloj van al mismo renglón, el 26. El marcador cuelga del
+   suyo, seis más abajo, porque a 36 px se le quedaba pegado al filo de
+   arriba; que sea a propósito no lo hace menos frágil —esos seis son
+   una medida, y una medida se pierde en cuanto alguien toque el
+   cuerpo—, así que también se comprueba.
 
    Se mide la tinta y no las cajas, que es lo único que se ve. La de
    la barra es la caja, que va pintada entera; la de la cifra va de la
    línea base al alto de versal, así que hace falta la línea base —una
    caja de alto cero alineada a ella— y el alto que mida la propia
    tipografía. El reloj no se mide: lo dibuja render.js centrado en 26
-   y ése es el renglón contra el que se comparan los otros dos.     */
-await step("vidas, marcador y reloj van a la misma altura", async () => {
+   y ése es el renglón contra el que se compara la barra.           */
+await step("vidas, marcador y reloj caen donde deben", async () => {
   S.timer = 0;
   await start("free");
-  const RENGLON = 26, borde = $("stage").getBoundingClientRect().top;
+  const RENGLON = 26, MARCADOR = 32, borde = $("stage").getBoundingClientRect().top;
   const centro = r => (r.top + r.bottom) / 2 - borde;
 
   const viva = document.querySelector("#lives i");
@@ -259,9 +265,9 @@ await step("vidas, marcador y reloj van a la misma altura", async () => {
 
      Cuenta con DM Mono cargada, que es de donde salen las medidas —
      la prueba ya necesita red de todas formas.                     */
-  if (Math.abs(cifra - RENGLON) > 0.35)
-    throw new Error("el marcador se sale del renglón: " + cifra.toFixed(2) +
-                    " contra la barra en " + barra.toFixed(2));
+  if (Math.abs(cifra - MARCADOR) > 0.35)
+    throw new Error("el marcador se sale de su renglón: " + cifra.toFixed(2) +
+                    " en vez de " + MARCADOR + ", con la barra en " + barra.toFixed(2));
   goHome();
 });
 

@@ -27,21 +27,23 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .stage .lives{position:absolute;left:12px;top:26px;transform:translateY(-50%);z-index:2}
 /* El marcador en directo, en medio de esas dos.
 
-   Los tres van al mismo renglón: la altura 26 del lienzo, que es donde
-   render.js dibuja el reloj. El `top:26px` con el medio tirón hacia
-   arriba centra la caja en esa línea sea cual sea su tamaño.
+   Vidas y reloj van al renglón 26 del lienzo, que es donde render.js
+   dibuja el aro. El marcador cuelga de un renglón propio, 6 px por
+   debajo: el `top` con el medio tirón hacia arriba centra la caja en
+   esa línea sea cual sea su tamaño.
+
+   Seis y no cero porque a 36 px la cifra mide unos 26 de tinta, y
+   colgada del mismo renglón que las otras dos le quedaban trece
+   escasos hasta el filo de arriba del escenario —pegada a la raya del
+   HUD, como si se saliera—. Bajándola quedan diecinueve y respira.
+   Las tres siguen leyéndose como una sola banda porque el marcador es
+   mucho más alto que sus vecinas y las envuelve de sobra; lo que se
+   descuadraría es alinearlas por el centro cuando una mide el doble.
 
    En azul, que es el color del acierto, y con cifra tabular para que
    no baile al rodar de 999 a 1.000. Y sin recoger el puntero: el
    escenario entero es zona de corte, y una banda de lado a lado se
    tragaría los trazos que empiezan arriba.
-
-   36 px: es el marcador de la partida y se gana en el corte, así que
-   manda, y a este cuerpo se lee de un vistazo sin apartar los ojos de
-   la figura. Pasa de alto a las barras de las vidas y también al aro
-   del reloj, y no pasa nada: el renglón lo marca el centro y no los
-   bordes, así que los tres siguen alineados aunque el de en medio
-   sobresalga por arriba y por abajo.
 
    Y ese pelo con el que se sube: centrar la caja no centra la cifra.
    La tinta de un número va de la línea base al alto de versal, y eso
@@ -53,7 +55,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
    y no lo hace. Se vuelve a medir cada vez que se toque el cuerpo, y
    el paso de prueba del renglón está para avisar si se olvida.     */
 .pts-live{
-  position:absolute;left:0;right:0;top:26px;
+  position:absolute;left:0;right:0;top:32px;
   transform:translateY(calc(-50% - .5px));
   z-index:2;pointer-events:none;text-align:center;
   font-size:36px;letter-spacing:.04em;line-height:1;
@@ -144,8 +146,16 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
    baja, y la línea le cruza las letras de lado a lado: deja de parecer
    un pliegue y parece un tachón sobre el ¡YA!. La tarjeta se sigue
    partiendo por ahí al girar, que es lo que cuenta; lo que se retira
-   es sólo el trazo quieto.                                           */
-.flap .up:has(i.word){border-bottom-color:transparent}
+   es sólo el trazo quieto.
+
+   Y se retira el borde entero, no su color. Con `border-box` la mitad
+   de arriba mide 70 px contando el borde, así que ese píxel se lo
+   quita a la letra: la palabra se recorta en 69 y la de abajo empieza
+   en 70, y en medio queda una banda del color de la tarjeta que sigue
+   partiendo el texto aunque el trazo ya no se pinte. Sin borde, la
+   mitad de arriba llega hasta el 70 justo donde arranca la otra y la
+   palabra se lee de una pieza, que es de lo que se trataba.        */
+.flap .up:has(i.word){border-bottom-width:0}
 .flap .lo{bottom:0;transform-origin:50% 0}
 /* la que cae va delante de todo; la que sube espera de canto, que a
    90 grados no se ve, y sólo entonces tapa a la cifra vieja       */
