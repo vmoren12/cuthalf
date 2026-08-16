@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   "src/pwa.js": {
-    "mtime": 1786888856.4362295,
-    "ast_hash": "ce32b72b5572031db2c632f66a47c2d4",
+    "mtime": 1786906808.5373802,
+    "ast_hash": "4f8d6ceb8254d64f0be271475cccce06",
     "semantic_hash": ""
   },
   "src/render.js": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "sw.js": {
-    "mtime": 1786888855.4074595,
-    "ast_hash": "d10bcfd4cb7fc1528dd29c72bd7820be",
+    "mtime": 1786906805.148576,
+    "ast_hash": "abd3e96712932e2a1274c56b9a04c4a2",
     "semantic_hash": ""
   },
   "tests/serve.mjs": {
@@ -225,7 +225,7 @@
     "semantic_hash": ""
   },
   "tests/probe.html": {
-    "mtime": 1786888413.3570168,
+    "mtime": 1786906716.6315298,
     "ast_hash": "901c01eab208f7d1d76167e4381187ae",
     "semantic_hash": ""
   },

@@ -36,10 +36,12 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
    escenario entero es zona de corte, y una banda de lado a lado se
    tragaría los trazos que empiezan arriba.
 
-   24 px: es el marcador de la partida y se gana en el corte, así que
-   manda. Pasa de alto a las barras de las vidas, que quedan dentro de
-   su tinta, y no pasa nada: el renglón lo marca el centro y no los
-   bordes. El aro del reloj sigue siendo el más alto de los tres.
+   36 px: es el marcador de la partida y se gana en el corte, así que
+   manda, y a este cuerpo se lee de un vistazo sin apartar los ojos de
+   la figura. Pasa de alto a las barras de las vidas y también al aro
+   del reloj, y no pasa nada: el renglón lo marca el centro y no los
+   bordes, así que los tres siguen alineados aunque el de en medio
+   sobresalga por arriba y por abajo.
 
    Y ese pelo con el que se sube: centrar la caja no centra la cifra.
    La tinta de un número va de la línea base al alto de versal, y eso
@@ -52,9 +54,9 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
    el paso de prueba del renglón está para avisar si se olvida.     */
 .pts-live{
   position:absolute;left:0;right:0;top:26px;
-  transform:translateY(calc(-50% - .3px));
+  transform:translateY(calc(-50% - .5px));
   z-index:2;pointer-events:none;text-align:center;
-  font-size:24px;letter-spacing:.04em;line-height:1;
+  font-size:36px;letter-spacing:.04em;line-height:1;
 }
 .pts-live b{font-weight:500;color:var(--signal);font-variant-numeric:tabular-nums}
 /* consejo del tutorial: banda superior del escenario, fuera del paso
@@ -137,6 +139,13 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .flap i.word{font-size:52px;letter-spacing:-.02em;position:relative;top:-8px}
 .flap .lo i{margin-top:-70px}
 .flap .up{top:0;transform-origin:50% 100%;border-bottom:1px solid var(--hair)}
+/* Menos en la salida. Esa línea es el corte de la tarjeta, y sobre una
+   cifra —alta y estrecha— se lee como tal; pero la palabra es ancha y
+   baja, y la línea le cruza las letras de lado a lado: deja de parecer
+   un pliegue y parece un tachón sobre el ¡YA!. La tarjeta se sigue
+   partiendo por ahí al girar, que es lo que cuenta; lo que se retira
+   es sólo el trazo quieto.                                           */
+.flap .up:has(i.word){border-bottom-color:transparent}
 .flap .lo{bottom:0;transform-origin:50% 0}
 /* la que cae va delante de todo; la que sube espera de canto, que a
    90 grados no se ve, y sólo entonces tapa a la cifra vieja       */
