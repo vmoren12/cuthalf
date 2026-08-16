@@ -367,7 +367,7 @@
       "label": "T()",
       "file_type": "code",
       "source_file": "src/i18n.js",
-      "source_location": "L145",
+      "source_location": "L162",
       "_origin": "ast",
       "id": "src_i18n_t",
       "community": 0,
@@ -377,7 +377,7 @@
       "label": "setLang()",
       "file_type": "code",
       "source_file": "src/i18n.js",
-      "source_location": "L146",
+      "source_location": "L163",
       "_origin": "ast",
       "id": "src_i18n_setlang",
       "community": 0,
@@ -3646,9 +3646,9 @@
       "source_file": "src/game.js",
       "source_location": "L426",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_game",
-      "target": "src_game_poner",
-      "confidence_score": 1.0
+      "target": "src_game_poner"
     },
     {
       "relation": "contains",
@@ -5113,9 +5113,9 @@
       "source_file": "src/game.js",
       "source_location": "L436",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_game_pintarcuenta",
-      "target": "src_game_poner",
-      "confidence_score": 1.0
+      "target": "src_game_poner"
     },
     {
       "relation": "calls",
@@ -5124,9 +5124,9 @@
       "source_file": "src/game.js",
       "source_location": "L427",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_game_poner",
-      "target": "src_state",
-      "confidence_score": 1.0
+      "target": "src_state"
     },
     {
       "relation": "calls",
@@ -5157,9 +5157,9 @@
       "source_file": "src/game.js",
       "source_location": "L451",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_game_cuentaatras",
-      "target": "src_i18n_t",
-      "confidence_score": 1.0
+      "target": "src_i18n_t"
     },
     {
       "relation": "calls",
@@ -12672,5 +12672,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "da03769c67b9ae0128fa1d64d4a69b87cb217ef8"
+  "built_at_commit": "d400cdf8cbb87eadcda293e33f0773f93eecc7f9"
 }

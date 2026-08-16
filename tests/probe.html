@@ -628,11 +628,22 @@ await step("atrás, desde las marcas y los donativos, vuelve a la portada", () =
   if (backHeld()) throw new Error("ya en la portada, atrás sigue retenido");
 });
 
+/* El botón de la taza y el titular de la pantalla llevan claves
+   distintas —el botón dice adónde va, el titular hace el chiste—, y
+   volver a juntarlas es fácil: son dos textos parecidos a un palmo el
+   uno del otro. Si alguien devuelve el titular al botón, un lector de
+   pantalla anunciará «¿Un cortado?, botón» a quien sólo quería saber
+   adónde lleva, y eso no se ve mirando la página.                   */
 await step("la taza lleva a los donativos, y avisa de que aún no", () => {
   $("go-donate").click();
   if ($("scr-donate").hidden) throw new Error("la taza no abre nada");
   if (!/Próximamente|Coming soon/.test($("scr-donate").textContent))
     throw new Error("no dice que todavía no está");
+  if ($("go-donate").getAttribute("aria-label") !== T("donate"))
+    throw new Error("el botón de la taza ya no dice adónde lleva: " +
+                    $("go-donate").getAttribute("aria-label"));
+  if ($("scr-donate").querySelector(".headline").textContent !== T("donateTitle"))
+    throw new Error("el titular de los donativos no es el suyo");
   $("donate-close").click();
   if (!$("scr-donate").hidden) throw new Error("no se cierra");
 });

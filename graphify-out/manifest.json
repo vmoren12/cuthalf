@@ -15,8 +15,8 @@
     "semantic_hash": ""
   },
   "src/i18n.js": {
-    "mtime": 1786887421.6323016,
-    "ast_hash": "163b482bd7168f0f612a87222521e3db",
+    "mtime": 1786910584.26139,
+    "ast_hash": "3713425b3dd5e3130276579a01651320",
     "semantic_hash": ""
   },
   "src/input.js": {
@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   "src/pwa.js": {
-    "mtime": 1786907844.3626342,
-    "ast_hash": "47a18f5b2134e9fd4b089f8de26ed34a",
+    "mtime": 1786910687.2287376,
+    "ast_hash": "91d70822240e208aad30691bb8b44849",
     "semantic_hash": ""
   },
   "src/render.js": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "sw.js": {
-    "mtime": 1786907843.0784569,
-    "ast_hash": "e534155fe952bafdd3d26c8d3afc79b0",
+    "mtime": 1786910686.0259526,
+    "ast_hash": "4eaa76da6ed9aeb72e6e1c94da35b5a9",
     "semantic_hash": ""
   },
   "tests/serve.mjs": {
@@ -215,8 +215,8 @@
     "semantic_hash": ""
   },
   "index.html": {
-    "mtime": 1786838088.7129629,
-    "ast_hash": "79fb32ef32d87d5eb400ac35a3b4e39a",
+    "mtime": 1786910584.2599401,
+    "ast_hash": "fece2408af374ccbf60e0692d51dd2b3",
     "semantic_hash": ""
   },
   "tests/foto.html": {
@@ -225,8 +225,8 @@
     "semantic_hash": ""
   },
   "tests/probe.html": {
-    "mtime": 1786907761.217795,
-    "ast_hash": "5dd3a9fdacfdc513eb77f41022fe8c4c",
+    "mtime": 1786910584.2624087,
+    "ast_hash": "1e66078705a0e8f00fd5b030c5e6d976",
     "semantic_hash": ""
   },
   "icons/icon-192-any.png": {

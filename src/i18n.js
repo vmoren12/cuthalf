@@ -59,8 +59,20 @@ export const L = {
     hintIOS:"En iPhone o iPad: Compartir → Añadir a pantalla de inicio",
     hintHTTP:"Abre la página desde un servidor https para poder instalarla",
     language:"Idioma", theme:"Tema", light:"Claro", dark:"Oscuro",
+    /* `donate` es el nombre del botón de la taza y `donateTitle` el
+       titular de su pantalla, y van aparte a propósito. Un botón tiene
+       que decir adónde lleva —quien lo oye leído en voz alta sólo
+       quiere eso—, mientras que el titular ya está dentro y puede
+       permitirse el guiño: de todos los cafés, el cortado es el único
+       que se llama como lo que se hace aquí. Con una sola clave había
+       que elegir, y elegir salía mal por los dos lados.
+
+       Y el «se podrá» es futuro porque debajo sigue el sello de
+       «Próximamente»: mientras no haya dónde pagar, el texto no puede
+       dar a entender que ya se pueda.                                */
     donate:"Invítame a un café", soon:"Próximamente",
-    donateNote:"SPLITINHALF no tiene anuncios, ni cuentas, ni te pide nada para jugar. Si te apetece echar una mano, aquí se podrá.",
+    donateTitle:"¿Un cortado?",
+    donateNote:"SPLITINHALF no tiene anuncios, ni cuentas, ni te pide nada para jugar: si te apetece invitarme a un cortado, aquí se podrá.",
     howTo:"Cómo se juega", skip:"Saltar", practice:"Práctica",
     tutorDone:"Ya sabes jugar",
     tut1:"Desliza el dedo de un lado a otro de la figura. La línea de puntos es un corte válido.",
@@ -126,8 +138,13 @@ export const L = {
     hintIOS:"On iPhone or iPad: Share → Add to Home Screen",
     hintHTTP:"Open the page from an https server to install it",
     language:"Language", theme:"Theme", light:"Light", dark:"Dark",
+    /* El titular no traduce al castellano, lo sustituye: «cortado» es
+       un chiste que sólo existe aquí, así que el inglés hace el suyo
+       con el modismo de cortar que sí tiene. El cuerpo es el mismo en
+       los dos idiomas, y también el futuro del «Próximamente».      */
     donate:"Buy me a coffee", soon:"Coming soon",
-    donateNote:"SPLITINHALF has no ads, no accounts and asks you for nothing. If you fancy chipping in, this is where you'll be able to.",
+    donateTitle:"Let me cut to the chase",
+    donateNote:"SPLITINHALF has no ads, no accounts and asks you for nothing to play. If you'd like to buy me a coffee, this is where you'll be able to.",
     howTo:"How to play", skip:"Skip", practice:"Practice",
     tutorDone:"You're ready",
     tut1:"Swipe across the shape, from one side to the other. The dotted line is a valid cut.",
