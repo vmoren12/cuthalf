@@ -72,7 +72,7 @@ export const L = {
        dar a entender que ya se pueda.                                */
     donate:"Invítame a un café", soon:"Próximamente",
     donateTitle:"¿Un cortado?",
-    donateNote:"SPLITINHALF no tiene anuncios, ni cuentas, ni te pide nada para jugar: si te apetece invitarme a un cortado, aquí se podrá.",
+    donateNote:"Gracias por jugar. SPLITINHALF es gratis y va a seguir siéndolo: sin anuncios, sin cuentas. Si te apetece invitar a un café, aquí se podrá.",
     howTo:"Cómo se juega", skip:"Saltar", practice:"Práctica",
     tutorDone:"Ya sabes jugar",
     tut1:"Desliza el dedo de un lado a otro de la figura. La línea de puntos es un corte válido.",
@@ -139,12 +139,19 @@ export const L = {
     hintHTTP:"Open the page from an https server to install it",
     language:"Language", theme:"Theme", light:"Light", dark:"Dark",
     /* El titular no traduce al castellano, lo sustituye: «cortado» es
-       un chiste que sólo existe aquí, así que el inglés hace el suyo
-       con el modismo de cortar que sí tiene. El cuerpo es el mismo en
-       los dos idiomas, y también el futuro del «Próximamente».      */
+       un chiste que sólo existe allí, así que el inglés hace el suyo
+       con un modismo de cortar que sí tiene. «No short cuts» dice dos
+       cosas de una: que el juego no tiene atajos y que aquí no se
+       compra ventaja —que es lo primero que uno se pregunta en un
+       juego con clasificación mundial—. Va en dos palabras y no en
+       una, que es como se escribe normalmente, para que se lea el
+       «cut»: sin eso no hay chiste, sólo una frase hecha.
+
+       El cuerpo sí es el mismo en los dos idiomas, y también el futuro
+       del «Próximamente».                                            */
     donate:"Buy me a coffee", soon:"Coming soon",
-    donateTitle:"Let me cut to the chase",
-    donateNote:"SPLITINHALF has no ads, no accounts and asks you for nothing to play. If you'd like to buy me a coffee, this is where you'll be able to.",
+    donateTitle:"No short cuts",
+    donateNote:"Thanks for playing. SPLITINHALF is free and will stay that way: no ads, no accounts. If you'd like to buy a coffee, this is where you'll be able to.",
     howTo:"How to play", skip:"Skip", practice:"Practice",
     tutorDone:"You're ready",
     tut1:"Swipe across the shape, from one side to the other. The dotted line is a valid cut.",

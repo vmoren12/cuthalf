@@ -1,7 +1,7 @@
-# Graph Report - cuthalf  (2026-08-16)
+# Graph Report - cuthalf  (2026-08-17)
 
 ## Corpus Check
-- 48 files · ~45,470 words
+- 48 files · ~45,539 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d400cdf8`
+- Built from commit: `744821f1`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

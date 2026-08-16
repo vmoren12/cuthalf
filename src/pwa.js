@@ -6,7 +6,7 @@ import { S } from "./state.js";
    El service worker sirve el HTML con red primero, así que al abrir
    con conexión siempre llega la última versión. Si además cambia el
    propio worker, se recarga la página: nunca durante una partida.  */
-export const APP_VERSION = "2026.08.16-15";
+export const APP_VERSION = "2026.08.17-1";
 export let swReg = null, pendingReload = false, reloading = false;
 
 export function applyUpdate(){
