@@ -405,8 +405,13 @@ export function goHome(){
 
    El compás vive aquí y viaja al CSS en `--flip`, que es la única
    forma de que las dos mitades del efecto no discrepen. Las pruebas
-   lo ponen a cero: allí sólo alargaría.                             */
-export const CUENTA = { desde: 3, hold: 340, flip: 300 };
+   lo ponen a cero: allí sólo alargaría.
+
+   Cada tarjeta se lleva `hold` quieta más `flip` girando, así que el
+   segundo por cifra —los tres de la cuenta— es la suma de los dos y
+   no sólo la espera. Con 340+300 la cuenta acababa en menos de dos
+   segundos: parecía una cuenta atrás de tres y no lo era.           */
+export const CUENTA = { desde: 3, hold: 700, flip: 300 };
 
 const espera = ms => new Promise(r => setTimeout(r, ms));
 

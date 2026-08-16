@@ -30,11 +30,16 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
    En azul, que es el color del acierto, y con cifra tabular para que
    no baile al rodar de 999 a 1.000. Y sin recoger el puntero: el
    escenario entero es zona de corte, y una banda de lado a lado se
-   tragaría los trazos que empiezan arriba.                          */
+   tragaría los trazos que empiezan arriba.
+
+   20 px y no más: es el marcador de la partida y merece verse, pero
+   el techo lo pone el reloj de al lado, que ocupa de 12 a 40 en el
+   lienzo. Pasado eso la cifra sobresale de su renglón y compite con
+   la figura en vez de acompañarla.                                  */
 .pts-live{
   position:absolute;left:0;right:0;top:26px;transform:translateY(-50%);
   z-index:2;pointer-events:none;text-align:center;
-  font-size:16px;letter-spacing:.04em;line-height:1;
+  font-size:20px;letter-spacing:.04em;line-height:1;
 }
 .pts-live b{font-weight:500;color:var(--signal);font-variant-numeric:tabular-nums}
 /* consejo del tutorial: banda superior del escenario, fuera del paso

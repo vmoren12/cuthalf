@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "src/game.js": {
-    "mtime": 1786838210.6052685,
-    "ast_hash": "6f4c864eba10a57c1c37929c95436f17",
+    "mtime": 1786882564.6171527,
+    "ast_hash": "fb956e72f4a16d0f4e40a7e3e5a9d5a4",
     "semantic_hash": ""
   },
   "src/geometry.js": {
@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   "src/pwa.js": {
-    "mtime": 1786838631.2759738,
-    "ast_hash": "d98b8fa318ee3d8bb5131e6b04655445",
+    "mtime": 1786882584.8714807,
+    "ast_hash": "158a5238bc3ca49e260a02356d0afba2",
     "semantic_hash": ""
   },
   "src/render.js": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "sw.js": {
-    "mtime": 1786838629.976889,
-    "ast_hash": "29bec90f115c256d070efeaa5a81548a",
+    "mtime": 1786882583.6899283,
+    "ast_hash": "0f1c44547177020d7002f24c596b4770",
     "semantic_hash": ""
   },
   "tests/serve.mjs": {
