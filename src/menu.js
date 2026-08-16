@@ -61,7 +61,9 @@ export function drawTimers(){
   for (const v of CONFIG.timers){
     const b = document.createElement("button");
     b.textContent = v ? String(v) : "∞";
-    b.className = v === S.timer ? "on" : "";
+    /* el ∞ se marca porque necesita cuerpo propio: al de las cifras se
+       queda en la mitad de alto. Lo dice el CSS, aquí sólo se señala */
+    b.className = [v === S.timer ? "on" : "", v ? "" : "inf"].filter(Boolean).join(" ");
     b.setAttribute("aria-label", v ? v + " s" : T("noLimit"));
     b.addEventListener("click", () => { S.timer = v; DB.set("timer", v); drawTimers(); });
     box.appendChild(b);
@@ -78,7 +80,9 @@ export function drawBoards(){
     const t = boardTime(b);
     const btn = document.createElement("button");
     btn.textContent = b === "daily" ? T("dailyShort") : (t ? String(t) : "∞");
-    btn.className = b === S.board ? "on" : "";
+    /* mismo ∞ y mismo apaño que en la portada: es el mismo mando */
+    const inf = b !== "daily" && !t;
+    btn.className = [b === S.board ? "on" : "", inf ? "inf" : ""].filter(Boolean).join(" ");
     btn.setAttribute("aria-label", b === "daily" ? T("daily") : (t ? t + " s" : T("noLimit")));
     /* al cambiar de tabla se repinta también el tramo: cada familia
        recuerda el suyo, y el marcado tiene que seguirlo            */

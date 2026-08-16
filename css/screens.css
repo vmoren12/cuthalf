@@ -116,11 +116,28 @@
 .seg{display:flex;border:1px solid var(--hair)}
 /* el aire de los lados es lo que hace que se lean como botones y no
    como texto pegado a una caja */
-.seg button{font:inherit;font-size:11px;letter-spacing:.1em;min-width:42px;padding:9px 14px;
+.seg button{font:inherit;font-size:11px;line-height:13px;letter-spacing:.1em;min-width:42px;padding:9px 14px;
   background:none;border:0;border-left:1px solid var(--hair);color:var(--ink);opacity:.45;cursor:pointer;
   white-space:nowrap;
   transition:background .18s,color .18s,opacity .18s}
 .seg button:first-child{border-left:0}
+/* «Sin límite» es un ocho tumbado entre cifras, y en esta letra mide
+   la mitad de alto que ellas —0,48— aunque sea más ancho. Al mismo
+   cuerpo parece medio borrado, así que se le da el suyo.
+
+   Los 13 px de renglón son los de todos los botones y por eso están
+   escritos arriba: con el alto de línea al aire, el botón del ∞
+   crecería y estiraría de paso a los otros cuatro, que en una fila
+   miden todos lo que el más alto.
+
+   Y el punto de relleno que se le pasa de abajo arriba: en un renglón
+   fijo, una letra más grande apoya la línea base más abajo — la caja
+   de la letra no cabe en los 13 px y se reparte el sobrante por igual
+   arriba y abajo, así que la base baja con el cuerpo. El ∞ salía
+   colgando 1,75 px por debajo de las cifras. Se le devuelve eso sin
+   tocar el alto del botón, que lleva fondo cuando está elegido y un
+   botón más alto que sus vecinos se vería. Medido, no calculado.  */
+.seg button.inf{font-size:16px;padding-top:8px;padding-bottom:10px}
 /* el selector de clasificación ocupa el ancho: son cinco tablas y
    ninguna es más importante que las otras */
 .seg--full{width:100%}

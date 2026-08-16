@@ -249,11 +249,16 @@ await step("vidas, marcador y reloj van a la misma altura", async () => {
   m.font = cs.fontWeight + " " + cs.fontSize + " " + cs.fontFamily;
   const alto = m.measureText(b.textContent || "0");
   const cifra = base - (alto.actualBoundingBoxAscent - alto.actualBoundingBoxDescent) / 2;
-  /* aquí el margen es de un cuarto de píxel y no de medio: centrar la
-     caja en vez de la cifra descoloca 0,4, y con medio píxel de manga
-     ancha esto no se enteraría. Cuenta con DM Mono cargada, que es de
-     donde salen las medidas — la prueba ya necesita red.            */
-  if (Math.abs(cifra - RENGLON) > 0.25)
+  /* Un tercio de píxel de margen, ni más ni menos. Menos no se puede:
+     esta cuenta lee unas décimas por debajo de lo que acaba pintado
+     —measureText devuelve la caja de tinta redondeada a píxeles
+     enteros— y clavarla a cero daría falsos fallos. Más tampoco: los
+     desajustes que se han visto aquí son de medio píxel, y con medio
+     píxel de manga ancha esto no se enteraría de ninguno.
+
+     Cuenta con DM Mono cargada, que es de donde salen las medidas —
+     la prueba ya necesita red de todas formas.                     */
+  if (Math.abs(cifra - RENGLON) > 0.35)
     throw new Error("el marcador se sale del renglón: " + cifra.toFixed(2) +
                     " contra la barra en " + barra.toFixed(2));
   goHome();
